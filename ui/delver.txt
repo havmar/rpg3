@@ -4,7 +4,7 @@
 
   HP    [####################] 17/17
   GRIT  [########] 3/3
-  LIGHT [###########-] 9/10
+  LIGHT [########----] 7/10
   SUPPLY 3
 
   EDGE 3  IRON 2  VIM 3  NERVE 2  CRAFT 3
@@ -14,6 +14,9 @@
   armor:  quilted delver's coat (guard +1, soak 1)
   knack:  surgeons-runner -- +3 healing when camping
 
-  ON EXPEDITION -- depth 1
+  ON EXPEDITION -- depth 3
   chits banked: 0
+  carrying:
+    - scrap glass and fittings (worth 2)
+    - fused coin-clutch (worth 3)
 

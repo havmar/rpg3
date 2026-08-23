@@ -1,0 +1,9 @@
+LAST FIGHT -- shatterfall scree (depth 1) -- VICTORY
+====================================================
+
+(every roll; the short log is fight.txt)
+
+  -- round 1 --
+  You hit shardswarm#1 for 8 (11+6 vs 10).
+* shardswarm#1 goes down.
+* FIGHT ENDS after round 1: the field is yours.

@@ -3,5 +3,9 @@ THE DESCENT
 
   WAKE  (the mouth)
    |
-  d1  [encounter]  shatterfall scree   <-- you are here
+  d1  [encounter]  shatterfall scree
+   |
+  d2  [breather]   lantern niche
+   |
+  d3  [encounter]  glass orchard   <-- you are here
 
