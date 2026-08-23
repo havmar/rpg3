@@ -132,6 +132,37 @@ something big surfaces, change the game, start a new delver. Therefore:
   admit it. Fixed geography and name pools live beside the map that owns
   them.
 
+## The session cycle (meta-process)
+
+Development runs as separate sessions with distinct jobs. The repo, not the
+chat, carries context between them.
+
+- **Design sessions** (frontier model). Harvest `docs/PLAYNOTES.md`, argue
+  the design, and produce a *plan file*: `docs/plans/NNNN-<slug>.md`, a
+  full spec ready to implement with no further design decisions — file
+  list, behavior, formulas, catalog content, test expectations, and an
+  implementation checklist. Header carries `Status: READY / IN PROGRESS /
+  DONE`. A DONE plan is history: never edit it, write a new one.
+- **Implementation sessions** (cheaper model). Read ENGINE.md and exactly
+  one plan file; implement, tick the plan's checklist, flip its status,
+  run tests and benches, commit. For a plan too big for one context, run
+  sequential subagent rounds: each round one coherent chunk, tests green
+  at the end of each round, the next round started only when the previous
+  reports done. The orchestrating session stays thin; the plan file is
+  the shared context, and each round updates the checklist so a dead
+  session loses nothing.
+- **Review sessions** (separate, for bigger changes). Review the diff
+  against the plan file — the plan is the review contract.
+- **Play sessions** (Opus, on a `play/<delver>` branch). Governed by the
+  playbook only. Every play session ends with the wrap-up rite
+  (playbook), which is how play feeds back into design.
+
+**The feedback loop**: play wrap-ups append structured notes to
+`docs/PLAYNOTES.md`, mirrored to the main branch (same rite as the
+Ledger). A design session starts by reading PLAYNOTES, marks each item
+HARVESTED (with the plan file that answers it) or DECLINED (with one line
+why), and never deletes entries.
+
 ## Working with the player (dev sessions)
 
 UNDERSTORY inverts the RPG2 arrangement: the player sets feelings and hard

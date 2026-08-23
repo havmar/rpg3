@@ -82,6 +82,26 @@ Commit the entry on the play branch, then mirror the same change to the
 main branch so every future game inherits it. Future expeditions may find
 traces of ledgered delvers in the deep.
 
+## The wrap-up rite (end of every play session)
+
+Before a play session ends (invoked as `/wrapup`, or unprompted when the
+player says goodnight):
+
+1. Run `sheet` one last time so the pages match the table.
+2. Write a wrap-up entry and append it to `docs/PLAYNOTES.md`: date,
+   delver, where the fiction stands, then two short lists — *DM notes*
+   (what felt rough, joyless, or unbalanced from the DM chair; ideas that
+   came up in play) and *player notes*.
+3. Fill the player notes by asking the player three short questions:
+   the best moment of the session, the worst friction, and one wish.
+   Record answers in their spirit, rewritten as clean prose.
+4. Commit on the play branch, then mirror the PLAYNOTES change to the
+   main branch (same rite as the Ledger).
+5. Close the table in the fiction — one line, where the delver rests.
+
+PLAYNOTES is an inbox for design sessions: entries are never deleted,
+only marked harvested or declined by a later design session.
+
 ## Session start (play mode)
 
 1. `git status --short --branch`; clean → `git pull --ff-only`, dirty →
