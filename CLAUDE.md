@@ -56,7 +56,9 @@ instruction filename unchanged.)
 
 ## Status
 
-Design phase. Infrastructure conventions adapted from the previous game's
-export (`docs/archive/RPG2_EXPORT.txt`) into ENGINE.md and PLAYBOOK.md.
-Next: the engine skeleton — character model, seeded RNG core, autocombat
-resolver, `session.py`. Update this status as milestones land.
+v0.1 playable (plan 0001, benched 2026-08-23): full expedition loop —
+creation, delve, autocombat with one pause, camp, surface, bank, train,
+buy — through `session.py`, with contract suites (`python -m unittest`)
+and benches (`python tune.py`). The Vitric Age runs 6 depths and has a
+sealed floor. Next milestone: first real playthrough on a `play/<delver>`
+branch, then harvest PLAYNOTES. Update this status as milestones land.
