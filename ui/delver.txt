@@ -4,7 +4,7 @@
 
   HP    [###############-----] 13/17
   GRIT  [########] 3/3
-  LIGHT [###########-] 9/10
+  LIGHT [##########--] 8/10
   SUPPLY 3
 
   EDGE 3  IRON 3  VIM 3  NERVE 2  CRAFT 2
@@ -14,7 +14,7 @@
   armor:  cullet-studded jack (guard +1, soak 2)
   knack:  cutter -- +1 attack
 
-  ON EXPEDITION -- depth 1
+  ON EXPEDITION -- depth 2
   chits banked: 0
   carrying:
     - scrap glass and fittings (worth 6)

@@ -3,5 +3,7 @@ THE DESCENT
 
   WAKE  (the mouth)
    |
-  d1  [encounter]  shatterfall scree   <-- you are here
+  d1  [encounter]  shatterfall scree
+   |
+  d2  [encounter]  watchman's rotunda   <-- you are here
 
