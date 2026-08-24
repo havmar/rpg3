@@ -2,7 +2,7 @@
   Teodor Slake -- cutter of Wake
 ====================================================
 
-  HP    [####################] 17/17
+  HP    [###############-----] 13/17
   GRIT  [########] 3/3
   LIGHT [###########-] 9/10
   SUPPLY 3
@@ -16,4 +16,7 @@
 
   ON EXPEDITION -- depth 1
   chits banked: 0
+  carrying:
+    - scrap glass and fittings (worth 6)
+    - fused coin-clutch (worth 3)
 
