@@ -1,9 +1,20 @@
-LAST FIGHT -- shatterfall scree (depth 1) -- VICTORY
-====================================================
+LAST FIGHT -- glass orchard (depth 3) -- VICTORY
+================================================
 
 (every roll; the short log is fight.txt)
 
   -- round 1 --
-  You hit shardswarm#1 for 8 (11+6 vs 10).
+  fluxworm#1 hits you for 5 (13+4 vs 9).
+  You hit shardswarm#1 for 9 (18+10 vs 10).
 * shardswarm#1 goes down.
-* FIGHT ENDS after round 1: the field is yours.
+  -- round 2 --
+  fluxworm#1 hits you for 1 (10+4 vs 9).
+  You hit fluxworm#1 for 2 (6+10 vs 12).
+  -- round 3 --
+  fluxworm#1 misses you (4+4 vs 9).
+  You hit fluxworm#1 for 6 (8+10 vs 12).
+  -- round 4 --
+  fluxworm#1 hits you for 2 (18+4 vs 9).
+  You hit fluxworm#1 for 4 (3+10 vs 12).
+* fluxworm#1 goes down.
+* FIGHT ENDS after round 4: the field is yours.

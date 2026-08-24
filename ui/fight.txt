@@ -1,5 +1,6 @@
-LAST FIGHT -- shatterfall scree (depth 1) -- VICTORY
-====================================================
+LAST FIGHT -- glass orchard (depth 3) -- VICTORY
+================================================
 
 shardswarm#1 goes down.
-FIGHT ENDS after round 1: the field is yours.
+fluxworm#1 goes down.
+FIGHT ENDS after round 4: the field is yours.

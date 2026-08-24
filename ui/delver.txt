@@ -2,7 +2,7 @@
   Hallam Rasp -- surgeons-runner of Wake
 ====================================================
 
-  HP    [####################] 17/17
+  HP    [###########---------] 9/17
   GRIT  [########] 3/3
   LIGHT [########----] 7/10
   SUPPLY 3
@@ -19,4 +19,5 @@
   carrying:
     - scrap glass and fittings (worth 2)
     - fused coin-clutch (worth 3)
+    - scrap glass and fittings (worth 8)
 
