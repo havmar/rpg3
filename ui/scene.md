@@ -1,50 +1,49 @@
-# Depth 3 — the rotunda again
+# Depth 3 — the chorus broken
 
-**Light 6.**
+**Four rounds. Victory. hp 12/17, grit 3/3 unspent.**
 
-The same guard-round. Not a similar one — the same plan, the same
-sightlines, one epoch deeper, which means the Vitric Age built this room,
-buried it, and built it again on top of itself. Whatever they were watching
-for, they never stopped expecting it, and they never once looked down.
+The song got you before the fight did: you rolled a **2** on the nerve test
+and went **SHAKEN** on the spot — −2 attack, −1 guard, the whole way through.
+It cost you round one, a swing at a drift of glass you should not have been
+able to miss.
 
-Three things hold the floor. Two **chorus panes** — standing sheets, and
-they are singing; a chorus pane is one voice of a congregation and the
-harmony is load-bearing. Between them a **shardswarm** drifts against the
-draft, all edges.
+Round two you rolled a **natural 20**. Twelve damage into a four-hit-point
+swarm, which is roughly like kicking a puddle. Then the panes, one and one:
+**8**, then **7**, each of them dead in a single swing, because brittle
+things and a heavy axe are a short conversation.
 
----
+Here is what the room was actually about. The harmony is load-bearing. Kill
+one pane and the chorus does not get quieter — it goes *wrong*, and the two
+that are left sing harder to cover the hole, and the last one sings the
+whole part alone, badly, until you stop it.
 
-**Chorus pane ×2** — hp 5 · atk +3 · guard 11 · soak 0 · dmg 1d6 · **brittle** · **dread 1**
-**Shardswarm** — hp 4 · atk +2 · guard 10 · soak 0 · dmg 1d4 · **brittle**
-**Teodor** — hp 17/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
+Five hits came back at you and every single one did **1**. Their dice are
+1d6 and 1d4; your jack soaks 2. Press gave them a 70% chance to hit and it
+did not matter, because what they were allowed to hit for was the floor.
 
-**Brittle is the whole fight.** Your axe takes **+2** against them and not
-one of the three has any soak at all: **1d10+2, so 3 to 12**, against four
-and five hit points. *Every swing that lands kills something.* Three landed
-swings clears the room. The engine strikes the weakest first — swarm, then
-panes.
-
-**The singing is a dread test.** Before the first blow: d20+4 against **12**,
-so **65%** you hold. Fail and you are **SHAKEN** — −2 attack, −1 guard, for
-the whole fight. One grit at the pause shakes it off. Pause line is hp 10.
-
-## Stance
-
-| | you hit | pane hits | swarm hits | through your soak |
-|---|---|---|---|---|
-| `press` | **95%** | 70% | 65% | ~2.0 / ~1.3 |
-| `measure` | **85 / 80%** | 60% | 55% | ~2.0 / ~1.3 |
-| `skirmish` | **80 / 75%** | 55% | 50% | ~2.0 / ~1.3 |
-| `ward` | **75 / 70%** | 45% | 40% | **~1.5 / ~1.0** |
-
-Three attackers is what makes this different from the last two rooms. Press
-ends it in about three rounds and expects to cost about **8 hp**; ward takes
-about four and expects about **4**. But ward is also the stance that most
-hates being shaken — at −2 attack it stops one-shotting reliably, and every
-round it fails to kill, three things swing at you.
-
-**Which stance?**
+**The strip:** scrap (**10**) and a **watchman's eye** (**8**) — pried from a
+vitrified citizen. It has stopped watching. Probably.
 
 ---
 
-*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+## Where this stands
+
+**hp 12/17 · grit 3/3 · light 6 · supply 2 · carrying 37 · banked 0**
+
+Thirty-seven. That is a real number for the first time — and it is a real
+number you are carrying, which means it is a real number you can lose.
+
+- **`delve`** — depth 4, light to **5**. Deeper is where salvage gets
+  expensive to reach and worth reaching. Three depths left before the
+  sealed floor.
+- **`camp`** — 5 down; **2d6+3** mostly lands. Costs your **second-to-last
+  supply** and 1 light. Supply only refills by surfacing.
+- **`surface`** — 1 light, bank **37**, day 2, everything resets. At 37 Wake
+  finally sells you something: the **glass-backed maul, 25** — 2d6 instead
+  of 1d10, at −1 attack. Against soak it is a straight upgrade; against
+  brittle things like tonight's it is a downgrade. Or bank the lot and come
+  back for **plate (40)** or **your first stat point (45–60)**.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [full log](fight_full.txt) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*

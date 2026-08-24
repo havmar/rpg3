@@ -1,12 +1,24 @@
-LAST FIGHT -- watchman's rotunda (depth 2) -- VICTORY
+LAST FIGHT -- watchman's rotunda (depth 3) -- VICTORY
 =====================================================
 
 (every roll; the short log is fight.txt)
 
+* Fear gets its hook in: SHAKEN (-2 attack, -1 guard) (2+4 vs 12).
   -- round 1 --
-  saltfog strangler#1 hits you for 4 (14+8 vs 15).
-  You miss saltfog strangler#1 (4+4 vs 11).
+  You miss shardswarm#1 (2+7 vs 10).
+  chorus pane#1 misses you (2+3 vs 9).
+  chorus pane#2 hits you for 1 (18+3 vs 9).
+  shardswarm#1 hits you for 1 (16+2 vs 9).
   -- round 2 --
-  You hit saltfog strangler#1 for 9 (8+4 vs 11).
-* saltfog strangler#1 goes down.
-* FIGHT ENDS after round 2: the field is yours.
+* You hit shardswarm#1 for 12 CRIT! (20+7 vs 10).
+* shardswarm#1 goes down.
+  chorus pane#1 hits you for 1 (18+3 vs 9).
+  chorus pane#2 hits you for 1 (17+3 vs 9).
+  -- round 3 --
+  You hit chorus pane#1 for 8 (19+7 vs 11).
+* chorus pane#1 goes down.
+  chorus pane#2 hits you for 1 (9+3 vs 9).
+  -- round 4 --
+  You hit chorus pane#2 for 7 (10+7 vs 11).
+* chorus pane#2 goes down.
+* FIGHT ENDS after round 4: the field is yours.
