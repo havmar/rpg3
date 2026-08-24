@@ -5,5 +5,7 @@ THE DESCENT
    |
   d1  [encounter]  shatterfall scree
    |
-  d2  [encounter]  watchman's rotunda   <-- you are here
+  d2  [encounter]  watchman's rotunda
+   |
+  d3  [encounter]  watchman's rotunda   <-- you are here
 

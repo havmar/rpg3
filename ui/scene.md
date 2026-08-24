@@ -1,28 +1,49 @@
-# Depth 2 — a cold camp in the rotunda
+# Depth 3 — the rotunda again
 
-**+11 hp. Full: 17/17. Grit restored. Supply 3→2, light 8→7.**
+**Light 6.**
 
-You sleep in the room with sightlines in every direction, which is either
-the best or the worst place in this stratum to do it, and you decline to
-decide which. The rose goes on the floor by your head. Some time in the
-night it moves — not much, about the width of a hair, and only in the
-direction it was already going.
+The same guard-round. Not a similar one — the same plan, the same
+sightlines, one epoch deeper, which means the Vitric Age built this room,
+buried it, and built it again on top of itself. Whatever they were watching
+for, they never stopped expecting it, and they never once looked down.
+
+Three things hold the floor. Two **chorus panes** — standing sheets, and
+they are singing; a chorus pane is one voice of a congregation and the
+harmony is load-bearing. Between them a **shardswarm** drifts against the
+draft, all edges.
 
 ---
 
-## Where this stands
+**Chorus pane ×2** — hp 5 · atk +3 · guard 11 · soak 0 · dmg 1d6 · **brittle** · **dread 1**
+**Shardswarm** — hp 4 · atk +2 · guard 10 · soak 0 · dmg 1d4 · **brittle**
+**Teodor** — hp 17/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
 
-**hp 17/17 · grit 3/3 · light 7 · supply 2 · carrying 19 · banked 0**
+**Brittle is the whole fight.** Your axe takes **+2** against them and not
+one of the three has any soak at all: **1d10+2, so 3 to 12**, against four
+and five hit points. *Every swing that lands kills something.* Three landed
+swings clears the room. The engine strikes the weakest first — swarm, then
+panes.
 
-Run the light budget once, because it is not what you'd think. Seven light
-gets you to **depth 6 — the sealed floor of the Vitric Age** — and still
-pays the **2** it costs to climb out from down there. Light is not your
-constraint today. **Two supplies and seventeen hit points are.**
+**The singing is a dread test.** Before the first blow: d20+4 against **12**,
+so **65%** you hold. Fail and you are **SHAKEN** — −2 attack, −1 guard, for
+the whole fight. One grit at the pause shakes it off. Pause line is hp 10.
 
-- **`delve`** — depth 3, light to **6**. Four more steps and there is no
-  more Vitric Age to see.
-- **`surface`** — banks **19**, costs 1 light, ends day 1. Still six short
-  of the maul.
+## Stance
+
+| | you hit | pane hits | swarm hits | through your soak |
+|---|---|---|---|---|
+| `press` | **95%** | 70% | 65% | ~2.0 / ~1.3 |
+| `measure` | **85 / 80%** | 60% | 55% | ~2.0 / ~1.3 |
+| `skirmish` | **80 / 75%** | 55% | 50% | ~2.0 / ~1.3 |
+| `ward` | **75 / 70%** | 45% | 40% | **~1.5 / ~1.0** |
+
+Three attackers is what makes this different from the last two rooms. Press
+ends it in about three rounds and expects to cost about **8 hp**; ward takes
+about four and expects about **4**. But ward is also the stance that most
+hates being shaken — at −2 attack it stops one-shotting reliably, and every
+round it fails to kill, three things swing at you.
+
+**Which stance?**
 
 ---
 
