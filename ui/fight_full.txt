@@ -1,24 +1,12 @@
-LAST FIGHT -- shatterfall scree (depth 1) -- VICTORY
-====================================================
+LAST FIGHT -- watchman's rotunda (depth 2) -- VICTORY
+=====================================================
 
 (every roll; the short log is fight.txt)
 
   -- round 1 --
-  You miss cullet crab#1 (6+4 vs 14).
-  cullet crab#1 misses you (2+3 vs 15).
+  saltfog strangler#1 hits you for 4 (14+8 vs 15).
+  You miss saltfog strangler#1 (4+4 vs 11).
   -- round 2 --
-  You miss cullet crab#1 (7+4 vs 14).
-  cullet crab#1 misses you (8+3 vs 15).
-  -- round 3 --
-  You hit cullet crab#1 for 7 (17+4 vs 14).
-  cullet crab#1 hits you for 2 (14+3 vs 15).
-  -- round 4 --
-  You miss cullet crab#1 (4+4 vs 14).
-  cullet crab#1 hits you for 2 (17+3 vs 15).
-  -- round 5 --
-  You hit cullet crab#1 for 1 (19+4 vs 14).
-  cullet crab#1 misses you (9+3 vs 15).
-  -- round 6 --
-  You hit cullet crab#1 for 1 (18+4 vs 14).
-* cullet crab#1 goes down.
-* FIGHT ENDS after round 6: the field is yours.
+  You hit saltfog strangler#1 for 9 (8+4 vs 11).
+* saltfog strangler#1 goes down.
+* FIGHT ENDS after round 2: the field is yours.
