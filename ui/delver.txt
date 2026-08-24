@@ -1,0 +1,23 @@
+====================================================
+  Hallam Rasp -- surgeons-runner of Wake
+====================================================
+
+  HP    [###########---------] 9/17
+  GRIT  [########] 3/3
+  LIGHT [########----] 7/10
+  SUPPLY 3
+
+  EDGE 3  IRON 2  VIM 3  NERVE 2  CRAFT 3
+
+  attack +7   guard 11   soak 1
+  weapon: delver's knife (1d6+1, acc +1)
+  armor:  quilted delver's coat (guard +1, soak 1)
+  knack:  surgeons-runner -- +3 healing when camping
+
+  ON EXPEDITION -- depth 3
+  chits banked: 0
+  carrying:
+    - scrap glass and fittings (worth 2)
+    - fused coin-clutch (worth 3)
+    - scrap glass and fittings (worth 8)
+
