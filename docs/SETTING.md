@@ -85,3 +85,25 @@ Deep time, loss, strange beauty; dry gallows humor at the surface, awe at
 depth. Never grimdark, never camp. The world is dying but it is not bitter
 about it — it has had a very long time to make peace, and the living haven't,
 and that gap is where the stories are.
+
+## Voice — the narration contract
+
+Settled after session 1 (PLAYNOTES): the player reads for the object level —
+what happened, what it cost, what the choices are. The voice was welcome; the
+volume was the problem. The contract is **hard form, free diction**:
+
+- **Object level first.** Every message opens with what happened and the
+  numbers, stated plainly. A reader who takes only the opening lines and the
+  choice list loses nothing mechanical.
+- **Word budget.** A routine turn — travel, camp, trade, a fight that was
+  never close — gets up to ~100 words of prose. A discovery turn — a new
+  place, a new creature, real consequence — gets up to ~250. At most one
+  setpiece per session (a stratum first entered, a death, an ending) may run
+  long.
+- **One image per message.** Pick the one detail or figure that earns its
+  place; everything else is plain declarative sentences. The craft is in the
+  choosing, and the plainness around the image is what makes it land.
+- **Numbers stay bare.** Damage, costs, resources: bold and unembroidered.
+
+The budget is a form, not a muzzle. Nothing here restricts diction, humor,
+or what the one image may be — only how much of everything there is.

@@ -44,6 +44,9 @@ DM-authored pages (the engine never writes them; `sheet` just commits them):
 - **Draft–review–commit–copy**: the DM message is written into
   `ui/scene.md` first, reread and edited there, committed, and only then
   copied into chat verbatim. The chat copy is a copy, never a first draft.
+  The review is a *cut pass* against the voice contract (SETTING.md
+  §Voice): count the words against the budget, keep one image, cut the
+  rest. Over budget means cutting, not committing.
   If a fix happens after posting: edit the page, commit again, state the
   correction plainly — the two never silently diverge.
 - **One commit per message**: a single end-of-message command (`sheet`)
