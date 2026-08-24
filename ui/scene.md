@@ -1,36 +1,38 @@
-# Wake — Day 1, the mouth
+# Depth 1 — shatterfall scree
 
-The cutter signs. **Teodor Slake** — war habits, salvage axe on a shoulder
-loop, a jack of glass shards laced over the ribs. Wake's clerk writes
-*cutter* in the trade column and does not ask which war.
+Down the great mouth. **Light 9.**
 
-**hp 17/17 · grit 3/3 · light 10/10 · supply 3 · chits 0**
-**atk +6 · guard 12 · soak 2 · axe 1d10**
+The first depth is a slope of crushed glass in constant faint motion, loud
+underfoot. Nothing is quiet here, which is fair, because nothing here is
+trying to be. Somebody broke a shardswarm on this slope recently; the scree
+is still sorting the pieces.
 
-Wake is a town shaped like a rim. Lamp-wrights, brokers' stalls, the
-surgery, the vigil-house — all of it faces inward at the hole. Cold air goes
-down the mouth all day and comes back up at night smelling of something that
-was sealed for a very long time.
-
-You own nothing. Outfitters' row is open and every price on it is a number
-you don't have; the cheapest thing there is oilcloth wraps at **5**, and
-raising one stat by a point starts at **60**. Chits come up out of the
-ground or they don't come.
-
-Below is the **Vitric Age** — six depths, and Wake holds that its floor is
-sealed. Somewhere in the third of those depths is a surgeon's-runner who
-chose deeper, and thirteen chits' worth of glass nobody has collected.
+A **cullet crab** comes up at you through them — slag and shard fitted over
+something, unhurried, entirely unconcerned.
 
 ---
 
-## Where the real choices are
+**The crab** — hp 9 · atk +3 · guard 14 · soak 3 · dmg 1d6
+**Teodor** — hp 17/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
 
-Not here. Down there: how deep before turning, when to spend a supply on a
-camp, what stance to meet a thing in, and whether the light left is enough
-to climb out on. **Each step down burns 1 light. So does a camp. Climbing
-out costs more the deeper you are.**
+High guard, thick soak: your axe lands about **3** a swing through it, its
+claw about **2** through your jack. Nine hit points means roughly three
+landed swings. This is a grind, not a threat — but grinds are where the
+first bad roll finds you.
 
-**What Teodor does:** `delve` — down the great mouth, into depth 1.
+## Stance
+
+| | you hit | it hits | |
+|---|---|---|---|
+| `press` | **80%** | **70%** | +3 atk, −2 guard. ~3–4 rounds, ~5 hp |
+| `measure` | **65%** | **60%** | flat. ~4–5 rounds, ~5 hp |
+| `skirmish` | **60%** | **55%** | +1 guard, and you may break off if it turns |
+| `ward` | **55%** | **45%** | −2 atk, +3 guard, +1 soak. ~5–6 rounds, ~4 hp |
+
+A fight burns no light — the clock only runs on steps and camps. What a long
+fight costs is hp and the chance of a bad round.
+
+**Which stance?**
 
 ---
 

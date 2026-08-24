@@ -1,7 +1,7 @@
 THE DESCENT
 ===========
 
-  WAKE  (the mouth)   <-- you are here
+  WAKE  (the mouth)
    |
-  (the Understory waits)
+  d1  [encounter]  shatterfall scree   <-- you are here
 
