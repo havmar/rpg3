@@ -20,10 +20,11 @@ banked. The delve-or-surface choice is live.
 - CRAFT is a dead stat: it appears in the stat list, background priorities,
   and training, but no formula reads it. Chits spent training it buy
   nothing. Needs a design decision — give it a job (salvage value? light or
-  supply efficiency?) or drop it.
+  supply efficiency?) or drop it. `[HARVESTED → plans/0003 — CRAFT becomes
+  the expedition-logistics stat: satchel size and drum windings.]`
 - The delver sheet lists the five stats without saying what they do; the
   player had to ask what VIM is. Add a short legend to `ui/delver.txt` or a
-  stats note in the playbook.
+  stats note in the playbook. `[HARVESTED → plans/0003.]`
 
 **Player notes:**
 
@@ -59,17 +60,20 @@ it to a second day.
   Nothing in the game punishes a long fight except the hp it costs, which is
   exactly what ward minimises. Fix candidates: a per-round or per-fight light
   cost; a fatigue/round clock; press granting damage rather than only
-  accuracy; capping stance soak.
+  accuracy; capping stance soak. `[HARVESTED → plans/0002 — fights burn light every
+  4th round; press gains flat damage.]`
 - **The damage floor (`max(1, dmg - soak)`) makes high-soak enemies a wait,
   not a threat.** Against the watchman's soak 4, a 1d10 dealt **1** on any
   roll of 1–5 — half of all landed hits. The result was twelve rounds of
-  chip damage. Slow is not the same as tense.
+  chip damage. Slow is not the same as tense. `[HARVESTED → plans/0002 — the armored
+  trait now cracks: delver hits strip soak.]`
 - **Surge can be a dud, and that is the worst bug of the session.** Two grit
   — the game's marquee spend, a swing that *cannot miss*, double dice — came
   up 2d10 = 2, minus soak 4, floored to **1 damage**. The one moment the
   player is promised certainty delivered the minimum. Surge should pierce
   soak, or floor well above 1, or roll damage twice and take the better. It
-  must never be able to feel like a wasted button.
+  must never be able to feel like a wasted button. `[HARVESTED →
+  plans/0002 — surge ignores soak; minimum 2.]`
 - **The haven layer has still never been played.** Two delvers, two deaths,
   both on day 1, both carrying a full coat and an empty account. Charter §3
   ("real decisions live between fights") describes a layer no session has
@@ -78,19 +82,24 @@ it to a second day.
   decision point therefore favours `delve`. Candidates: bank a fraction of
   carried salvage on death; a standing debt or commission that forces a
   return; diminishing returns on a single descent; supply that cannot be
-  refilled without surfacing *and* fights that consume it.
+  refilled without surfacing *and* fights that consume it. `[HARVESTED →
+  plans/0003 — satchel carry limit + daily commissions; bank-on-death
+  DECLINED — it would hollow out the Ledger.]`
 - **Three dead traits and a dead stat.** `armored` (cullet crab, vitrified
   watchman) and `pack` (chorus pane, shardswarm) are in `ALLOWED_TRAITS` and
   the catalog and are read by no code in `engine.py`; only `brittle`,
   `lurker`, `relentless`, `swift` do anything. **CRAFT** is still dead,
-  carried unharvested from session 1.
+  carried unharvested from session 1. `[HARVESTED → plans/0002 (armored
+  cracks) and plans/0003 (CRAFT). Correction on review: pack is not dead —
+  content.py uses it for group size; only armored was unread.]`
 - **Site templates repeated inside one descent** — `watchman's rotunda` at
   depth 2 and again at depth 3. Covered diegetically (an epoch that built the
   same guard-round twice, one on top of the other) and it landed well, but by
-  luck. Consider excluding a site name already used this expedition.
+  luck. Consider excluding a site name already used this expedition. `[HARVESTED
+  → plans/0003.]`
 - **`ui/delver.txt` still has no stat legend** (session 1 note, unharvested).
   I hand-wrote one into the opening scene, which worked, but it should live
-  on the sheet.
+  on the sheet. `[HARVESTED → plans/0003.]`
 - **The Monte Carlo was the single best DM tool of the session.** Running the
   engine 4,000–6,000 times — first over the pending fight, then from the
   *actual paused state* with the real RNG swapped out — let me hand the
@@ -98,9 +107,11 @@ it to a second day.
   real and kept me honest. This should be a first-class command
   (`session.py odds`, `session.py odds --resume`), not a scratch script the
   DM improvises. Note the integrity constraint: it must reseed, never peek
-  at the live fight's RNG.
+  at the live fight's RNG. `[HARVESTED → plans/0003 — the reckoning drum:
+  session.py odds, windings = 1 + CRAFT, reseed-never-peek pinned by
+  test.]`
 - **The one-pause rule works.** It fired exactly once, at exactly the right
-  moment, and it was the high point of the session.
+  moment, and it was the high point of the session. `[No action — keep.]`
 
 **Player notes:**
 
@@ -109,3 +120,31 @@ it to a second day.
   the enjoyment — the visible machinery is a feature, not a leak.
 - friction: not given this session.
 - wish: not given this session.
+
+**Addendum — player feedback, chat, 2026-08-25** (given after the session
+in place of the table questions; harvested by the same design session as
+the notes above):
+
+- Character creation: wants a fully random delver, no pick-of-three, and
+  the game opening already underground so play starts where there is no
+  choice to make. `[HARVESTED → plans/0003.]`
+- The dead-delver trace line ("thirteen chits nobody has collected") read
+  as a quest hook and gave pause. Traces are welcome as atmosphere if they
+  never become objectives. `[HARVESTED → playbook §Ledger rite: traces are
+  set dressing, never hooks, never priced.]`
+- The DM overdid option analysis (the market advice; the unprompted odds
+  table gave a double take). Either no advice, or lean in deliberately —
+  the player suggested DM computation as an in-game resource, and the game
+  needs a dimension the DM's arithmetic cannot trivialise. `[HARVESTED →
+  playbook §Advice (object-level only) + plans/0003 (the reckoning drum,
+  windings as the meter; nerve-and-appetite decisions stay uncomputed).]`
+- Combat should generate labels-words, not just numbers, since a full
+  fight is too long to narrate; a wounds-like layer added texture in a
+  previous game but was too gory — wants it quirkier. `[HARVESTED →
+  plans/0002 — beat vocabulary in the fight log + marks.]`
+- /wrapup should not ask feedback questions; feedback comes separately,
+  and design sessions analyze transcripts. `[HARVESTED → playbook
+  §wrap-up rite + .claude/skills/wrapup, same commit as this entry.]`
+- Process: the player sets feelings and constraints and wants the design
+  details owned by the DM — "go strong." `[Noted — this is Charter §The
+  contract, reaffirmed.]`

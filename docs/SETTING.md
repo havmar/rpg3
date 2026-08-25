@@ -35,6 +35,13 @@ Wake lives on salvage. Delvers descend; relic-brokers, salvage-priests,
 lamp-wrights, and surgeons make their livings on what — and who — comes back
 up. Everything the player does between expeditions happens here.
 
+Wake's assay-house rents out **reckoning drums**: small Lattice-epoch
+instruments of brass and counting-glass, salvage nobody fully understands.
+Wind one, put to it a question shaped like a wager, and it clicks out odds.
+It answers only about the fight in front of you — that is all it can hear —
+and each winding spends something in it that only a night on the surface
+restores. Delvers argue about whether the drums calculate or remember.
+
 Wake keeps the **Ledger** — the record of dead delvers and what the world
 remembers of them. The Ledger survives everything, including new versions of
 the world (Charter §6). Every delver the player loses is written into it.

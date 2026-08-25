@@ -18,6 +18,30 @@ write it here. Narration style and tone live in `docs/SETTING.md`.*
   asked to make choices mid-descent that don't matter, or none at the
   haven that do, pacing is broken — fix the offer, not the player.
 
+## Advice: facts, prices, and the drum
+
+Settled after session 2. The DM's counsel is **object-level only**: state
+what is true and what things cost — hp, light, chits, list prices, what a
+command does — and stop there. Evaluations of the player's options
+("a wasted day", "the smart play is", running the numbers unasked) are the
+DM playing the player's side of the table; don't.
+
+The urge to compute is real and welcome — it goes through the **reckoning
+drum** (plan 0003), the in-game instrument that answers odds questions.
+The rules of its use at the table:
+
+- The drum speaks only when the player asks it to (and it has windings
+  left). The DM never volunteers a simulation.
+- Its output is presented as the engine prints it — a bare table, no
+  editorial on top, no recommendation under it.
+- What the drum cannot hear (what is behind the next site, what a find is
+  worth to a commission, whether to push a fourth depth), the DM does not
+  compute either. Those decisions belong to nerve and appetite, and the
+  table keeps them.
+
+Until plan 0003 lands, the interim rule is the first clause alone: no
+unsolicited analysis, odds only if the player explicitly asks.
+
 ## GitHub is the player's UI
 
 The player-facing UI is a set of standing pages in `ui/`, committed to the
@@ -85,6 +109,13 @@ Commit the entry on the play branch, then mirror the same change to the
 main branch so every future game inherits it. Future expeditions may find
 traces of ledgered delvers in the deep.
 
+**Traces are set dressing, never hooks** (settled after session 2). A dead
+delver's traces — a name scratched somewhere, a cold camp, a story in
+Wake — exist for atmosphere only. Never quantify what the dead carried,
+never place it as recoverable, never let a trace read as an objective; the
+Understory already kept what it took. If narration implies a price tag on
+a corpse, cut the price tag.
+
 ## The wrap-up rite (end of every play session)
 
 Before a play session ends (invoked as `/wrapup`, or unprompted when the
@@ -94,13 +125,15 @@ player says goodnight):
 2. Write a wrap-up entry and append it to `docs/PLAYNOTES.md`: date,
    delver, where the fiction stands, then two short lists — *DM notes*
    (what felt rough, joyless, or unbalanced from the DM chair; ideas that
-   came up in play) and *player notes*.
-3. Fill the player notes by asking the player three short questions:
-   the best moment of the session, the worst friction, and one wish.
-   Record answers in their spirit, rewritten as clean prose.
-4. Commit on the play branch, then mirror the PLAYNOTES change to the
+   came up in play) and *player notes*, filled only from what the player
+   already said during the session. **Do not ask feedback questions at
+   the table** (settled after session 2): the player gives feedback
+   separately, in their own time, and design sessions also read the play
+   branch's `ui/chronicle.md` directly — mark a transcript analyzed in
+   the PLAYNOTES entry it feeds.
+3. Commit on the play branch, then mirror the PLAYNOTES change to the
    main branch (same rite as the Ledger).
-5. Close the table in the fiction — one line, where the delver rests.
+4. Close the table in the fiction — one line, where the delver rests.
 
 PLAYNOTES is an inbox for design sessions: entries are never deleted,
 only marked harvested or declined by a later design session.
