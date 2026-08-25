@@ -1,6 +1,6 @@
 # Plan 0003 — A reason to surface: the satchel, commissions, the drum, and a faster start
 
-Status: READY (implement after plan 0002; builds on its save shape)
+Status: DONE (2026-08-25)
 
 ## Sources
 
@@ -183,13 +183,46 @@ No migration.
 
 ## Checklist
 
-- [ ] catalogs/names.json + validation; roll_delver; new = roll + first delve
-- [ ] satchel (cap, scrap stack, overflow) + sheet/status lines
-- [ ] commissions (draw, fill, redraw) + market/status lines
-- [ ] odds command + windings + odds_counter; reseed-never-peek test pinned
-- [ ] site no-repeat
-- [ ] delver.txt legend
-- [ ] SAVE_VERSION 3; fresh save plays clean end-to-end
-- [ ] contract suites green; benches re-run; BENCHLOG entry appended
-- [ ] PLAYBOOK drum-rules paragraph added
-- [ ] CLAUDE.md status updated
+- [x] catalogs/names.json + validation; roll_delver; new = roll + first delve
+- [x] satchel (cap, scrap stack, overflow) + sheet/status lines
+- [x] commissions (draw, fill, redraw) + market/status lines
+- [x] odds command + windings + odds_counter; reseed-never-peek test pinned
+- [x] site no-repeat
+- [x] delver.txt legend
+- [x] SAVE_VERSION 3; fresh save plays clean end-to-end
+- [x] contract suites green; benches re-run; BENCHLOG entry appended
+- [x] PLAYBOOK drum-rules paragraph added
+- [x] CLAUDE.md status updated
+
+## Implementation notes (deviations, recorded for review)
+
+- **`content.new_save(cat, world_seed)` is new.** The save shape was being
+  hand-built in three places (`session.cmd_new`, the content suite, the
+  career bench) and this plan adds three keys to it. One constructor is
+  the only way a no-migration save shape stays honest; the hand-built
+  copies are gone.
+- **`satchel_cap` and `windings_max` live in `engine.py`**, beside
+  `light_max`, not in `content.py`. They are derived readings off
+  `delver["stats"]`, which is what the engine's delver-math section is
+  for, and it keeps `pages.py` importing nothing but the engine. The
+  plan's "engine.py — nothing" line is about the odds simulation, which
+  is indeed content-side.
+- **`simulate_odds` lives in `content.py`; `session.py` only prints it.**
+  ENGINE.md: the driver adds no game logic of its own. The command,
+  its flags and the table layout are the driver's.
+- **The delver is deep-copied once per `odds` call, not once per sample.**
+  `engine.start_fight` never mutates the delver it reads (it builds a
+  combatant from it), so per-sample copies would buy nothing at 24,000
+  samples a table.
+- **Pause-policy fallback.** A row's policy can become illegal by the time
+  its sample reaches the pause — `surge` after the grit auto-spend ate
+  the grit. Such a sample falls back to `fight_on` rather than raising, so
+  a surge row reads "surge if you still can, else keep at it", which is
+  what the player would actually be able to do.
+- **The commission is drawn on the standard event-RNG path**
+  (`_evt_rng`, counter bumped): it is an ordinary seeded world event.
+  Only the drum uses the separate `odds_counter` path, because only the
+  drum must be unable to disturb the fight stream.
+- The `satchel` bench policy dies *more* than `ramp`, not less; see the
+  BENCHLOG entry for why that is a crude-policy artifact rather than the
+  carry limit being lethal.

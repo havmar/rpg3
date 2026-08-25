@@ -4,7 +4,9 @@ One broken world per validator clause: every lint gets exactly one test that
 builds a catalog violating it and asserts rejection.
 """
 
+import contextlib
 import copy
+import io
 import json
 import os
 import shutil
@@ -23,6 +25,9 @@ class TestCatalogLoads(unittest.TestCase):
     def test_clean_load(self):
         c = content.load_catalog()
         for section, count in content.CENSUS.items():
+            if section == "names":
+                self.assertEqual(sum(len(c["names"][p]) for p in content.NAME_LISTS), count)
+                continue
             self.assertEqual(len(c[section]), count, section)
 
     def test_version_clause(self):
@@ -132,6 +137,21 @@ class TestBrokenWorlds(unittest.TestCase):
         c["marks"].append(dict(c["marks"][0], name="an eleventh regret"))
         self.assert_rejected(c)
 
+    def test_name_census_mismatch(self):
+        c = cat()
+        c["names"]["given"].append("Extra")
+        self.assert_rejected(c)
+
+    def test_duplicate_name_in_a_name_list(self):
+        c = cat()
+        c["names"]["family"][1] = c["names"]["family"][0]
+        self.assert_rejected(c)
+
+    def test_name_locality_violation(self):
+        c = cat()
+        c["names"]["given"][0] = "Wakeborn"
+        self.assert_rejected(c)
+
     def test_priorities_not_permutation(self):
         c = cat()
         c["backgrounds"][0]["priorities"] = ["edge"] * 5
@@ -167,14 +187,20 @@ class TestGenerators(unittest.TestCase):
             if s1["kind"] == "encounter":
                 self.assertTrue(s1["enemies"])
 
-    def test_candidates(self):
-        c1 = content.delver_candidates(self.cat, "Ashline", 42)
-        c2 = content.delver_candidates(self.cat, "Ashline", 42)
-        self.assertEqual(c1, c2)
-        self.assertEqual(len({c["background"] for c in c1}), 3)
-        for c in c1:
-            self.assertEqual(sum(c["stats"].values()), sum(content.BASE_ARRAY) + 1)
-        self.assertNotEqual(c1, content.delver_candidates(self.cat, "Ashline", 43))
+    def test_roll_delver_is_deterministic(self):
+        a = content.roll_delver(self.cat, 42)
+        self.assertEqual(a, content.roll_delver(self.cat, 42))
+        self.assertNotEqual(a, content.roll_delver(self.cat, 43))
+        self.assertEqual(sum(a["stats"].values()), sum(content.BASE_ARRAY) + 1)
+
+    def test_the_deal_reaches_every_background_and_every_name(self):
+        rolled = [content.roll_delver(self.cat, seed) for seed in range(600)]
+        self.assertEqual({d["background"] for d in rolled},
+                         {b["name"] for b in self.cat["backgrounds"]})
+        given = {d["name"].split()[0] for d in rolled}
+        family = {d["name"].split()[1] for d in rolled}
+        self.assertEqual(given, set(self.cat["names"]["given"]))
+        self.assertEqual(family, set(self.cat["names"]["family"]))
 
 
 class TestExpeditionFlow(unittest.TestCase):
@@ -182,15 +208,7 @@ class TestExpeditionFlow(unittest.TestCase):
 
     def fresh_save(self, world_seed=1234):
         c = content.load_catalog()
-        candidate = content.delver_candidates(c, "Testfell", world_seed)[0]
-        return c, {
-            "version": engine.SAVE_VERSION, "world_seed": world_seed, "counter": 0,
-            "delver": content.new_delver(candidate),
-            "expedition": {"active": False, "depth": 0, "sites": [], "pending_site": None,
-                           "paused_fight": None, "free_delve": False},
-            "wake": {"chits": 0, "day": 1, "expeditions": 0},
-            "history": [], "last_fight": None,
-        }
+        return c, content.new_save(c, world_seed)
 
     def test_career_runs_and_save_roundtrips(self):
         c, save = self.fresh_save()
@@ -341,6 +359,233 @@ class TestMarks(unittest.TestCase):
         else:
             self.fail("no breather in 40 sites")
         self.assertEqual(d["grit"], 0)
+
+
+class TestSatchel(unittest.TestCase):
+    """A hard carry limit: the turnaround the descent never had."""
+
+    def setUp(self):
+        self.cat, self.save = TestExpeditionFlow().fresh_save()
+        self.d = self.save["delver"]
+        self.d["salvage"] = []
+
+    def fill(self, *values):
+        for i, v in enumerate(values):
+            self.d["salvage"].append({"name": "thing %d" % i, "value": v})
+
+    def test_capacity_tracks_craft(self):
+        self.d["stats"]["craft"] = 2
+        self.assertEqual(engine.satchel_cap(self.d), 6)
+        self.d["stats"]["craft"] = 5
+        self.assertEqual(engine.satchel_cap(self.d), 9)
+
+    def test_scrap_stacks_into_one_slot(self):
+        content.take_salvage(self.d, content.SCRAP, 4)
+        content.take_salvage(self.d, content.SCRAP, 6)
+        self.assertEqual(len(self.d["salvage"]), 1)
+        self.assertEqual(self.d["salvage"][0]["value"], 10)
+
+    def test_scrap_stacks_even_when_the_satchel_is_full(self):
+        content.take_salvage(self.d, content.SCRAP, 4)
+        self.fill(*[9] * (engine.satchel_cap(self.d) - 1))
+        content.take_salvage(self.d, content.SCRAP, 5)
+        self.assertEqual(len(self.d["salvage"]), engine.satchel_cap(self.d))
+        self.assertEqual(content.by_name(self.d["salvage"], content.SCRAP)["value"], 9)
+
+    def test_a_full_satchel_keeps_the_more_valuable_find(self):
+        cap = engine.satchel_cap(self.d)
+        self.fill(*([5] * (cap - 1) + [2]))
+        lines = content.take_salvage(self.d, "a better thing", 9)
+        self.assertEqual(len(self.d["salvage"]), cap)
+        self.assertIn("a better thing", [i["name"] for i in self.d["salvage"]])
+        self.assertNotIn(2, [i["value"] for i in self.d["salvage"]])
+        self.assertIn("drop", lines[0])
+
+    def test_the_cheapest_find_is_left_behind(self):
+        cap = engine.satchel_cap(self.d)
+        self.fill(*[5] * cap)
+        lines = content.take_salvage(self.d, "a worse thing", 3)
+        self.assertEqual(len(self.d["salvage"]), cap)
+        self.assertNotIn("a worse thing", [i["name"] for i in self.d["salvage"]])
+        self.assertIn("stays where it lies", lines[0])
+
+
+class TestCommission(unittest.TestCase):
+    """The pull: surfacing is a payday, not a concession."""
+
+    def setUp(self):
+        self.cat, self.save = TestExpeditionFlow().fresh_save()
+        self.save["expedition"].update({"active": True, "depth": 2})
+        self.save["delver"]["salvage"] = []
+        self.save["delver"]["knack"] = "cutter"  # keep the glasspicker bonus out of the sums
+
+    def wanted(self):
+        return content.by_name(self.cat["salvage"], self.save["wake"]["commission"]["item"])
+
+    def test_a_filled_order_pays_double_for_exactly_one(self):
+        item = self.wanted()
+        for _ in range(2):
+            self.save["delver"]["salvage"].append({"name": item["name"], "value": item["value"]})
+        drawn_at = self.save["counter"]
+        content.do_surface(self.cat, self.save)
+        self.assertEqual(self.save["wake"]["chits"], 3 * item["value"])
+        # a new day is a new posting: the draw happened, even if it repeats
+        self.assertGreater(self.save["counter"], drawn_at)
+        self.assertTrue(any("order for" in h for h in self.save["history"]))
+
+    def test_an_unfilled_order_banks_plainly_and_is_reposted(self):
+        other = next(s for s in self.cat["salvage"] if s["name"] != self.wanted()["name"])
+        self.save["delver"]["salvage"].append({"name": other["name"], "value": other["value"]})
+        content.do_surface(self.cat, self.save)
+        self.assertEqual(self.save["wake"]["chits"], other["value"])
+        self.assertIn("item", self.save["wake"]["commission"])
+
+    def test_the_bonus_is_the_list_price(self):
+        com = self.save["wake"]["commission"]
+        self.assertEqual(com["bonus"], content.by_name(self.cat["salvage"], com["item"])["value"])
+
+
+class TestTheDrum(unittest.TestCase):
+    """Odds as a rationed object in the world. Reseed, never peek."""
+
+    def setUp(self):
+        self.cat, self.save = TestExpeditionFlow().fresh_save()
+        self.pending_fight(self.save)
+
+    def pending_fight(self, save):
+        exp = save["expedition"]
+        for _ in range(60):
+            content.advance_delve(self.cat, save, content._evt_rng(save))
+            if exp["pending_site"] and exp["pending_site"].get("enemies"):
+                return
+            exp["depth"] = 1  # stay shallow; we only want an encounter
+        self.fail("no encounter in 60 delves")
+
+    def resolve(self, save):
+        paused, _ = content.start_pending_fight(self.cat, save, "measure")
+        if paused:
+            content.resume_paused_fight(self.cat, save, "fight_on")
+        return save["last_fight"]["events"]
+
+    def test_consulting_the_drum_cannot_change_the_fight(self):
+        untouched = json.loads(json.dumps(self.save))
+        content.simulate_odds(self.cat, self.save, 25)
+        self.assertEqual(self.resolve(self.save), self.resolve(untouched))
+
+    def test_consulting_the_drum_twice_still_cannot(self):
+        untouched = json.loads(json.dumps(self.save))
+        content.simulate_odds(self.cat, self.save, 10)
+        content.simulate_odds(self.cat, self.save, 10)
+        self.assertEqual(self.resolve(self.save), self.resolve(untouched))
+
+    def test_rows_are_whole_distributions(self):
+        rows = content.simulate_odds(self.cat, self.save, 50)
+        self.assertTrue(rows)
+        for row in rows:
+            self.assertAlmostEqual(row["victory"] + row["retreated"] + row["down"], 100.0, places=6)
+            self.assertEqual(row["n"], 50)
+
+    def test_a_winding_per_question_and_then_it_is_spent(self):
+        d = self.save["delver"]
+        d["windings"] = 2
+        content.simulate_odds(self.cat, self.save, 5)
+        self.assertEqual(d["windings"], 1)
+        content.simulate_odds(self.cat, self.save, 5)
+        self.assertEqual(d["windings"], 0)
+        with self.assertRaises(ValueError):
+            content.simulate_odds(self.cat, self.save, 5)
+
+    def test_the_drum_hears_nothing_when_no_fight_stands_in_front_of_you(self):
+        self.save["expedition"]["pending_site"] = None
+        with self.assertRaises(ValueError):
+            content.simulate_odds(self.cat, self.save, 5)
+
+    def test_a_night_above_ground_winds_it_again(self):
+        d = self.save["delver"]
+        d["windings"] = 0
+        self.save["expedition"]["pending_site"] = None
+        content.do_surface(self.cat, self.save)
+        self.assertEqual(d["windings"], engine.windings_max(d))
+
+    def test_it_reads_a_paused_fight_too(self):
+        save = self.save
+        while True:
+            paused, _ = content.start_pending_fight(self.cat, save, "measure")
+            if paused:
+                break
+            if not save["delver"]["alive"]:
+                self.fail("died before a pause")
+            self.pending_fight(save)
+        rows = content.simulate_odds(self.cat, save, 20)
+        labels = {r["label"] for r in rows}
+        self.assertEqual(labels, set(engine.pause_options(save["expedition"]["paused_fight"])))
+        untouched = json.loads(json.dumps(save))
+        untouched["expedition"]["paused_fight"] = json.loads(
+            json.dumps(save["expedition"]["paused_fight"]))
+        a = engine.resume_fight(save["expedition"]["paused_fight"], "fight_on")
+        b = engine.resume_fight(untouched["expedition"]["paused_fight"], "fight_on")
+        self.assertEqual(a["events"], b["events"])
+
+
+class TestSitesDoNotRepeat(unittest.TestCase):
+    def setUp(self):
+        self.cat = content.load_catalog()
+
+    def test_a_template_does_not_come_round_again_until_its_pool_is_spent(self):
+        pools = {kind: [s["name"] for s in self.cat["sites"]
+                        if s["kind"] == kind and s["depth"][0] <= 3 <= s["depth"][1]]
+                 for kind in content.SITE_KINDS}
+        drawn = {kind: [] for kind in content.SITE_KINDS}
+        seen = set()
+        for i in range(40):
+            site = content.generate_site(self.cat, 3, engine.rng_for("norepeat", i), exclude=seen)
+            seen.add(site["name"])
+            drawn[site["kind"]].append(site["name"])
+        for kind, names in drawn.items():
+            head = names[:len(pools[kind])]
+            self.assertEqual(len(set(head)), len(head), "%s repeated early: %s" % (kind, head))
+
+    def test_an_expedition_does_not_repeat_itself(self):
+        cat, save = TestExpeditionFlow().fresh_save(77)
+        exp = save["expedition"]
+        for _ in range(6):
+            content.advance_delve(cat, save, content._evt_rng(save))
+            exp["pending_site"] = None
+        names = [s["name"] for s in exp["sites"]]
+        self.assertEqual(len(set(names)), len(names), names)
+
+
+class TestTheOpeningCommand(unittest.TestCase):
+    """`new` deals a stranger and puts them underground in one command."""
+
+    def test_new_writes_a_complete_v3_save_already_at_depth_one(self):
+        import pages
+        import session
+        with tempfile.TemporaryDirectory() as tmp:
+            old_save, old_ui = session.SAVE_PATH, pages.UI_DIR
+            session.SAVE_PATH = os.path.join(tmp, "save.json")
+            pages.UI_DIR = os.path.join(tmp, "ui")
+            try:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    session.main(["new", "--seed", "31337"])
+                with open(session.SAVE_PATH, encoding="utf-8") as f:
+                    save = json.load(f)
+                with open(os.path.join(pages.UI_DIR, "delver.txt"), encoding="utf-8") as f:
+                    sheet = f.read()
+            finally:
+                session.SAVE_PATH, pages.UI_DIR = old_save, old_ui
+        self.assertEqual(save["version"], engine.SAVE_VERSION)
+        self.assertEqual(save["odds_counter"], 0)
+        self.assertTrue(save["expedition"]["active"])
+        self.assertEqual(save["expedition"]["depth"], 1)
+        self.assertEqual(len(save["expedition"]["sites"]), 1)
+        d = save["delver"]
+        self.assertEqual(d["marks"], [])
+        self.assertEqual(d["windings"], engine.windings_max(d))
+        self.assertEqual(len(d["name"].split()), 2)
+        self.assertIn("item", save["wake"]["commission"])
+        self.assertIn("CRAFT  provision", sheet)
+        self.assertIn("SATCHEL", sheet)
 
 
 if __name__ == "__main__":

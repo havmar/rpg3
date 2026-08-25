@@ -4,11 +4,11 @@ All campaign state lives in save.json (untracked) between invocations. This
 driver adds no game logic of its own; rules live in engine.py and
 content.py, and the numbers live in the catalogs.
 
-    python session.py new Ashline            # meet three candidates
-    python session.py new Ashline --pick 2   # take one; the save begins
+    python session.py new                    # roll a delver; day 1 starts underground
     python session.py delve                  # one step deeper
     python session.py fight --stance press   # resolve the pending fight
     python session.py fight --resume surge   # answer a mid-fight pause
+    python session.py odds                   # wind the drum: odds on this fight
     python session.py camp | surface | status | market | log
     python session.py train edge | buy "salvage axe"
     python session.py sheet -m "message"     # rewrite + commit ui/ pages
@@ -28,7 +28,7 @@ SAVE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "save.json"
 
 def load_save():
     if not os.path.exists(SAVE_PATH):
-        raise SystemExit("no save.json -- start with: python session.py new <Name>")
+        raise SystemExit("no save.json -- start with: python session.py new")
     with open(SAVE_PATH, "r", encoding="utf-8") as f:
         save = json.load(f)
     if save.get("version") != engine.SAVE_VERSION:
@@ -52,43 +52,35 @@ def say(lines):
 def require_alive(save):
     if not save["delver"]["alive"]:
         raise SystemExit("%s is dead. The Ledger remembers; the save is done. "
-                         "Start anew: delete save.json, then session.py new <Name>"
+                         "Start anew: delete save.json, then session.py new"
                          % save["delver"]["name"])
 
 
 # ------------------------------------------------------------------ commands
 
 def cmd_new(cat, args):
+    """Deal a stranger and put them underground. No parade of candidates:
+    a choice between three unplayed strangers is a fake one."""
     if os.path.exists(SAVE_PATH) and not args.force:
         raise SystemExit("save.json already exists; pass --force to abandon it")
     world_seed = args.seed if args.seed is not None else engine.child_seed(os.urandom(8).hex())
-    candidates = content.delver_candidates(cat, args.name, world_seed)
-    if args.pick is None:
-        print("Three came to the mouth answering to %r (world seed %d):\n" % (args.name, world_seed))
-        for i, c in enumerate(candidates, 1):
-            stats = "  ".join("%s %d" % (s.upper(), c["stats"][s]) for s in engine.STATS)
-            print("  %d) the %s -- %s" % (i, c["background"], c["blurb"]))
-            print("     %s" % stats)
-            print("     %s / %s; knack: %s" % (c["weapon"]["name"], c["armor"]["name"], c["knack_text"]))
-            print()
-        print("choose with: python session.py new %s --seed %d --pick N" % (args.name, world_seed))
-        return
-    candidate = candidates[args.pick - 1]
-    save = {
-        "version": engine.SAVE_VERSION,
-        "world_seed": world_seed,
-        "counter": 0,
-        "delver": content.new_delver(candidate),
-        "expedition": {"active": False, "depth": 0, "sites": [], "pending_site": None,
-                       "paused_fight": None, "free_delve": False},
-        "wake": {"chits": 0, "day": 1, "expeditions": 0},
-        "history": ["Day 1: %s, %s, signed the delvers' book in Wake."
-                    % (candidate["name"], candidate["background"])],
-        "last_fight": None,
-    }
+    save = content.new_save(cat, world_seed)
+    d = save["delver"]
+    print("%s, %s.  (world seed %d)" % (d["name"], d["background"], world_seed))
+    print(d["blurb"])
+    print("  " + "  ".join("%s %d" % (s.upper(), d["stats"][s]) for s in engine.STATS))
+    print("  hp %d/%d  grit %d/%d  light %d  supply %d  satchel 0/%d  windings %d"
+          % (d["hp"], engine.hp_max(d), d["grit"], engine.grit_max(d), d["light"],
+             d["supply"], engine.satchel_cap(d), d["windings"]))
+    print("  %s (%s, acc %+d) / %s (guard +%d, soak %d)"
+          % (d["weapon"]["name"], d["weapon"]["dmg"], d["weapon"]["acc"],
+             d["armor"]["name"], d["armor"]["guard"], d["armor"]["soak"]))
+    print("  knack: %s" % d["knack_text"])
+    print("  standing order at the assay-house: %s, paying double."
+          % save["wake"]["commission"]["item"])
+    print("")
+    _delve(cat, save)
     write_save(save)
-    print("%s the %s stands at the mouth. (save.json written)"
-          % (candidate["name"], candidate["background"]))
 
 
 def cmd_status(cat, args):
@@ -101,6 +93,10 @@ def cmd_status(cat, args):
     print("hp %d/%d  grit %d/%d  light %d  supply %d  chits %d"
           % (d["hp"], engine.hp_max(d), d["grit"], engine.grit_max(d),
              d["light"], d["supply"], save["wake"]["chits"]))
+    print("satchel %d/%d  windings %d/%d  standing order: %s (pays +%d)"
+          % (len(d["salvage"]), engine.satchel_cap(d), d["windings"],
+             engine.windings_max(d), save["wake"]["commission"]["item"],
+             save["wake"]["commission"]["bonus"]))
     if d["salvage"]:
         print("carrying: " + ", ".join("%s(%d)" % (i["name"], i["value"]) for i in d["salvage"]))
     for mark in d["marks"]:
@@ -114,16 +110,35 @@ def cmd_status(cat, args):
                                                 ", ".join(exp["pending_site"]["enemies"])))
 
 
-def cmd_delve(cat, args):
-    save = load_save()
-    require_alive(save)
-    rng = content._evt_rng(save)
-    site, lines = content.advance_delve(cat, save, rng)
+def _delve(cat, save):
+    site, lines = content.advance_delve(cat, save, content._evt_rng(save))
     print("DEPTH %d -- %s [%s]" % (site["depth"], site["name"], site["kind"]))
     print(site["text"])
     if site["kind"] == "strange":
         print(site["strange_text"])
     say(lines)
+
+
+def cmd_delve(cat, args):
+    save = load_save()
+    require_alive(save)
+    _delve(cat, save)
+    write_save(save)
+
+
+def cmd_odds(cat, args):
+    """The reckoning drum. Its table is printed as the engine makes it;
+    the playbook forbids editorial on top of it."""
+    save = load_save()
+    require_alive(save)
+    rows = content.simulate_odds(cat, save, args.n)
+    print("THE RECKONING DRUM -- %d windings left, %d runs a line"
+          % (save["delver"]["windings"], args.n))
+    print("  %-22s   win  retreat    dead   rounds  hp on win  light" % "line")
+    for r in rows:
+        print("  %-22s %5.1f%%  %5.1f%%  %5.1f%%   %6.1f     %6.1f  %5.1f"
+              % (r["label"], r["victory"], r["retreated"], r["down"],
+                 r["rounds"], r["hp_on_win"], r["light"]))
     write_save(save)
 
 
@@ -181,6 +196,9 @@ def cmd_market(cat, args):
               % (a["name"], a["value"], a["guard"], a["soak"], ", heavy" if a["heavy"] else "", a["blurb"]))
     print("training: raising a stat to N costs %d*N chits (cap %d)"
           % (content.TRAIN_COST_PER_LEVEL, content.STAT_CAP))
+    com = save["wake"]["commission"]
+    print("standing order: the assay-house pays double for %s (+%d chits on the first one in)"
+          % (com["item"], com["bonus"]))
 
 
 def cmd_log(cat, args):
@@ -205,12 +223,14 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    s = sub.add_parser("new", help="raise a delver (twice: once to see candidates, once with --pick)")
-    s.add_argument("name")
-    s.add_argument("--seed", type=int, default=None, help="world seed; keep it when picking")
-    s.add_argument("--pick", type=int, choices=[1, 2, 3], default=None)
+    s = sub.add_parser("new", help="roll a delver and take the first step down")
+    s.add_argument("--seed", type=int, default=None, help="world seed (omit for a random one)")
     s.add_argument("--force", action="store_true", help="abandon an existing save.json")
     s.set_defaults(fn=cmd_new)
+
+    s = sub.add_parser("odds", help="wind the reckoning drum: simulated odds on this fight")
+    s.add_argument("--n", type=int, default=2000, help="runs per line")
+    s.set_defaults(fn=cmd_odds)
 
     for name, fn, msg in (("status", cmd_status, "where things stand"),
                           ("delve", cmd_delve, "one step deeper (costs 1 light)"),

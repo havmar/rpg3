@@ -72,6 +72,10 @@ traces rule, and a wrap-up rite without table questions.
 Plan 0002 is DONE (save v2): stances carry a damage bonus, rounds burn
 lamp oil, armor cracks as you work it, a surge goes through soak, the
 fight log tags its own beats for the DM, and a hard fight leaves a mark.
-Plans 0003 and 0004 are READY (implement in that order). Next milestone:
-0003 and 0004, then a third playthrough on the new engine. Update this
-status as milestones land.
+Plan 0003 is DONE (save v3): `new` deals a random delver and executes the
+first delve, so day 1 starts underground; the satchel caps what comes
+home; Wake posts a daily commission that pays double; and the reckoning
+drum (`session.py odds`) answers odds questions out of a rationed supply
+of windings, on a seed path that cannot peek at the real fight.
+Plan 0004 is READY. Next milestone: 0004, then a third playthrough on the
+new engine. Update this status as milestones land.

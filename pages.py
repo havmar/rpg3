@@ -34,9 +34,18 @@ def write_delver(save):
     lines.append("  HP    " + _bar(d["hp"], engine.hp_max(d)))
     lines.append("  GRIT  " + _bar(d["grit"], engine.grit_max(d), width=8))
     lines.append("  LIGHT " + _bar(d["light"], engine.light_max(d), width=12))
-    lines.append("  SUPPLY %d" % d["supply"])
+    lines.append("  SUPPLY %d      WINDINGS %d/%d"
+                 % (d["supply"], d["windings"], engine.windings_max(d)))
+    lines.append("  SATCHEL %d/%d" % (len(d["salvage"]), engine.satchel_cap(d)))
     lines.append("")
     lines.append("  " + "  ".join("%s %d" % (s.upper(), d["stats"][s]) for s in engine.STATS))
+    lines.append("")
+    lines.append("  EDGE   swing      (attack rolls)")
+    lines.append("  IRON   stand      (guard)")
+    lines.append("  VIM    endure     (hp)")
+    lines.append("  NERVE  hold       (grit, fear)")
+    lines.append("  CRAFT  provision  (satchel size, drum windings)")
+    lines.append("  grit: luck you spend    light: time underground    supply: nights of camp")
     lines.append("")
     lines.append("  attack %+d   guard %d   soak %d" % (engine.attack_bonus(d), engine.guard(d), engine.soak(d)))
     lines.append("  weapon: %s (%s, acc %+d)" % (d["weapon"]["name"], d["weapon"]["dmg"], d["weapon"]["acc"]))
@@ -55,8 +64,11 @@ def write_delver(save):
     else:
         lines.append("  IN WAKE -- day %d" % save["wake"]["day"])
     lines.append("  chits banked: %d" % save["wake"]["chits"])
+    com = save["wake"]["commission"]
+    lines.append("  standing order: %s -- the assay-house pays +%d on the first one in"
+                 % (com["item"], com["bonus"]))
     if d["salvage"]:
-        lines.append("  carrying:")
+        lines.append("  carrying (%d/%d):" % (len(d["salvage"]), engine.satchel_cap(d)))
         for item in d["salvage"]:
             lines.append("    - %s (worth %d)" % (item["name"], item["value"]))
     lines.append("")

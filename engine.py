@@ -10,7 +10,7 @@ import json
 import random
 import re
 
-SAVE_VERSION = 2
+SAVE_VERSION = 3
 
 STATS = ["edge", "iron", "vim", "nerve", "craft"]
 
@@ -112,6 +112,16 @@ def nerve_bonus(delver):
 
 def light_max(delver):
     return 10 + (2 if delver["knack"] == "lamplighter" else 0)
+
+
+def satchel_cap(delver):
+    """How much salvage comes home with you. CRAFT is provisioning."""
+    return 4 + delver["stats"]["craft"]
+
+
+def windings_max(delver):
+    """Reckoning-drum windings per expedition. CRAFT again."""
+    return 1 + delver["stats"]["craft"]
 
 
 def camp_heal(delver, rng):

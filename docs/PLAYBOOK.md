@@ -36,20 +36,25 @@ command does — and stop there. Evaluations of the player's options
 DM playing the player's side of the table; don't.
 
 The urge to compute is real and welcome — it goes through the **reckoning
-drum** (plan 0003), the in-game instrument that answers odds questions.
-The rules of its use at the table:
+drum**, the in-game instrument that answers odds questions
+(`session.py odds`). The rules of its use at the table:
 
-- The drum speaks only when the player asks it to (and it has windings
-  left). The DM never volunteers a simulation.
+- The drum speaks only when the player asks it to. Each question spends a
+  winding; `1 + CRAFT` of them per expedition, restored by a night above
+  ground. The DM never volunteers a simulation and never spends a winding
+  on the player's behalf.
 - Its output is presented as the engine prints it — a bare table, no
-  editorial on top, no recommendation under it.
-- What the drum cannot hear (what is behind the next site, what a find is
-  worth to a commission, whether to push a fourth depth), the DM does not
-  compute either. Those decisions belong to nerve and appetite, and the
-  table keeps them.
-
-Until plan 0003 lands, the interim rule is the first clause alone: no
-unsolicited analysis, odds only if the player explicitly asks.
+  editorial on top, no recommendation under it. Naming which row is best
+  is the DM playing the player's side of the table.
+- The drum answers only about the fight in front of you: a pending
+  encounter, or a fight standing at its pause. Anything else it cannot
+  hear, and the DM does not compute either — what is behind the next
+  passage, whether a find is worth carrying, whether to push a fourth
+  depth. Those belong to nerve and appetite, and the table keeps them.
+- The drum cannot cheat and cannot be cheated. Its simulations run on a
+  seed path of their own, so asking never changes and never reveals the
+  fight actually waiting (reseed, never peek — pinned by test). Consulting
+  it, then reloading and not consulting it, produces the same fight.
 
 ## GitHub is the player's UI
 

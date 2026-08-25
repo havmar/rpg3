@@ -5,6 +5,7 @@ censuses are pinned so silent content drift fails loudly. The engine stays
 generic; everything that knows names lives here.
 """
 
+import copy
 import json
 import os
 
@@ -23,7 +24,11 @@ CENSUS = {
     "strange": 10,
     "sites": 12,
     "marks": 10,
+    "names": 40,  # given + family together
 }
+
+# names are two plain string lists, not records; validated on their own terms
+NAME_LISTS = ("given", "family")
 
 ALLOWED_TRAITS = {"swift", "lurker", "brittle", "relentless", "armored", "pack"}
 SITE_KINDS = ("encounter", "salvage", "strange", "breather")
@@ -84,9 +89,29 @@ def _check_records(records, section):
         raise CatalogError("%s census is %d, pinned %d" % (section, len(records), CENSUS[section]))
 
 
+def _check_names(names):
+    total = 0
+    for part in NAME_LISTS:
+        pool = names[part]
+        if not all(isinstance(nm, str) and nm for nm in pool):
+            raise CatalogError("names %s holds something that is not a name" % part)
+        if len(set(pool)) != len(pool):
+            raise CatalogError("names %s has duplicates" % part)
+        for nm in pool:
+            for word in FORBIDDEN_IN_TEMPLATES:
+                if word in nm:
+                    raise CatalogError("names %s violates locality: %r names %r" % (part, nm, word))
+        total += len(pool)
+    if total != CENSUS["names"]:
+        raise CatalogError("names census is %d, pinned %d" % (total, CENSUS["names"]))
+
+
 def validate_catalog(cat):
     """Full lint of the merged catalog dict. Raises CatalogError."""
     for section in CENSUS:
+        if section == "names":
+            _check_names(cat["names"])
+            continue
         _check_records(cat[section], section)
     weapon_names = {w["name"] for w in cat["weapons"]}
     armor_names = {a["name"] for a in cat["armors"]}
@@ -131,13 +156,17 @@ def load_catalog():
         ("strange.json", ["strange"]),
         ("sites.json", ["sites"]),
         ("marks.json", ["marks"]),
+        ("names.json", list(NAME_LISTS)),
     ):
         with open(os.path.join(CATALOG_DIR, fname), "r", encoding="utf-8") as f:
             data = json.load(f)
         if data.get("version") != CATALOG_VERSION:
             raise CatalogError("%s: version %r, expected %d" % (fname, data.get("version"), CATALOG_VERSION))
         for section in sections:
-            cat[section] = data[section]
+            if fname == "names.json":
+                cat.setdefault("names", {})[section] = data[section]
+            else:
+                cat[section] = data[section]
     return validate_catalog(cat)
 
 
@@ -178,16 +207,22 @@ def roll_salvage(cat, depth, rng):
     return rng.choice(_eligible(cat["salvage"], depth))
 
 
-def generate_site(cat, depth, rng):
-    """One site at this depth: template + payload. Deterministic per rng."""
+def generate_site(cat, depth, rng, exclude=()):
+    """One site at this depth: template + payload. Deterministic per rng.
+
+    `exclude` names templates already used this expedition; the Understory
+    does not repeat itself until it runs out of rooms.
+    """
     total = sum(w for _, w in SITE_KIND_WEIGHTS)
     pick = rng.randint(1, total)
     for kind, weight in SITE_KIND_WEIGHTS:
         pick -= weight
         if pick <= 0:
             break
-    template = rng.choice([s for s in cat["sites"] if s["kind"] == kind
-                           and s["depth"][0] <= depth <= s["depth"][1]])
+    pool = [s for s in cat["sites"] if s["kind"] == kind
+            and s["depth"][0] <= depth <= s["depth"][1]]
+    fresh = [s for s in pool if s["name"] not in exclude]
+    template = rng.choice(fresh or pool)
     site = {"depth": depth, "kind": kind, "name": template["name"], "text": template["text"]}
     if kind == "encounter":
         site["enemies"] = [e["name"] for e in build_encounter(cat, depth, rng)]
@@ -209,28 +244,30 @@ def generate_site(cat, depth, rng):
 BASE_ARRAY = [3, 3, 2, 2, 2]
 
 
-def delver_candidates(cat, name, world_seed):
-    """Three seeded delver candidates for a name. Deterministic."""
-    rng = engine.rng_for(world_seed, "delver", name)
-    picks = rng.sample(sorted(cat["backgrounds"], key=lambda b: b["name"]), 3)
-    candidates = []
-    for bg in picks:
-        stats = {}
-        for stat, val in zip(bg["priorities"], BASE_ARRAY):
-            stats[stat] = val
-        bonus = rng.choice(sorted(engine.STATS))
-        stats[bonus] += 1
-        candidates.append({
-            "name": name,
-            "background": bg["name"],
-            "blurb": bg["blurb"],
-            "knack": bg["knack"],
-            "knack_text": bg["knack_text"],
-            "stats": stats,
-            "weapon": dict(by_name(cat["weapons"], bg["weapon"])),
-            "armor": dict(by_name(cat["armors"], bg["armor"])),
-        })
-    return candidates
+def roll_delver(cat, world_seed):
+    """The stranger the world deals you. Deterministic in the world seed.
+
+    No pick-of-three: a choice between three unplayed strangers is a fake
+    one. The first real decision of a playthrough is what to do about
+    depth 1.
+    """
+    rng = engine.rng_for(world_seed, "delver")
+    name = "%s %s" % (rng.choice(cat["names"]["given"]), rng.choice(cat["names"]["family"]))
+    bg = rng.choice(sorted(cat["backgrounds"], key=lambda b: b["name"]))
+    stats = {}
+    for stat, val in zip(bg["priorities"], BASE_ARRAY):
+        stats[stat] = val
+    stats[rng.choice(sorted(engine.STATS))] += 1
+    return {
+        "name": name,
+        "background": bg["name"],
+        "blurb": bg["blurb"],
+        "knack": bg["knack"],
+        "knack_text": bg["knack_text"],
+        "stats": stats,
+        "weapon": dict(by_name(cat["weapons"], bg["weapon"])),
+        "armor": dict(by_name(cat["armors"], bg["armor"])),
+    }
 
 
 # ---------------------------------------------------------- expedition flow
@@ -240,6 +277,8 @@ def delver_candidates(cat, name, world_seed):
 SUPPLY_START = 3
 TRAIN_COST_PER_LEVEL = 15
 STAT_CAP = 6
+SCRAP = "scrap glass and fittings"
+ODDS_POLICIES = ("fight_on", "surge", "withdraw")
 
 
 def new_delver(candidate):
@@ -248,10 +287,67 @@ def new_delver(candidate):
     d["hp"] = engine.hp_max(d)
     d["grit"] = engine.grit_max(d)
     d["light"] = engine.light_max(d)
+    d["windings"] = engine.windings_max(d)
     d["supply"] = SUPPLY_START
     d["salvage"] = []
     d["alive"] = True
     return d
+
+
+def new_save(cat, world_seed):
+    """A whole campaign in one shape. There is no other shape and no
+    migration path to it (Charter §6)."""
+    delver = new_delver(roll_delver(cat, world_seed))
+    save = {
+        "version": engine.SAVE_VERSION,
+        "world_seed": world_seed,
+        "counter": 0,
+        "odds_counter": 0,
+        "delver": delver,
+        "expedition": {"active": False, "depth": 0, "sites": [], "pending_site": None,
+                       "paused_fight": None, "free_delve": False},
+        "wake": {"chits": 0, "day": 1, "expeditions": 0, "commission": None},
+        "history": ["Day 1: %s, %s, went down the great mouth."
+                    % (delver["name"], delver["background"])],
+        "last_fight": None,
+    }
+    save["wake"]["commission"] = draw_commission(cat, save)
+    return save
+
+
+# ------------------------------------------------------------- the satchel
+# A hard carry limit is the turnaround the descent never had: "my bag is
+# full" is a reason to climb that is not a punishment.
+
+def take_salvage(delver, name, value):
+    """Put a find in the satchel, or decide what it displaces. Returns lines."""
+    if name == SCRAP:
+        for carried in delver["salvage"]:
+            if carried["name"] == SCRAP:  # scrap merges; it never costs a second slot
+                carried["value"] += value
+                return ["Scrap goes in with the rest (the lot is worth %d)." % carried["value"]]
+    cap = engine.satchel_cap(delver)
+    if len(delver["salvage"]) < cap:
+        delver["salvage"].append({"name": name, "value": value})
+        return ["Salvage taken: %s (worth %d) [satchel %d/%d]."
+                % (name, value, len(delver["salvage"]), cap)]
+    cheapest = min(delver["salvage"], key=lambda i: (i["value"], i["name"]))
+    if value > cheapest["value"]:
+        delver["salvage"].remove(cheapest)
+        delver["salvage"].append({"name": name, "value": value})
+        return ["The satchel is full: you drop %s (worth %d) and take %s (worth %d)."
+                % (cheapest["name"], cheapest["value"], name, value)]
+    return ["The satchel is full; %s (worth %d) stays where it lies." % (name, value)]
+
+
+# ---------------------------------------------------------- the commission
+# Wake's standing order: the reason surfacing is a payday and not a reset.
+
+def draw_commission(cat, save):
+    """The day's posting at the assay-house. A filled one pays double."""
+    rng = _evt_rng(save)
+    item = rng.choice(cat["salvage"])
+    return {"item": item["name"], "bonus": item["value"]}
 
 
 def _darkness(delver):
@@ -287,7 +383,8 @@ def advance_delve(cat, save, rng):
     delver["light"] = max(0, delver["light"] - cost)
     if _darkness(delver):
         lines.append("The lamp is dry. You move in the dark now.")
-    site = generate_site(cat, exp["depth"], rng)
+    site = generate_site(cat, exp["depth"], rng,
+                         exclude={s["name"] for s in exp["sites"]})
     exp["sites"].append({"depth": site["depth"], "kind": site["kind"], "name": site["name"]})
     if site["kind"] == "encounter":
         exp["pending_site"] = site
@@ -295,15 +392,13 @@ def advance_delve(cat, save, rng):
     elif site["kind"] == "salvage":
         for name in site["salvage"]:
             item = by_name(cat["salvage"], name)
-            delver["salvage"].append({"name": item["name"], "value": item["value"]})
-            lines.append("Salvage taken: %s (worth %d)." % (item["name"], item["value"]))
+            lines.extend(take_salvage(delver, item["name"], item["value"]))
         exp["pending_site"] = None
     elif site["kind"] == "strange":
         lines.extend(engine.apply_strange(delver, exp, site["effect"], rng))
         for name in site.get("salvage", []):
             item = by_name(cat["salvage"], name)
-            delver["salvage"].append({"name": item["name"], "value": item["value"]})
-            lines.append("Salvage taken: %s (worth %d)." % (item["name"], item["value"]))
+            lines.extend(take_salvage(delver, item["name"], item["value"]))
         exp["pending_site"] = None
     else:  # breather
         if engine.has_mark(delver, "breather_numb"):
@@ -354,13 +449,13 @@ def apply_fight_result(cat, save, result):
     if result["outcome"] == "victory":
         exp["pending_site"] = None
         scrap = 2 * result["menace_defeated"]
-        delver["salvage"].append({"name": "scrap glass and fittings", "value": scrap})
         lines.append("You strip the field: scrap worth %d." % scrap)
+        lines.extend(take_salvage(delver, SCRAP, scrap))
         rng = _evt_rng(save)
         if rng.random() < 0.7:
             item = roll_salvage(cat, exp["depth"], rng)
-            delver["salvage"].append({"name": item["name"], "value": item["value"]})
             lines.append("Among the wreckage: %s (worth %d)." % (item["name"], item["value"]))
+            lines.extend(take_salvage(delver, item["name"], item["value"]))
         save["history"].append("Day %d, depth %d: cleared %s (%s)."
                                % (save["wake"]["day"], exp["depth"], site["name"],
                                   ", ".join(site["enemies"])))
@@ -440,9 +535,15 @@ def do_surface(cat, save):
     bonus = 0
     for item in delver["salvage"]:
         banked += item["value"]
-        if delver["knack"] == "glasspicker" and item["name"] != "scrap glass and fittings":
+        if delver["knack"] == "glasspicker" and item["name"] != SCRAP:
             bonus += 1
     banked += bonus
+    commission = save["wake"]["commission"]
+    filled = next((i for i in delver["salvage"] if i["name"] == commission["item"]), None)
+    if filled:
+        banked += commission["bonus"]
+        lines.append("The standing order is filled: one %s against the posting, +%d chits."
+                     % (commission["item"], commission["bonus"]))
     delver["salvage"] = []
     save["wake"]["chits"] += banked
     save["wake"]["day"] += 1
@@ -453,6 +554,7 @@ def do_surface(cat, save):
     delver["hp"] = engine.hp_max(delver)
     delver["grit"] = engine.grit_max(delver)
     delver["light"] = engine.light_max(delver)
+    delver["windings"] = engine.windings_max(delver)
     delver["supply"] = SUPPLY_START
     if delver["marks"]:
         lines.append("A night above ground and a surgeon's hour: %s, all of it gone."
@@ -463,7 +565,92 @@ def do_surface(cat, save):
     lines.append("A day of rest in Wake: healed, refit, ready.")
     save["history"].append("Day %d: surfaced from depth %d, banked %d chits."
                            % (save["wake"]["day"], reached, banked))
+    if filled:
+        save["history"].append("Day %d: filled the assay-house order for %s."
+                               % (save["wake"]["day"], commission["item"]))
+    save["wake"]["commission"] = draw_commission(cat, save)
+    lines.append("Today's posting at the assay-house: %s, paying double (%d over the list)."
+                 % (save["wake"]["commission"]["item"], save["wake"]["commission"]["bonus"]))
     return lines
+
+
+# ------------------------------------------------------- the reckoning drum
+# Odds as an object in the world, with a meter on it. The integrity rule is
+# constitutional for this feature: RESEED, NEVER PEEK. Every sample draws
+# from a dedicated seed path, so asking the drum can neither change nor
+# reveal the fight that is actually waiting.
+
+def simulate_odds(cat, save, n):
+    """Wind the drum once and read it. Returns a list of rows."""
+    delver = save["delver"]
+    exp = save["expedition"]
+    if delver["windings"] < 1:
+        raise ValueError("the drum is spent; only a night above ground winds it again")
+    if exp["paused_fight"]:
+        rows = _odds_paused(save, n)
+    elif exp["pending_site"] and exp["pending_site"].get("enemies"):
+        rows = _odds_pending(cat, save, n)
+    else:
+        raise ValueError("the drum only hears the fight in front of you, and there is none")
+    delver["windings"] -= 1
+    save["odds_counter"] += 1
+    return rows
+
+
+def _odds_row(label, results, start_light):
+    n = len(results)
+    wins = [r for r in results if r["outcome"] == "victory"]
+    return {
+        "label": label,
+        "n": n,
+        "victory": 100.0 * len(wins) / n,
+        "retreated": 100.0 * sum(r["outcome"] == "retreated" for r in results) / n,
+        "down": 100.0 * sum(r["outcome"] == "down" for r in results) / n,
+        "rounds": sum(r["rounds"] for r in results) / n,
+        "hp_on_win": (sum(r["hp"] for r in wins) / len(wins)) if wins else 0.0,
+        "light": sum(start_light - r["light"] for r in results) / n,
+    }
+
+
+def _odds_seed(save, row, i):
+    return engine.child_seed(save["world_seed"], "odds", save["odds_counter"], row, i)
+
+
+def _odds_pending(cat, save, n):
+    """One row per stance x pause policy against the encounter in front of you."""
+    delver = copy.deepcopy(save["delver"])
+    specs = [by_name(cat["enemies"], nm) for nm in save["expedition"]["pending_site"]["enemies"]]
+    dark = _darkness(delver)
+    rows = []
+    for stance in sorted(engine.STANCES):
+        for policy in ODDS_POLICIES:
+            if policy == "surge" and delver["grit"] < 2:
+                continue
+            results = []
+            for i in range(n):
+                state, result = engine.start_fight(delver, specs, stance,
+                                                   _odds_seed(save, len(rows), i), darkness=dark)
+                if result is None:
+                    choice = policy if policy in engine.pause_options(state) else "fight_on"
+                    result = engine.resume_fight(state, choice)
+                results.append(result)
+            rows.append(_odds_row("%s / %s" % (stance, policy), results, delver["light"]))
+    return rows
+
+
+def _odds_paused(save, n):
+    """One row per legal pause option, from a copy of the fight as it stands."""
+    paused = save["expedition"]["paused_fight"]
+    start_light = paused["delver"]["light"]
+    rows = []
+    for choice in sorted(engine.pause_options(paused)):
+        results = []
+        for i in range(n):
+            sim = copy.deepcopy(paused)
+            engine.reseed_state(sim, _odds_seed(save, len(rows), i))
+            results.append(engine.resume_fight(sim, choice))
+        rows.append(_odds_row(choice, results, start_light))
+    return rows
 
 
 def do_train(save, stat):

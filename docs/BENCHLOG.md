@@ -80,3 +80,38 @@ expensive across the expedition — is invisible to a single-fight bench.
 Flagging rather than tuning: the honest instrument is a career bench that
 prices light, and building one is a design decision, not an implementation
 one.
+
+## 2026-08-25 — plan 0003 (a reason to surface)
+
+`python tune.py --runs 300 --careers 300`. Combat numbers are byte-identical
+to the plan 0002 entry — nothing in this plan touches a fight — so only the
+career bench is reproduced. The career bench now runs two policies: **ramp**
+(the plan-0001 policy, kept as the baseline) and **satchel** (new: climb out
+when the bag is full or hp drops under 40%).
+
+Plan targets, actuals:
+
+- **Median chits per expedition under the satchel policy: 23** (target
+  > 0). Median career: 66, against an upgrade bar of 20 chits — **72% of
+  satchel careers bank at least one gear upgrade**, so the haven layer is
+  reachable by a crude policy, which was the point.
+- **Day-1 career deaths: 18%** under satchel, 2% under ramp (target
+  < 50%). Both playtest delvers died on day 1 with full coats and empty
+  accounts; the carry limit plus a payday at the top now gets most crude
+  runs out of the ground at least once.
+- **Commission uptake: 25%** of surfacings carrying 3+ items filled the
+  standing order, under both policies (target ≥ 20%). The draw is not
+  unfillable.
+
+Policy comparison, for the record: ramp died in 67% of careers over 4.3
+expeditions and banked a median 108 chits; satchel died in 78% over 2.7
+expeditions and banked a median 66. The satchel policy is *greedier*, not
+safer — "bag full" arrives later than "depth target reached", so it pushes
+to d5–d6 (death histogram d5:68 d6:50 against ramp's d5:44 d6:23) and dies
+richer and sooner. That is the crude-policy artifact, not the mechanic: a
+player reads hp and light and turns back before the bag fills. Recorded so
+the next tuning pass does not mistake it for the satchel being lethal.
+
+Mean max depth reached rose (3.9 → 4.3 ramp, 4.5 satchel) and mean chits
+per career rose (103 → 131 ramp), both from the commission and from
+expeditions running longer under a carry limit than under a depth target.
