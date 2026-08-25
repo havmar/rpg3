@@ -45,6 +45,11 @@ def write_delver(save):
                                                           " [heavy]" if d["armor"].get("heavy") else ""))
     lines.append("  knack:  %s -- %s" % (d["knack"], d["knack_text"]))
     lines.append("")
+    if d["marks"]:
+        lines.append("  MARKS (camp dresses the newest; a day in the haven clears them all)")
+        for mark in d["marks"]:
+            lines.append("    - %s: %s" % (mark["name"], mark["text"]))
+        lines.append("")
     if exp["active"]:
         lines.append("  ON EXPEDITION -- depth %d" % exp["depth"])
     else:
@@ -87,16 +92,22 @@ def write_history(save):
     _write("history.md", "\n".join(lines) + "\n")
 
 
+def _beat_line(imp, text, beat):
+    """The engine's beat rides along as a [tag]: the DM narrates every one."""
+    return text + (("  [%s]" % beat) if beat else "")
+
+
 def write_fight(save):
     lf = save.get("last_fight")
     if not lf:
         return
     head = "LAST FIGHT -- %s (depth %d) -- %s" % (lf["site"], lf["depth"], lf["outcome"].upper())
     short = [head, "=" * len(head), ""]
-    short += engine.fight_summary(lf["events"])
+    short += [_beat_line(imp, text, beat) for imp, text, beat in lf["events"]
+              if imp >= 1 or beat]
     _write("fight.txt", "\n".join(short) + "\n")
     full = [head, "=" * len(head), "", "(every roll; the short log is fight.txt)", ""]
-    full += [("* " if imp else "  ") + text for imp, text in lf["events"]]
+    full += [("* " if imp else "  ") + _beat_line(imp, text, beat) for imp, text, beat in lf["events"]]
     _write("fight_full.txt", "\n".join(full) + "\n")
 
 

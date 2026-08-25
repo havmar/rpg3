@@ -22,6 +22,7 @@ CENSUS = {
     "salvage": 10,
     "strange": 10,
     "sites": 12,
+    "marks": 10,
 }
 
 ALLOWED_TRAITS = {"swift", "lurker", "brittle", "relentless", "armored", "pack"}
@@ -40,7 +41,12 @@ _FIELDS = {
     "salvage": {"name", "value", "depth", "blurb"},
     "strange": {"name", "effect", "text"},
     "sites": {"name", "kind", "depth", "text"},
+    "marks": {"name", "effect", "text"},
 }
+
+# a fight this hard leaves a mark; see engine.MARK_EFFECTS for what they do
+MARK_BLOW = 6
+MARK_HP_FRAC = 3  # ... or coming out at or under a third of your hp
 
 
 class CatalogError(ValueError):
@@ -97,6 +103,9 @@ def validate_catalog(cat):
     for s in cat["strange"]:
         if s["effect"] not in engine.STRANGE_EFFECTS:
             raise CatalogError("strange %r has unknown effect %r" % (s["name"], s["effect"]))
+    for m in cat["marks"]:
+        if m["effect"] not in engine.MARK_EFFECTS:
+            raise CatalogError("mark %r has unknown effect %r" % (m["name"], m["effect"]))
     for site in cat["sites"]:
         if site["kind"] not in SITE_KINDS:
             raise CatalogError("site %r has unknown kind %r" % (site["name"], site["kind"]))
@@ -121,6 +130,7 @@ def load_catalog():
         ("salvage.json", ["salvage"]),
         ("strange.json", ["strange"]),
         ("sites.json", ["sites"]),
+        ("marks.json", ["marks"]),
     ):
         with open(os.path.join(CATALOG_DIR, fname), "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -234,6 +244,7 @@ STAT_CAP = 6
 
 def new_delver(candidate):
     d = dict(candidate)
+    d["marks"] = []  # before the derived readers: they all consult it
     d["hp"] = engine.hp_max(d)
     d["grit"] = engine.grit_max(d)
     d["light"] = engine.light_max(d)
@@ -266,9 +277,14 @@ def advance_delve(cat, save, rng):
         exp["depth"] += 1
     if exp.get("free_delve"):
         exp["free_delve"] = False
+        cost = 0
         lines.append("The old stairs hold: no light spent.")
     else:
-        delver["light"] = max(0, delver["light"] - 1)
+        cost = 1
+    if engine.has_mark(delver, "light_leak"):
+        cost += 1
+        lines.append("Lamp-shy: the flame takes an extra measure on the way down.")
+    delver["light"] = max(0, delver["light"] - cost)
     if _darkness(delver):
         lines.append("The lamp is dry. You move in the dark now.")
     site = generate_site(cat, exp["depth"], rng)
@@ -290,7 +306,9 @@ def advance_delve(cat, save, rng):
             lines.append("Salvage taken: %s (worth %d)." % (item["name"], item["value"]))
         exp["pending_site"] = None
     else:  # breather
-        if delver["grit"] < engine.grit_max(save["delver"]):
+        if engine.has_mark(delver, "breather_numb"):
+            lines.append("A quiet room. You sit in it and get nothing back from it.")
+        elif delver["grit"] < engine.grit_max(delver):
             delver["grit"] += 1
             lines.append("A moment of quiet; you gather yourself: +1 grit.")
         exp["pending_site"] = None
@@ -329,6 +347,7 @@ def apply_fight_result(cat, save, result):
     site = exp["pending_site"]
     delver["hp"] = result["hp"]
     delver["grit"] = result["grit"]
+    delver["light"] = result["light"]
     save["last_fight"] = {"outcome": result["outcome"], "site": site["name"],
                           "depth": exp["depth"], "events": result["events"]}
     lines = engine.fight_summary(result["events"])
@@ -356,7 +375,27 @@ def apply_fight_result(cat, save, result):
         lines.append("The expedition ends here. The Understory keeps what it takes.")
         save["history"].append("Day %d: %s went down at depth %d, in %s. The Ledger remembers."
                                % (save["wake"]["day"], delver["name"], exp["depth"], site["name"]))
+    lines.extend(gain_mark(cat, save, result))
     return lines
+
+
+def gain_mark(cat, save, result):
+    """A fight that nearly had you leaves something behind. Returns lines."""
+    delver = save["delver"]
+    if result["outcome"] not in ("victory", "retreated"):
+        return []
+    hard = (result["worst_blow"] >= MARK_BLOW
+            or result["hp"] * MARK_HP_FRAC <= engine.hp_max(delver))
+    if not hard or len(delver["marks"]) >= engine.MARK_CAP:
+        return []
+    held = {m["name"] for m in delver["marks"]}
+    pool = [m for m in cat["marks"] if m["name"] not in held]
+    rng = engine.rng_for(save["world_seed"], "mark", save["counter"])
+    save["counter"] += 1
+    mark = dict(rng.choice(pool))
+    delver["marks"].append(mark)
+    delver["hp"] = min(delver["hp"], engine.hp_max(delver))
+    return ["You come away with something: %s -- %s" % (mark["name"], mark["text"])]
 
 
 def do_camp(cat, save):
@@ -373,8 +412,12 @@ def do_camp(cat, save):
     delver["light"] = max(0, delver["light"] - 1)
     heal = engine.camp_heal(delver, rng)
     delver["hp"] = min(engine.hp_max(delver), delver["hp"] + heal)
+    lines = ["You camp cold behind a shard-wall: +%d hp, grit restored, -1 supply, -1 light." % heal]
+    if delver["marks"]:
+        mark = delver["marks"].pop()
+        lines.append("Dressed and splinted by lamplight: %s is behind you." % mark["name"])
     delver["grit"] = engine.grit_max(delver)
-    return ["You camp cold behind a shard-wall: +%d hp, grit restored, -1 supply, -1 light." % heal]
+    return lines
 
 
 def do_surface(cat, save):
@@ -411,6 +454,10 @@ def do_surface(cat, save):
     delver["grit"] = engine.grit_max(delver)
     delver["light"] = engine.light_max(delver)
     delver["supply"] = SUPPLY_START
+    if delver["marks"]:
+        lines.append("A night above ground and a surgeon's hour: %s, all of it gone."
+                     % ", ".join(m["name"] for m in delver["marks"]))
+        delver["marks"] = []
     lines.append("You surface into the red light of the Ember. Banked %d chits (total %d)."
                  % (banked, save["wake"]["chits"]))
     lines.append("A day of rest in Wake: healed, refit, ready.")

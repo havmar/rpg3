@@ -117,6 +117,21 @@ class TestBrokenWorlds(unittest.TestCase):
             e["depth"] = [1, min(e["depth"][1], 5)]
         self.assert_rejected(c)
 
+    def test_unknown_mark_effect(self):
+        c = cat()
+        c["marks"][0]["effect"] = "immortality"
+        self.assert_rejected(c)
+
+    def test_duplicate_mark_name(self):
+        c = cat()
+        c["marks"][1]["name"] = c["marks"][0]["name"]
+        self.assert_rejected(c)
+
+    def test_mark_census_mismatch(self):
+        c = cat()
+        c["marks"].append(dict(c["marks"][0], name="an eleventh regret"))
+        self.assert_rejected(c)
+
     def test_priorities_not_permutation(self):
         c = cat()
         c["backgrounds"][0]["priorities"] = ["edge"] * 5
@@ -223,6 +238,109 @@ class TestExpeditionFlow(unittest.TestCase):
         content.do_buy(c, save, "salvage axe")
         self.assertEqual(save["delver"]["weapon"]["name"], "salvage axe")
         self.assertLess(save["wake"]["chits"], 100)
+
+
+class TestMarks(unittest.TestCase):
+    """The quirky wound layer: gained by hard fights, dressed at camp."""
+
+    def setUp(self):
+        self.cat = content.load_catalog()
+        self.save = TestExpeditionFlow().fresh_save()[1]
+        self.save["expedition"].update({"active": True, "depth": 2,
+                                        "pending_site": {"name": "a test hall"}})
+
+    def result(self, **over):
+        d = self.save["delver"]
+        r = {"outcome": "victory", "hp": engine.hp_max(d), "grit": 1, "light": 5,
+             "worst_blow": 0, "rounds": 3, "kills": [], "events": [], "menace_defeated": 1}
+        r.update(over)
+        return r
+
+    def marks(self):
+        return [m["name"] for m in self.save["delver"]["marks"]]
+
+    def test_big_blow_marks_you(self):
+        content.gain_mark(self.cat, self.save, self.result(worst_blow=content.MARK_BLOW))
+        self.assertEqual(len(self.marks()), 1)
+
+    def test_coming_out_low_marks_you(self):
+        hpm = engine.hp_max(self.save["delver"])
+        content.gain_mark(self.cat, self.save, self.result(hp=hpm // 3))
+        self.assertEqual(len(self.marks()), 1)
+
+    def test_an_easy_fight_marks_nothing(self):
+        content.gain_mark(self.cat, self.save, self.result(worst_blow=content.MARK_BLOW - 1))
+        self.assertEqual(self.marks(), [])
+
+    def test_going_down_is_not_a_mark(self):
+        content.gain_mark(self.cat, self.save, self.result(outcome="down", worst_blow=20))
+        self.assertEqual(self.marks(), [])
+
+    def test_cap_of_three_distinct_marks(self):
+        for _ in range(8):
+            content.gain_mark(self.cat, self.save, self.result(worst_blow=9))
+        self.assertEqual(len(self.marks()), engine.MARK_CAP)
+        self.assertEqual(len(set(self.marks())), engine.MARK_CAP)
+
+    def test_marks_are_deterministic(self):
+        other = json.loads(json.dumps(self.save))
+        for save in (self.save, other):
+            for _ in range(3):
+                content.gain_mark(self.cat, save, self.result(worst_blow=9))
+        self.assertEqual([m["name"] for m in self.save["delver"]["marks"]],
+                         [m["name"] for m in other["delver"]["marks"]])
+
+    def test_a_mark_can_cost_you_hit_points(self):
+        d = self.save["delver"]
+        d["marks"] = [dict(content.by_name(self.cat["marks"], "cracked rib"))]
+        d["hp"] = 99
+        content.gain_mark(self.cat, self.save, self.result(worst_blow=9))
+        self.assertLessEqual(d["hp"], engine.hp_max(d))
+
+    def test_camp_dresses_the_newest_mark_only(self):
+        d = self.save["delver"]
+        for _ in range(3):
+            content.gain_mark(self.cat, self.save, self.result(worst_blow=9))
+        newest = self.marks()[-1]
+        self.save["expedition"]["pending_site"] = None
+        content.do_camp(self.cat, self.save)
+        self.assertEqual(len(self.marks()), 2)
+        self.assertNotIn(newest, self.marks())
+
+    def test_surfacing_clears_every_mark(self):
+        for _ in range(3):
+            content.gain_mark(self.cat, self.save, self.result(worst_blow=9))
+        self.save["expedition"]["pending_site"] = None
+        content.do_surface(self.cat, self.save)
+        self.assertEqual(self.marks(), [])
+
+    def test_light_leak_costs_an_extra_measure_going_down(self):
+        d = self.save["delver"]
+        self.save["expedition"]["pending_site"] = None
+        before = d["light"]
+        content.advance_delve(self.cat, self.save, content._evt_rng(self.save))
+        plain = before - d["light"]
+        d["light"] = before
+        self.save["expedition"]["pending_site"] = None
+        d["marks"] = [dict(content.by_name(self.cat["marks"], "lamp-shy"))]
+        content.advance_delve(self.cat, self.save, content._evt_rng(self.save))
+        self.assertEqual(before - d["light"], plain + 1)
+
+    def test_a_numbed_breather_gives_no_grit(self):
+        d = self.save["delver"]
+        d["marks"] = [dict(content.by_name(self.cat["marks"], "thousand-yard glaze"))]
+        d["grit"] = 0
+        exp = self.save["expedition"]
+        exp["pending_site"] = None
+        for _ in range(40):
+            site, _ = content.advance_delve(self.cat, self.save, content._evt_rng(self.save))
+            if site["kind"] == "breather":
+                break
+            exp["pending_site"] = None
+            exp["depth"] = 1
+        else:
+            self.fail("no breather in 40 sites")
+        self.assertEqual(d["grit"], 0)
 
 
 if __name__ == "__main__":

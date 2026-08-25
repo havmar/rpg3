@@ -1,6 +1,6 @@
 # Plan 0002 — Combat that costs: tempo, armor, surge, beats, marks
 
-Status: READY
+Status: DONE (2026-08-25)
 
 ## Sources
 
@@ -174,11 +174,39 @@ earns a clause of narration; unlabeled lines may compress freely.
 
 ## Checklist
 
-- [ ] engine.py: stances, light clock, cracking, surge pierce, beats, mark effects
-- [ ] catalogs/marks.json + content.py validation, gain/heal wiring
-- [ ] session.py status + pages.py (beats, marks, no stale readers of 2-tuple events)
-- [ ] SAVE_VERSION 2; fresh save plays clean end-to-end
-- [ ] contract suites green (`python -m unittest`)
-- [ ] benches re-run; BENCHLOG entry appended with the targets above
-- [ ] PLAYBOOK narrate-from-beats paragraph added
-- [ ] CLAUDE.md status updated
+- [x] engine.py: stances, light clock, cracking, surge pierce, beats, mark effects
+- [x] catalogs/marks.json + content.py validation, gain/heal wiring
+- [x] session.py status + pages.py (beats, marks, no stale readers of 2-tuple events)
+- [x] SAVE_VERSION 2; fresh save plays clean end-to-end
+- [x] contract suites green (`python -m unittest`)
+- [x] benches re-run; BENCHLOG entry appended with the targets above
+- [x] PLAYBOOK narrate-from-beats paragraph added
+- [x] CLAUDE.md status updated
+
+## Implementation notes (deviations, recorded for review)
+
+- **Marks are stored as records, not names.** `delver["marks"]` holds
+  `{name, effect, text}` copies of the catalog entries rather than bare
+  names. Forced by two callers: `pages.py` takes only the save and has no
+  catalog, but must print each mark's text on the sheet; and the engine's
+  derived readers need the effect without knowing the catalog. This is the
+  same pattern the delver already uses for `weapon` and `armor`.
+- **`result` gains `worst_blow` as well as `light`.** The mark trigger
+  ("largest single blow taken >= 6") lives in the content layer, and
+  scraping it back out of the event log would be worse than reporting it.
+  The value is the damage actually taken, after any grit halving.
+- **`_attack` returns instead of logging.** Beats like `finisher` depend on
+  whether the blow dropped anyone, which the attacker's caller decides
+  (for the delver, after the grit auto-spend). `_attack` now returns an
+  info dict and each striker logs the event with the beat it earned. The
+  enemy path resolves the grit spend *before* logging so the blow's own
+  line can carry `finisher`; the printed order of lines is unchanged.
+- **Beat vocabulary is exactly the eleven the plan pins.** Dread, shaken,
+  and pause-choice lines were left untagged: they are already importance 1
+  and adding tags would widen a list the tests and the playbook pin.
+- **`light_leak` stacks with the old stairs.** A leaking lamp leaks whether
+  or not the stairs made the descent free, so the mark adds 1 to the cost
+  rather than only to a paid delve.
+- The stance-diversity bench target is met (60%, not > 60%) but the metric
+  is an artifact; see the BENCHLOG caveat and the second reading the bench
+  now prints.

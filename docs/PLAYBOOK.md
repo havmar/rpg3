@@ -18,6 +18,15 @@ write it here. Narration style and tone live in `docs/SETTING.md`.*
   asked to make choices mid-descent that don't matter, or none at the
   haven that do, pacing is broken — fix the offer, not the player.
 
+**Narrate from the beats.** The fight log tags its own turning points —
+`first-blood`, `finisher`, `crack`, `stagger`, `turned`, `overreach`,
+`close-call`, `surge`, `crit`, `lamp-low`, `lamp-out` — and those tags are
+the engine telling the DM where the fight actually happened. Every beat in
+the short log earns a clause of narration; every unlabeled line may be
+compressed, summarised, or dropped. A fight with two beats is two sentences,
+and that is correct — the word budget (SETTING §Voice) still rules. The
+beats are hooks, not vocabulary: never print the tag names at the table.
+
 ## Advice: facts, prices, and the drum
 
 Settled after session 2. The DM's counsel is **object-level only**: state

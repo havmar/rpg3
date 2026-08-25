@@ -64,10 +64,14 @@ sealed floor. Two playthroughs are on the shelf — `play/hallam-rasp`
 (session 1, abandoned mid-descent, ledgered) and `play/teodor-slake`
 (session 2, dead at depth 5). Both delvers died on day 1 having banked
 nothing, so the haven layer is still untested. Sessions 1–2 were harvested
-by the 2026-08-25 design session: plans `0002-combat-that-costs`,
-`0003-a-reason-to-surface`, and `0004-the-way-splits` are READY
-(implement in that order), and the playbook gained the advice protocol,
-the traces rule, and a wrap-up rite without table questions. Next
-milestone: implementation sessions for 0002–0004, then a third
-playthrough on the new engine. Update this status
-as milestones land.
+by the 2026-08-25 design session, which produced plans
+`0002-combat-that-costs`, `0003-a-reason-to-surface`, and
+`0004-the-way-splits`, and gave the playbook the advice protocol, the
+traces rule, and a wrap-up rite without table questions.
+
+Plan 0002 is DONE (save v2): stances carry a damage bonus, rounds burn
+lamp oil, armor cracks as you work it, a surge goes through soak, the
+fight log tags its own beats for the DM, and a hard fight leaves a mark.
+Plans 0003 and 0004 are READY (implement in that order). Next milestone:
+0003 and 0004, then a third playthrough on the new engine. Update this
+status as milestones land.

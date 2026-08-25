@@ -36,3 +36,47 @@ run below played rates; leaving them harsh on purpose.
 
 Watch next: whether played d5–d6 needs a mid-stratum gear tier, and
 whether training cost (15*new value) lets NERVE/VIM matter fast enough.
+
+## 2026-08-25 — plan 0002 (combat that costs)
+
+`python tune.py --runs 300 --careers 300`, against the 2026-08-23 baseline
+above. Everything in this entry moved on purpose.
+
+Plan targets, actuals:
+
+- **Watchman in press: 4.30 mean rounds on a win** (target ≤ 7; the
+  pre-change reference delver took 5.82 rounds and won only 46% of the
+  time — now 81% at 4.30). Cracking armor plus press's flat +2 turned the
+  soak-4 grind into a fight with an arc.
+- **Surge vs soak 4: mean 10.91, minimum 2** over 2000 samples (target EV
+  ≥ 9, minimum 2). Before the pierce this attack averaged ~5 through soak 4.
+- **Stance diversity: skirmish is the best-survival choice in 60% of
+  matchups** (target: no stance > 60%; it was 80%). See the caveat below.
+- **Career death rate 69%, from 77%.** Just outside the ±10% band if read
+  as a relative move (-10.4%), inside it read as points. Fights got kinder
+  because press and cracking both cut rounds; the light clock's cost is an
+  expedition-level tax that a single-fight bench cannot price. Left as is:
+  plan 0003 re-shapes survival incentives and will move this number again.
+
+Combat grid, notable deltas (fresh stock delver, pauses answered fight_on):
+press d2 89%→96%, d3 73%→85%, d4 52%→74%, d5 27%→46%, d6 14%→30% victory,
+and press's mean rounds fell at every depth (d4 4.8→4.0). measure gained a
+few points at every depth from cracking alone. ward barely moved in a
+single fight, which is the point — its cost is now light, not hp.
+
+Careers: mean max depth 3.9→4.1, mean chits banked 103→117, mean
+expeditions before death 3.9→4.0.
+
+**Caveat on the stance-diversity metric, for the next design session.** The
+metric as written counts a retreat as surviving, so skirmish wins every
+hard matchup by declining it — that is a property of the auto-withdraw, not
+of the stance numbers, and no tuning of atk/guard/soak/dmg will move it.
+The bench now also reports the useful half: which stance is best among the
+three that actually stay and fight. There, **press is best in 80% of
+matchups** (measure 20%, ward 0%). That is the real diversity problem this
+plan created: press converts risk into damage, and damage is what beats
+both soak and the light clock. Ward's compensation — long fights are now
+expensive across the expedition — is invisible to a single-fight bench.
+Flagging rather than tuning: the honest instrument is a career bench that
+prices light, and building one is a design decision, not an implementation
+one.

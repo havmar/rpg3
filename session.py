@@ -103,6 +103,8 @@ def cmd_status(cat, args):
              d["light"], d["supply"], save["wake"]["chits"]))
     if d["salvage"]:
         print("carrying: " + ", ".join("%s(%d)" % (i["name"], i["value"]) for i in d["salvage"]))
+    for mark in d["marks"]:
+        print("mark: %s -- %s" % (mark["name"], mark["text"]))
     if exp["paused_fight"]:
         print("A FIGHT HANGS PAUSED. Options:")
         for key, desc in sorted(engine.pause_options(exp["paused_fight"]).items()):
@@ -187,8 +189,8 @@ def cmd_log(cat, args):
     if not lf:
         print("no fight on record")
         return
-    for imp, text in lf["events"]:
-        print(("* " if imp else "  ") + text)
+    for imp, text, beat in lf["events"]:
+        print(("* " if imp else "  ") + text + (("  [%s]" % beat) if beat else ""))
 
 
 def cmd_sheet(cat, args):
