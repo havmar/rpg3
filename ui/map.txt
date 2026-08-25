@@ -9,5 +9,7 @@ THE DESCENT
    |
   d3  [encounter]  watchman's rotunda
    |
-  d4  [breather]   a cold hearth-round   <-- you are here
+  d4  [breather]   a cold hearth-round
+   |
+  d5  [encounter]  annealing hall   <-- you are here
 
