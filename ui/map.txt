@@ -7,5 +7,7 @@ THE DESCENT
    |
   d2  [encounter]  watchman's rotunda
    |
-  d3  [encounter]  watchman's rotunda   <-- you are here
+  d3  [encounter]  watchman's rotunda
+   |
+  d4  [breather]   a cold hearth-round   <-- you are here
 
