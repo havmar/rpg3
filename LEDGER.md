@@ -29,3 +29,35 @@ record stops there.
 guarded. Nothing he carried was ever banked, so nothing he found is on any
 broker's book — which means it is all still down there, on him, at whatever
 depth he stopped at.
+
+---
+
+## Teodor Slake — cutter
+
+*Signed the book the morning Hallam Rasp's page was written. Went down the
+same day and got five depths before the Vitric Age closed over him.*
+
+**Delved:** the Vitric Age, depths 1 through 5, in one descent, without ever
+returning to the surface.
+
+**Deeds:** ground a cullet crab down in six rounds of ward on the shatterfall
+scree. Took a saltfog strangler's ambush at the watchman's rotunda and
+answered it with one swing. Went **shaken** at the singing of a chorus pane
+one depth lower, in a rotunda the Vitric Age had built twice, and cleared the
+room anyway — two panes and a shardswarm, four rounds, five hits taken and
+every one of them for exactly 1.
+
+**How it ended:** a vitrified watchman in the annealing hall at depth 5,
+still at its post, soak four against his axe. He missed it four times running
+at the start and the engine stopped the fight to ask him what he wanted to
+do. He spent two grit on a swing that could not miss, and the dice came up
+two, and it did **1 damage**. He was at one hit point by round seven with the
+door still open every round, and he did not take it. He got the watchman to
+**5 of 14** before it rolled a natural 20 on him in round twelve. His last
+grit halved the blow. It was not enough by three.
+
+**What Wake remembers:** that he never guarded until it was the arithmetic,
+and never ran once it wasn't. Thirty-seven chits' worth on him when he fell —
+a fused coin-clutch, a glass rose still growing, a watchman's eye — none of
+it ever banked, none of it ever spent. Two names in this book now, and
+neither of them ever saw a second day.

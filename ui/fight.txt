@@ -1,9 +1,13 @@
-LAST FIGHT -- watchman's rotunda (depth 3) -- VICTORY
-=====================================================
+LAST FIGHT -- annealing hall (depth 5) -- DOWN
+==============================================
 
-Fear gets its hook in: SHAKEN (-2 attack, -1 guard) (2+4 vs 12).
-You hit shardswarm#1 for 12 CRIT! (20+7 vs 10).
-shardswarm#1 goes down.
-chorus pane#1 goes down.
-chorus pane#2 goes down.
-FIGHT ENDS after round 4: the field is yours.
+PAUSE: the fight hangs in the balance.
+You choose: spend 2 grit: next attack cannot miss and strikes double.
+You hit vitrified watchman#1 for 1 SURGE! (11+4 vs 12).
+You are badly hurt (3/17).
+You are badly hurt (1/17).
+You hit vitrified watchman#1 for 6 CRIT! (20+4 vs 12).
+vitrified watchman#1 hits you for 7 CRIT! (20+3 vs 15).
+You grit through it: damage halved to 3 (1 grit spent).
+You are down.
+FIGHT ENDS after round 12: the dark takes you.

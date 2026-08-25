@@ -1,24 +1,48 @@
-LAST FIGHT -- watchman's rotunda (depth 3) -- VICTORY
-=====================================================
+LAST FIGHT -- annealing hall (depth 5) -- DOWN
+==============================================
 
 (every roll; the short log is fight.txt)
 
-* Fear gets its hook in: SHAKEN (-2 attack, -1 guard) (2+4 vs 12).
   -- round 1 --
-  You miss shardswarm#1 (2+7 vs 10).
-  chorus pane#1 misses you (2+3 vs 9).
-  chorus pane#2 hits you for 1 (18+3 vs 9).
-  shardswarm#1 hits you for 1 (16+2 vs 9).
+  You miss vitrified watchman#1 (6+4 vs 12).
+  vitrified watchman#1 misses you (6+3 vs 15).
   -- round 2 --
-* You hit shardswarm#1 for 12 CRIT! (20+7 vs 10).
-* shardswarm#1 goes down.
-  chorus pane#1 hits you for 1 (18+3 vs 9).
-  chorus pane#2 hits you for 1 (17+3 vs 9).
+  You miss vitrified watchman#1 (4+4 vs 12).
+  vitrified watchman#1 misses you (1+3 vs 15).
   -- round 3 --
-  You hit chorus pane#1 for 8 (19+7 vs 11).
-* chorus pane#1 goes down.
-  chorus pane#2 hits you for 1 (9+3 vs 9).
+  You miss vitrified watchman#1 (5+4 vs 12).
+  vitrified watchman#1 hits you for 1 (16+3 vs 15).
   -- round 4 --
-  You hit chorus pane#2 for 7 (10+7 vs 11).
-* chorus pane#2 goes down.
-* FIGHT ENDS after round 4: the field is yours.
+  You miss vitrified watchman#1 (1+4 vs 12).
+  vitrified watchman#1 hits you for 5 (17+3 vs 15).
+* PAUSE: the fight hangs in the balance.
+* You choose: spend 2 grit: next attack cannot miss and strikes double.
+  -- round 5 --
+* You hit vitrified watchman#1 for 1 SURGE! (11+4 vs 12).
+  vitrified watchman#1 hits you for 3 (16+3 vs 15).
+* You are badly hurt (3/17).
+  -- round 6 --
+  You miss vitrified watchman#1 (1+4 vs 12).
+  vitrified watchman#1 hits you for 2 (19+3 vs 15).
+* You are badly hurt (1/17).
+  -- round 7 --
+  You miss vitrified watchman#1 (6+4 vs 12).
+  vitrified watchman#1 misses you (4+3 vs 15).
+  -- round 8 --
+  You hit vitrified watchman#1 for 1 (12+4 vs 12).
+  vitrified watchman#1 misses you (4+3 vs 15).
+  -- round 9 --
+  You hit vitrified watchman#1 for 1 (8+4 vs 12).
+  vitrified watchman#1 misses you (1+3 vs 15).
+  -- round 10 --
+* You hit vitrified watchman#1 for 6 CRIT! (20+4 vs 12).
+  vitrified watchman#1 misses you (4+3 vs 15).
+  -- round 11 --
+  You miss vitrified watchman#1 (1+4 vs 12).
+  vitrified watchman#1 misses you (6+3 vs 15).
+  -- round 12 --
+  You miss vitrified watchman#1 (5+4 vs 12).
+* vitrified watchman#1 hits you for 7 CRIT! (20+3 vs 15).
+* You grit through it: damage halved to 3 (1 grit spent).
+* You are down.
+* FIGHT ENDS after round 12: the dark takes you.
