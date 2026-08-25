@@ -5,7 +5,11 @@ THE DESCENT
    |
   d1  [encounter]  shatterfall scree
    |
-  d2  [breather]   lantern niche
+  d2  [encounter]  watchman's rotunda
    |
-  d3  [encounter]  glass orchard   <-- you are here
+  d3  [encounter]  watchman's rotunda
+   |
+  d4  [breather]   a cold hearth-round
+   |
+  d5  [encounter]  annealing hall   <-- you are here
 

@@ -1,23 +1,26 @@
 ====================================================
-  Hallam Rasp -- surgeons-runner of Wake
+  Teodor Slake -- cutter of Wake  (DECEASED)
 ====================================================
 
-  HP    [###########---------] 9/17
-  GRIT  [########] 3/3
-  LIGHT [########----] 7/10
-  SUPPLY 3
+  HP    [--------------------] 0/17
+  GRIT  [--------] 0/3
+  LIGHT [#####-------] 4/10
+  SUPPLY 2
 
-  EDGE 3  IRON 2  VIM 3  NERVE 2  CRAFT 3
+  EDGE 3  IRON 3  VIM 3  NERVE 2  CRAFT 2
 
-  attack +7   guard 11   soak 1
-  weapon: delver's knife (1d6+1, acc +1)
-  armor:  quilted delver's coat (guard +1, soak 1)
-  knack:  surgeons-runner -- +3 healing when camping
+  attack +6   guard 12   soak 2
+  weapon: salvage axe (1d10, acc -1)
+  armor:  cullet-studded jack (guard +1, soak 2)
+  knack:  cutter -- +1 attack
 
-  ON EXPEDITION -- depth 3
+  ON EXPEDITION -- depth 5
   chits banked: 0
   carrying:
-    - scrap glass and fittings (worth 2)
+    - scrap glass and fittings (worth 6)
     - fused coin-clutch (worth 3)
-    - scrap glass and fittings (worth 8)
+    - scrap glass and fittings (worth 4)
+    - glass rose (worth 6)
+    - scrap glass and fittings (worth 10)
+    - watchman's eye (worth 8)
 

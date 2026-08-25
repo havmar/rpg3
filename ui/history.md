@@ -1,6 +1,8 @@
 # The story so far
 
-- Day 1: Hallam Rasp, surgeons-runner, signed the delvers' book in Wake.
-- Day 1, depth 1: cleared shatterfall scree (shardswarm).
-- Day 1, depth 3: cleared glass orchard (fluxworm, shardswarm).
+- Day 1: Teodor Slake, cutter, signed the delvers' book in Wake.
+- Day 1, depth 1: cleared shatterfall scree (cullet crab).
+- Day 1, depth 2: cleared watchman's rotunda (saltfog strangler).
+- Day 1, depth 3: cleared watchman's rotunda (chorus pane, chorus pane, shardswarm).
+- Day 1: Teodor Slake went down at depth 5, in annealing hall. The Ledger remembers.
 

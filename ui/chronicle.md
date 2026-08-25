@@ -1,268 +1,637 @@
-# Chronicle — Hallam Rasp
+# The Chronicle of Teodor Slake
 
-*The append-only transcript of this playthrough. Newest at the bottom.*
-
----
-
-## The Mouth of Wake — Day 1
-
-Wake is loud at this hour, and all of it is downward-facing. The town is
-built in a ring around the hole, which the charter calls the Mouth and
-everyone else calls *it*, and the ring leans inward the way people lean over
-a well. Lamp-wrights are burning off the night's bad oil. A salvage-priest is
-blessing a winch. The Ember hangs low and orange over the steppe behind you,
-giving light the way an old dog gives warmth — willingly, and not much.
-
-The delvers' book is open on a lectern of fused glass, chained to the rail so
-it cannot follow anyone down. The vigil-keeper does not look up. She has done
-this a great many times and has learned not to invest early.
-
-"Name," she says.
-
-The name you give her is **Hallam Rasp**. She writes it in a hand that has
-written it before, somewhere, for someone.
-
-Then she does look up — not at you. Past you. Because that is the way of it
-in Wake: a name goes into the book and the book decides who it fits. Three
-people are standing in the cold at the rail, and every one of them answers to
-it.
-
-**1) Hallam Rasp, the surgeon's-runner.**
-Carried the bags and held the clamps. Knows what keeps a body going, which is
-mostly a matter of being quick with the right thing at the wrong moment.
-EDGE 3 · IRON 2 · VIM 3 · NERVE 2 · CRAFT 3
-*delver's knife / quilted delver's coat* — knack: **+3 healing when camping**
-
-**2) Hallam Rasp, the glasspicker.**
-Grew up sorting shard-middens barehanded. Fast eyes, faster fingers, and a
-salvager's instinct for what a broker will pretend not to want.
-EDGE 3 · IRON 2 · VIM 3 · NERVE 2 · CRAFT 3
-*delver's knife / oilcloth wraps* — knack: **+1 chit on every salvage item banked**
-
-**3) Hallam Rasp, the lamplighter.**
-Kept the wick-roads of the upper dark, where the lamps are a public service
-and going out is a civic emergency. Knows exactly how far oil goes.
-EDGE 2 · IRON 3 · VIM 2 · NERVE 3 · CRAFT 3
-*lamplighter's pike / quilted delver's coat* — knack: **+2 maximum light**
-
-The vigil-keeper taps the page. "One of you," she says. "The Ledger's got no
-patience for three."
-
-**Which Hallam went down?** — *the player took the first: the surgeon's-runner.*
+*Append-only. Every table message of this playthrough, in order.*
 
 ---
 
-## Depth 1 — Shatterfall Scree
+## Day 1 — Wake, the delvers' book
+leaf and asked for the next name.
 
-The vigil-keeper strikes out two of the three lines without ceremony. What is
-left in the delvers' book of Wake is one name, in a hand that has written a
-great many:
-
-**Hallam Rasp. Surgeon's-runner.**
-
-Two of the Hallams turn back toward the ring of the town, already becoming
-other people, and nobody watches them go. The one who stays carries a
-surgeon's-runner's habits down with him: the bag slung so the clasps face
-out, the knife kept where a knife is quickest rather than where it looks
-best, the practiced trick of doing the right thing before the fear finishes
-arriving. He is not a fighter. He is a man who has spent years being fast at
-the wrong moment, which turns out to be most of the job.
-
-"Down you go, then," the vigil-keeper says. "Come back and I'll ink you
-properly."
+Three came to the mouth answering to **Teodor Slake**. Wake has stopped
+asking which one is the real one. The book takes whoever signs it.
 
 ---
 
-The great mouth takes about ninety feet of rope before the Ember gives up.
-The cold changes character on the way — the clean cold of the steppe becomes
-the older, more patient cold of a place that has not been warm since before
-there were words for warm. Then the rope ends, and the light of your own lamp
-is the only light there has been here for ten thousand years.
+## The three
 
-You are in the **Vitric Age**. It is the shallowest of the dead epochs and
-the one Wake understands best, which is to say: barely. An age that taught
-glass to do everything, and then, at the end, turned that lesson on itself.
+**1 — the cutter.** Fought in somebody's war topside. The habits came home
+intact.
+> EDGE 3 IRON 3 VIM 3 NERVE 2 CRAFT 2
+> **hp 17 · grit 3 · atk +6 · guard 12 · soak 2 · light 10**
+> salvage axe (**1d10**) / cullet-studded jack · knack: +1 attack
+> camp heal **2d6+3**
 
-**Shatterfall scree.** A slope of crushed glass running away downward into
-the dark, and it *moves* — a slow constant seething, grain sliding over
-grain, so the whole hillside whispers like a held breath. Every step you take
-is loud. There is no such thing as a quiet step here, and something in the
-dark ahead has already learned what your steps mean.
+**2 — the surgeon's-runner.** Carried the bags and held the clamps. Knows
+what keeps a body going.
+> EDGE 2 IRON 3 VIM 3 NERVE 2 CRAFT 3
+> **hp 17 · grit 3 · atk +5 · guard 12 · soak 1 · light 10**
+> delver's knife (**1d6+1**) / quilted delver's coat · knack: +3 healing when camping
+> camp heal **2d6+6**
 
-The lamp finds it forty feet out and low: a drift of glass rising off the
-scree in a shape that keeps almost being a shape. It is moving against the
-draft. Nothing that is only broken glass moves against the draft.
-
-**A shardswarm.** Wake's brokers call them the deep's weather. All edges,
-no core, and the miserable habit of coming apart into more of itself when hit
-badly — brittle things fight brittle.
-
-It is coming, and the scree is telling it exactly where you are.
+**3 — the lamplighter.** Kept the wick-roads of the upper dark. Knows how
+far oil goes.
+> EDGE 2 IRON 2 VIM 2 NERVE 4 CRAFT 3
+> **hp 14 · grit 5 · atk +4 · guard 11 · soak 1 · light 12**
+> lamplighter's pike (**1d8+1**) / quilted delver's coat · knack: +2 max light
+> camp heal **2d6+2**
 
 ---
 
-**How does Hallam take it?**
+## What the numbers do
 
-- **`press`** — attack hard, drop your guard. Kill it before it settles.
-  *(+3 to hit, −2 guard)*
-- **`ward`** — knife up, coat forward, let it break itself on you.
-  *(−2 to hit, +3 guard, +1 soak)*
-- **`measure`** — straight, no cleverness. *(no modifiers)*
-- **`skirmish`** — fight to disengage; break off if this turns bad.
-  *(−1 to hit, +1 guard; you leave rather than die)*
-
----
-
-*[map](map.txt) · [history](history.md) · [chronicle](chronicle.md)*
-
----
-
-## Depth 3 — The Glass Orchard
-
-The shardswarm never got to arrive.
-
-Skirmish stance is a surgeon's-runner's stance: both feet already pointed at
-the exit, weight on the back leg, knife held the way you hold something you
-intend to keep. You did not wait for it to settle into a shape. You went in
-under the leading edge while it was still deciding to be a thing, and the
-knife went through the middle of it, and there was a sound like a window
-losing an argument.
-
-**8 damage on the first swing. It had four in it.** It came apart across the
-scree in a bright spreading fan and then it was just a hillside again, and
-quieter than before — you had, in one motion, made the whole slope's whisper
-a little thinner.
-
-*(One round. The field is yours. You took nothing.)*
-
-Stripping it earns **scrap glass and fittings (2)**, and something better
-half-buried where the drift had been hanging: a **fused coin-clutch (3)** — a
-purse of small currency that ran together in the heat and set as one lump.
-Somebody's whole ready money, made permanently unspendable, about four
-thousand years before Wake had a name. The brokers pay for it anyway.
+- **EDGE** — hitting things. Every point is **+2 attack**.
+- **IRON** — being missed. Every point is **+1 guard**.
+- **VIM** — hit points (**8 + 3×VIM**) and camp healing.
+- **NERVE** — grit (**1 + NERVE**), the pool that buys you out of a bad
+  round, and morale against dread.
+- **CRAFT** — *nothing yet.* No formula reads it. Known engine gap; do not
+  spend training on it until a design session gives it a job.
+- **LIGHT** is the expedition clock. Every step down burns 1, camping burns
+  1, and climbing out costs more the deeper you are. At 0 you fight blind
+  at **−2 attack**.
+- **SUPPLY** starts at 3. One per camp.
 
 ---
 
-**Depth 2 — a lantern niche.** An alcove cut square into the wall, lamp-hooks
-still in the stone, a scab of old wax on the sill. Somebody built a place to
-stop here, on purpose, for other people. It is defensible, it is quiet, and
-it is almost kind, which in the Understory is the rarest of the three. You
-mark it on the strip-map and do not spend supply on it — you are unhurt,
-and unhurt men do not get to use the kind places.
+## The choice
+
+The cutter kills faster and takes less. The surgeon's-runner is the one who
+can keep going after the first bad fight. The lamplighter is thin — 3 fewer
+hp, 2 less attack — and buys depth with it: two more light and five grit.
+
+**Which one signs?** `1`, `2`, or `3`.
 
 ---
 
-**Depth 3.** The floor goes flat and the air goes *clear*, and the lamp
-suddenly has somewhere to go.
-
-**A glass orchard.** Rows of them, planted at proper intervals, receding past
-where the light gives out — trees that were fruiting when the heat came and
-took the whole epoch in an afternoon. They are still fruiting. Every branch
-ends in a sag of glass and every sag holds a shape that is very nearly an
-apple, and the lamp goes down into them and comes back up in colours you had
-not budgeted for. Underfoot, glass windfall, decades of it. Somebody tended
-this. Somebody had a *job* here.
-
-Two things in the orchard have noticed you.
-
-The first is another **shardswarm**, coming up the row on your left, ordinary
-as bad weather.
-
-The second is not. Sixty feet out, a whole row of trunks leans one after the
-next — *bends*, upright and unbroken, the way wheat bends — and the ground
-between them takes a long swimming ripple. There is a **fluxworm** in the
-orchard floor. It moves through cooled glass as if the glass never finished
-setting, and it surfaces without warning, and Wake's brokers have a standing
-rate for anyone who brings back a piece of one because so few people do.
-
-It is ten times the swarm and it is *fast*, and the moment you commit to one
-of them you have chosen not to be looking at the other.
+*[ledger](../LEDGER.md) · [chronicle](chronicle.md)*
 
 ---
 
-**How does Hallam take it?**
+## Day 1 — the mouth
 
-- **`press`** — kill the worm first and fast; eat whatever the swarm does to
-  your back. *(+3 to hit, −2 guard)*
-- **`ward`** — put a trunk at your spine and make them come to the knife.
-  *(−2 to hit, +3 guard, +1 soak)*
-- **`measure`** — straight, no cleverness. *(no modifiers)*
-- **`skirmish`** — it worked once; fight with the orchard row as your way
-  out. *(−1 to hit, +1 guard; you leave rather than die)*
+The cutter signs. **Teodor Slake** — war habits, salvage axe on a shoulder
+loop, a jack of glass shards laced over the ribs. Wake's clerk writes
+*cutter* in the trade column and does not ask which war.
 
----
+**hp 17/17 · grit 3/3 · light 10/10 · supply 3 · chits 0**
+**atk +6 · guard 12 · soak 2 · axe 1d10**
 
-*[map](map.txt) · [history](history.md) · [chronicle](chronicle.md)*
+Wake is a town shaped like a rim. Lamp-wrights, brokers' stalls, the
+surgery, the vigil-house — all of it faces inward at the hole. Cold air goes
+down the mouth all day and comes back up at night smelling of something that
+was sealed for a very long time.
 
----
+You own nothing. Outfitters' row is open and every price on it is a number
+you don't have; the cheapest thing there is oilcloth wraps at **5**, and
+raising one stat by a point starts at **60**. Chits come up out of the
+ground or they don't come.
 
-## Depth 3 — After the Orchard
-
-You went at it the way a surgeon's-runner goes at a bleed: not carefully.
-
-**Round one.** The worm got to you first — it was always going to; it was
-under the floor the whole time and it came up through the windfall like a
-hand through a curtain, and it opened you across the ribs for **5**. You did
-not answer it. You turned the other way and put the knife through the
-shardswarm on a swing that had everything in it, **9 damage into a thing with
-four**, and the swarm stopped existing in a spray of bright nothing so you
-would only have one problem instead of two.
-
-Then you had one problem, and it was the whole problem.
-
-**Rounds two through four.** The fluxworm does not fight in the orchard; it
-fights *through* it. It swims. It went down into the floor and came up
-somewhere else and the trees bent politely out of its way as it passed, and
-every time you set your feet the ground under them stopped being ground.
-Press stance meant you never once tried to guard — you traded, four rounds
-straight, knife-in for teeth-in, and the arithmetic held only barely:
-**2, then 6, then 4**, against **1** to your arm and **2** more across the same
-ribs it opened in round one.
-
-On the fourth exchange you stopped waiting for it to surface and stabbed
-where you thought it was *going*. Ten thousand years of swimming through
-glass, and it had never had to be unpredictable before.
-
-It came apart lengthwise, still moving, and the orchard rang from one end to
-the other like somebody had struck every tree at once. It went on ringing for
-a long time. It is possible the orchard is still ringing.
-
-*(4 rounds. Victory. **HP 9/17.** Grit intact.)*
+Below is the **Vitric Age** — six depths, and Wake holds that its floor is
+sealed. Somewhere in the third of those depths is a surgeon's-runner who
+chose deeper, and thirteen chits' worth of glass nobody has collected.
 
 ---
 
-**The strip.** The worm was worth the beating: **scrap glass and fittings (8)**
-— plates of its lengthwise flanks, which are worked glass and something else,
-and which Wake's brokers have a standing rate for precisely because so few
-people bring them up.
+## Where the real choices are
 
-**Carrying:** coin-clutch (3), scrap (2), worm-scrap (8) — **13 chits'
-worth**, and none of it is money until it is on the surface.
+Not here. Down there: how deep before turning, when to spend a supply on a
+camp, what stance to meet a thing in, and whether the light left is enough
+to climb out on. **Each step down burns 1 light. So does a camp. Climbing
+out costs more the deeper you are.**
+
+**What Teodor does:** `delve` — down the great mouth, into depth 1.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 1, shatterfall scree
+
+Down the great mouth. **Light 9.**
+
+The first depth is a slope of crushed glass in constant faint motion, loud
+underfoot. Nothing is quiet here, which is fair, because nothing here is
+trying to be. Somebody broke a shardswarm on this slope recently; the scree
+is still sorting the pieces.
+
+A **cullet crab** comes up at you through them — slag and shard fitted over
+something, unhurried, entirely unconcerned.
+
+---
+
+**The crab** — hp 9 · atk +3 · guard 14 · soak 3 · dmg 1d6
+**Teodor** — hp 17/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
+
+High guard, thick soak: your axe lands about **3** a swing through it, its
+claw about **2** through your jack. Nine hit points means roughly three
+landed swings. This is a grind, not a threat — but grinds are where the
+first bad roll finds you.
+
+## Stance
+
+| | you hit | it hits | |
+|---|---|---|---|
+| `press` | **80%** | **70%** | +3 atk, −2 guard. ~3–4 rounds, ~5 hp |
+| `measure` | **65%** | **60%** | flat. ~4–5 rounds, ~5 hp |
+| `skirmish` | **60%** | **55%** | +1 guard, and you may break off if it turns |
+| `ward` | **55%** | **45%** | −2 atk, +3 guard, +1 soak. ~5–6 rounds, ~4 hp |
+
+A fight burns no light — the clock only runs on steps and camps. What a long
+fight costs is hp and the chance of a bad round.
+
+**Which stance?**
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 1, the crab down
+
+**Six rounds. Victory. hp 13/17, grit 3/3 intact.**
+
+Ward was the right read and a slow one. You swung six times and landed
+three, and only the first landed properly: a **7** that took a plate off its
+back and showed you something soft and unhappy living under all that
+salvage. The other two swings did **1** each — the arithmetic floor of a
+1d10 against soak 3, an axe going into a wall built out of other people's
+windows. It reached you twice for **2** and then stopped being able to.
+
+**The strip:** scrap glass and fittings (**6**), a fused coin-clutch
+(**3**) — somebody's purse, melted shut with the money still in it.
+**9 chits' worth**, and none of it is money until it is on the surface.
 
 ---
 
 ## Where this stands
 
-You are three deep in the Vitric Age, bleeding, with more than half your
-light left and all your supply. The orchard rows run on downward past the
-lamp. Something down there tended these trees.
+**hp 13/17 · grit 3/3 · light 9 · supply 3 · carrying 9 · banked 0**
 
-- **HP 9/17** — under half. The next fluxworm-grade thing gets a real vote
-  on whether you come back.
-- **Light 7** — surfacing from here costs 1. It costs more the deeper you go.
-- **Supply 3** — camping spends one and buys back hp; your knack makes your
-  camps unusually good ones (**+3 healing**, surgeon's-runner).
-- **Chits banked: 0.** Hallam owns nothing in Wake. This is his first
-  descent and everything he has is in his coat.
+The scree runs on down. Depth 2 is one step and one light away.
 
-**What does Hallam do?**
-
-- **`delve`** — deeper. Depth 4 in the Vitric Age, carrying 13 and 9 hp.
-- **`camp`** — burn a supply and a light here in the orchard, patch the ribs,
-  then decide.
-- **`surface`** — go back up the way you came, bank 13 chits, and be a man
-  who owns something. Training costs chits. So does a better knife.
+- **`delve`** — depth 2, light to **8**. The Vitric Age has six depths and
+  you have seen one.
+- **`camp`** — heals **2d6+3** (about 10) but you are only 4 down, so most
+  of that is spent on nothing. Costs **1 supply, 1 light**.
+- **`surface`** — costs **1 light**, banks **9**, and buys a full reset: hp,
+  light, and supply back to maximum, one day gone. But 9 chits buys nothing
+  in Wake. The real prices are **25** for a glass-backed maul — 2d6 instead
+  of 1d10, which is what actually beats thick soak — and **45** for your
+  first point of NERVE. Nine is a wasted day.
 
 ---
 
-*[map](map.txt) · [history](history.md) · [full fight log](fight_full.txt) · [chronicle](chronicle.md)*
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [full log](fight_full.txt) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 2, watchmans rotunda
+
+**Light 8.**
+
+A guard-round with sightlines in every direction, all of them yours to be
+seen from. Whoever built it wanted to see everything coming, and it works
+exactly as well for the thing that was already standing in it when you
+arrived.
+
+A **saltfog strangler** — upper-gallery patience, the kind of hunter that
+picks its gallery by where the lamps go thin.
+
+---
+
+**The strangler** — hp 8 · atk +4 · guard 11 · soak 1 · dmg 1d6+1 · **lurker**
+**Teodor** — hp 13/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
+
+Softer than the crab in every direction that counts: guard 11 and soak 1
+means the axe puts about **5** through it a swing, and eight hit points is
+two good swings. The catch is **lurker** — **+4 attack on the first round**,
+and the first round has already started.
+
+**You are at 13 of 17.** From round two on, dropping to **10 or below**
+pauses the fight and hands you one decision: switch stance, spend 2 grit to
+**surge** (next swing cannot miss, double damage), or withdraw and eat a
+parting blow.
+
+## Stance
+
+| | you hit | it hits, R1 | it hits, after |
+|---|---|---|---|
+| `press` | **95%** | **95%** | **75%** |
+| `measure` | **80%** | **85%** | **65%** |
+| `skirmish` | **75%** | **80%** | **60%** |
+| `ward` | **70%** | **70%** | **50%** |
+
+Press very likely kills it in two rounds and very likely gets you opened
+once on the way in. Ward halves the ambush and costs you a round.
+
+**Which stance?**
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 2, the strangler down
+
+**Two rounds. Victory. hp 9/17, grit 3/3 intact.**
+
+It got its ambush. Rolled a **22** against your guard of 15 and put through
+the maximum it had — **4** past the ward. Your answer missed. Then round two
+came and you rolled a **10** on the axe, which is **9** through soak 1, which
+is one more than the whole strangler. It let go of the rotunda and did not
+put anything down where it fell.
+
+The exact price of ward, this fight: **1 hp**. Same rolls in `measure` and
+it hits for 5 instead of 4, and both your swings land the same way. The
+stance bought a point and cost nothing.
+
+**The strip:** scrap glass and fittings (**4**) and a **glass rose** (**6**)
+— grown, not made. The stem is still growing, very slowly. It is doing it
+now, in your coat.
+
+---
+
+## Where this stands
+
+**hp 9/17 · grit 3/3 · light 8 · supply 3 · carrying 19 · banked 0**
+
+Nine of seventeen is under the line. **From the second round of the next
+fight onward, the engine will pause it and hand you a decision** — that
+threshold is hp 10, and you are beneath it before the fight even starts.
+
+- **`camp`** — **2d6+3** back, so 5 to 15 with the middle around 10; you are
+  8 down, so nearly all of it lands. Costs **1 supply** (3→2) and **1 light**
+  (8→7). This is what supply is for.
+- **`delve`** — depth 3 at nine hit points. Hallam's orchard was a depth-3
+  room.
+- **`surface`** — banks **19** and resets everything. But 19 is a bad number:
+  the cheapest thing in Wake that beats what you already wear or carry is
+  the **glass-backed maul at 25**. Six more chits and the day is worth taking.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [full log](fight_full.txt) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 2, the cold camp
+
+**+11 hp. Full: 17/17. Grit restored. Supply 3→2, light 8→7.**
+
+You sleep in the room with sightlines in every direction, which is either
+the best or the worst place in this stratum to do it, and you decline to
+decide which. The rose goes on the floor by your head. Some time in the
+night it moves — not much, about the width of a hair, and only in the
+direction it was already going.
+
+---
+
+## Where this stands
+
+**hp 17/17 · grit 3/3 · light 7 · supply 2 · carrying 19 · banked 0**
+
+Run the light budget once, because it is not what you'd think. Seven light
+gets you to **depth 6 — the sealed floor of the Vitric Age** — and still
+pays the **2** it costs to climb out from down there. Light is not your
+constraint today. **Two supplies and seventeen hit points are.**
+
+- **`delve`** — depth 3, light to **6**. Four more steps and there is no
+  more Vitric Age to see.
+- **`surface`** — banks **19**, costs 1 light, ends day 1. Still six short
+  of the maul.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 3, the rotunda again
+
+**Light 6.**
+
+The same guard-round. Not a similar one — the same plan, the same
+sightlines, one epoch deeper, which means the Vitric Age built this room,
+buried it, and built it again on top of itself. Whatever they were watching
+for, they never stopped expecting it, and they never once looked down.
+
+Three things hold the floor. Two **chorus panes** — standing sheets, and
+they are singing; a chorus pane is one voice of a congregation and the
+harmony is load-bearing. Between them a **shardswarm** drifts against the
+draft, all edges.
+
+---
+
+**Chorus pane ×2** — hp 5 · atk +3 · guard 11 · soak 0 · dmg 1d6 · **brittle** · **dread 1**
+**Shardswarm** — hp 4 · atk +2 · guard 10 · soak 0 · dmg 1d4 · **brittle**
+**Teodor** — hp 17/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
+
+**Brittle is the whole fight.** Your axe takes **+2** against them and not
+one of the three has any soak at all: **1d10+2, so 3 to 12**, against four
+and five hit points. *Every swing that lands kills something.* Three landed
+swings clears the room. The engine strikes the weakest first — swarm, then
+panes.
+
+**The singing is a dread test.** Before the first blow: d20+4 against **12**,
+so **65%** you hold. Fail and you are **SHAKEN** — −2 attack, −1 guard, for
+the whole fight. One grit at the pause shakes it off. Pause line is hp 10.
+
+## Stance
+
+| | you hit | pane hits | swarm hits | through your soak |
+|---|---|---|---|---|
+| `press` | **95%** | 70% | 65% | ~2.0 / ~1.3 |
+| `measure` | **85 / 80%** | 60% | 55% | ~2.0 / ~1.3 |
+| `skirmish` | **80 / 75%** | 55% | 50% | ~2.0 / ~1.3 |
+| `ward` | **75 / 70%** | 45% | 40% | **~1.5 / ~1.0** |
+
+Three attackers is what makes this different from the last two rooms. Press
+ends it in about three rounds and expects to cost about **8 hp**; ward takes
+about four and expects about **4**. But ward is also the stance that most
+hates being shaken — at −2 attack it stops one-shotting reliably, and every
+round it fails to kill, three things swing at you.
+
+**Which stance?**
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 3, the chorus broken
+
+**Four rounds. Victory. hp 12/17, grit 3/3 unspent.**
+
+The song got you before the fight did: you rolled a **2** on the nerve test
+and went **SHAKEN** on the spot — −2 attack, −1 guard, the whole way through.
+It cost you round one, a swing at a drift of glass you should not have been
+able to miss.
+
+Round two you rolled a **natural 20**. Twelve damage into a four-hit-point
+swarm, which is roughly like kicking a puddle. Then the panes, one and one:
+**8**, then **7**, each of them dead in a single swing, because brittle
+things and a heavy axe are a short conversation.
+
+Here is what the room was actually about. The harmony is load-bearing. Kill
+one pane and the chorus does not get quieter — it goes *wrong*, and the two
+that are left sing harder to cover the hole, and the last one sings the
+whole part alone, badly, until you stop it.
+
+Five hits came back at you and every single one did **1**. Their dice are
+1d6 and 1d4; your jack soaks 2. Press gave them a 70% chance to hit and it
+did not matter, because what they were allowed to hit for was the floor.
+
+**The strip:** scrap (**10**) and a **watchman's eye** (**8**) — pried from a
+vitrified citizen. It has stopped watching. Probably.
+
+---
+
+## Where this stands
+
+**hp 12/17 · grit 3/3 · light 6 · supply 2 · carrying 37 · banked 0**
+
+Thirty-seven. That is a real number for the first time — and it is a real
+number you are carrying, which means it is a real number you can lose.
+
+- **`delve`** — depth 4, light to **5**. Deeper is where salvage gets
+  expensive to reach and worth reaching. Three depths left before the
+  sealed floor.
+- **`camp`** — 5 down; **2d6+3** mostly lands. Costs your **second-to-last
+  supply** and 1 light. Supply only refills by surfacing.
+- **`surface`** — 1 light, bank **37**, day 2, everything resets. At 37 Wake
+  finally sells you something: the **glass-backed maul, 25** — 2d6 instead
+  of 1d10, at −1 attack. Against soak it is a straight upgrade; against
+  brittle things like tonight's it is a downgrade. Or bank the lot and come
+  back for **plate (40)** or **your first stat point (45–60)**.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [full log](fight_full.txt) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 4, a cold hearth-round
+
+**Nothing here. Light 5.**
+
+An old fire-ring with shard-benches stacked around it. Not Vitric work —
+delver work, generations of it, the benches restacked by people who each
+thought they were the first to think of it. A breather site restores 1 grit;
+yours is already 3 of 3, so the room gives you nothing but the room.
+
+There is a mark on the third bench that is not old. Somebody sat here
+recently and cut a short line into the glass with a blade too small to be a
+delving weapon — a surgeon's tool, the kind you use on people. It points
+down.
+
+---
+
+## Where this stands
+
+**hp 12/17 · grit 3/3 · light 5 · supply 2 · carrying 37 · banked 0**
+
+Two depths left in the Vitric Age. Climbing out from here costs **2** light,
+and from 5 or 6 it also costs 2 — so the climb never gets worse than this.
+You can reach the sealed floor and still get home on what's in the lamp.
+
+- **`delve`** — depth 5, light to **4**.
+- **`camp`** — 5 hp down; **2d6+3** heals most of it, for your second-to-last
+  supply and 1 light. The cheap moment to do this is *before* the fight that
+  needs it, not after.
+- **`surface`** — bank **37**, day 2, full reset.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 5, the annealing hall
+
+**Light 4. This is the one that can kill you.**
+
+A vaulted workshop where the ovens have never fully cooled — five depths
+down and the air still has heat in it, coming up out of the floor, patient
+about it. Glass was finished here. Slowly, so it would not shatter later.
+
+A **vitrified watchman** is standing at the far arch, and has been standing
+there since the last day. A citizen, still at their post, still enforcing
+something. In your coat is an eye pried out of one of these.
+
+---
+
+**Vitrified watchman** — hp 14 · atk +3 · guard 12 · soak 4 · dmg **1d10**
+**Teodor** — hp 12/17 · grit 3/3 · atk +6 · guard 12 · soak 2 · dmg 1d10
+
+Soak **4** against a 1d10: your average landed swing does **2.5**, and
+fourteen hit points is about six of them. Its 1d10 against your jack does
+**3.8** a hit at 60%. It out-damages you by half again and you are at twelve
+of seventeen.
+
+**You cannot camp and you cannot surface** — both refuse while something is
+watching. The hall has you. The only ways out are through it or away from it.
+
+## The odds
+
+I ran the engine 4,000 times per line — random seeds, not this fight's seed.
+These are priors, not a prediction.
+
+| stance | plan | win | retreat | **dead** |
+|---|---|---|---|---|
+| `ward` | surge at the pause | **85%** | — | **15%** |
+| `ward` | fight straight through | 80% | — | 20% |
+| `press` | surge at the pause | 76% | — | 24% |
+| `press` | fight straight through | 67% | — | **33%** |
+| `skirmish` | fight | 14% | **86%** | 0.4% |
+
+**`skirmish`** is the door. It breaks off on its own once you drop to **6 or
+below**, dumps you back at depth 4 with the parting blow eaten and all
+**37 chits still in your coat** — and no watchman salvage, which at menace 4
+is the best strip you've been offered.
+
+**`ward`** is the fight: about one in six that Teodor Slake ends here, in a
+warm room, and the Ledger gets its second page tonight.
+
+**Surge** costs 2 of your 3 grit and makes one swing unmissable at double
+dice — worth about 5 points of win rate. You can call it at the pause, which
+will come the moment you drop to 10.
+
+**Which stance — and if it pauses, what then?**
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 5, the pause
+
+**Round 4. Teodor: 6 of 17. The watchman: 14 of 14 — untouched.**
+
+You have swung four times at it. **6, 4, 5, 1** — you needed an 8. Four
+misses in a row at 65% is a one-in-sixty-five run of luck and you are
+standing in it.
+
+It has not moved off its post. It is not hunting you; it is *enforcing*
+something, in a room where the floor is still warm, and it has all the time
+that has already passed. Ward held the first two rounds clean. Then it put
+**1** through, and then it put **5** through, and that was the round the
+engine stopped the fight and turned to you.
+
+Grit **3 of 3**, unspent. Thirty-seven chits in your coat.
+
+---
+
+## The pause — 6,000 runs from exactly this position
+
+Random seeds, not this fight's seed. The position is real; the futures are priors.
+
+| option | win | retreat | **dead** | avg hp left |
+|---|---|---|---|---|
+| `--resume withdraw` | — | **100%** | **none in 6,000** | 4.9 |
+| `--resume skirmish` | — | 98.5% | 1.5% | 3.3 |
+| `--resume surge` | **65%** | — | **35%** | 2.4 |
+| `--resume fight_on` | 58% | — | 42% | 1.3 |
+| `--resume press` | 40% | — | 60% | 0.7 |
+| `--resume measure` | 40% | — | 60% | 0.8 |
+
+**Withdraw is not surrender.** It eats one parting blow — guard 15, and
+three grit standing by to halve anything lethal — and drops you back to
+depth 4 with every chit still on you. Depth 5 is then *unrolled*: the next
+time you go down those stairs the hall is generated fresh. It might not be a
+watchman. You would have light 4, supply 2, and the choice again.
+
+**Surge is the fight.** Two grit for one swing that cannot miss and rolls
+double dice — 2d10 less soak 4, so **6 to 16** into a thing with 14. It is
+the best line that ends with the watchman dead, and it is still barely
+two-in-three.
+
+**Forty-two percent** is what `fight_on` costs. That is Teodor, the
+thirty-seven, and the second page of the Ledger.
+
+**Your call.**
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
+
+## Day 1 — depth 5, the end of Teodor Slake
+
+**Round 12. Teodor Slake is down. The watchman is standing at 5 of 14.**
+
+---
+
+The surge went first, because that is what you bought it for: two grit for
+one swing that could not miss, double dice, **2d10** into a thing with
+fourteen hit points.
+
+It rolled **two**. A one and a one. Minus soak 4, floored to the minimum the
+engine allows.
+
+**The unmissable swing did 1 damage.**
+
+After that it was just arithmetic, and the arithmetic was long. Seven more
+rounds in the warm room. Round 6 you missed and it put you to **3**. Round 7
+you missed and it put you to **1**, and then — this is the part worth
+keeping — **you stayed.** At one hit point, against a thing you had not
+meaningfully marked in eight rounds, with the withdraw option still legal
+every single round, Teodor Slake kept swinging.
+
+Rounds 8 and 9: **1** and **1**, the soak floor, two more chips off a wall.
+Round 10: a **natural 20**, and the axe finally went in properly — **6** —
+and the watchman was down to **5** and you could see the end of it from
+there.
+
+Rounds 11 and 12 you missed.
+
+Round 12 it rolled a natural 20 of its own. Seven damage onto a man with
+one. Your last grit halved it to **3**, which was still three more than you
+had.
+
+It never moved off its post. It is still there, at five hit points, in a
+room where the ovens have not finished cooling after ten thousand years,
+enforcing something. Around it on the floor: a fused coin-clutch, a glass
+rose that is still very slowly growing, and a watchman's eye that has
+stopped watching. Probably.
+
+**Thirty-seven chits, none of them banked. Day one. He never went back up.**
+
+---
+
+## The record
+
+**Teodor Slake, cutter of Wake — dead at depth 5, the annealing hall.**
+
+- Killed: a cullet crab, a saltfog strangler, two chorus panes, a shardswarm.
+- Delved: depths 1 through 5 of the Vitric Age, in a single day.
+- Banked: **0**. Trained: nothing. Bought: nothing. He died in the kit he
+  signed the book in.
+
+His page is written. **The Ledger has two entries now, and both of them are
+men who died on their first day with a full coat and an empty account.**
+
+---
+
+## What happens next
+
+The save is closed — the engine refuses every command for a dead delver, by
+design (Charter §6). Nothing carries over but the Ledger.
+
+- **A new delver** — give me a name and I'll raise three who answer to it,
+  on a fresh world seed and a new play branch. Teodor's branch stands
+  forever as it is.
+- **Or call the session** and I'll run the wrap-up rite: notes into
+  PLAYNOTES, three questions to you, and the Ledger mirrored to main.
+
+---
+
+*[sheet](delver.txt) · [map](map.txt) · [history](history.md) · [full log](fight_full.txt) · [ledger](../LEDGER.md) · [chronicle](chronicle.md)*
+
+---
