@@ -134,6 +134,16 @@ def cmd_delve(cat, args):
     write_save(save)
 
 
+def _pct(value):
+    """Never round a near-certainty up to a certainty, or a real chance
+    down to none: the drum's one job is not lying about the odds."""
+    if 0.0 < value < 0.05:
+        return " <0.1%"
+    if 99.95 <= value < 100.0:
+        return " 99.9%"
+    return "%5.1f%%" % value
+
+
 def cmd_odds(cat, args):
     """The reckoning drum. Its table is printed as the engine makes it;
     the playbook forbids editorial on top of it."""
@@ -144,8 +154,8 @@ def cmd_odds(cat, args):
           % (save["delver"]["windings"], args.n))
     print("  %-22s   win  retreat    dead   rounds  hp on win  light" % "line")
     for r in rows:
-        print("  %-22s %5.1f%%  %5.1f%%  %5.1f%%   %6.1f     %6.1f  %5.1f"
-              % (r["label"], r["victory"], r["retreated"], r["down"],
+        print("  %-22s %s %s %s   %6.1f     %6.1f  %5.1f"
+              % (r["label"], _pct(r["victory"]), _pct(r["retreated"]), _pct(r["down"]),
                  r["rounds"], r["hp_on_win"], r["light"]))
     write_save(save)
 
