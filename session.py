@@ -5,7 +5,8 @@ driver adds no game logic of its own; rules live in engine.py and
 content.py, and the numbers live in the catalogs.
 
     python session.py new                    # roll a delver; day 1 starts underground
-    python session.py delve                  # one step deeper
+    python session.py delve                  # one step deeper (or hear the fork)
+    python session.py delve 2                 # take the second passage
     python session.py fight --stance press   # resolve the pending fight
     python session.py fight --resume surge   # answer a mid-fight pause
     python session.py odds                   # wind the drum: odds on this fight
@@ -101,6 +102,9 @@ def cmd_status(cat, args):
         print("carrying: " + ", ".join("%s(%d)" % (i["name"], i["value"]) for i in d["salvage"]))
     for mark in d["marks"]:
         print("mark: %s -- %s" % (mark["name"], mark["text"]))
+    if exp["fork"]:
+        say(content.fork_lines(exp["fork"]))
+        print("Take one with: python session.py delve <n>")
     if exp["paused_fight"]:
         print("A FIGHT HANGS PAUSED. Options:")
         for key, desc in sorted(engine.pause_options(exp["paused_fight"]).items()):
@@ -110,8 +114,12 @@ def cmd_status(cat, args):
                                                 ", ".join(exp["pending_site"]["enemies"])))
 
 
-def _delve(cat, save):
-    site, lines = content.advance_delve(cat, save, content._evt_rng(save))
+def _delve(cat, save, passage=None):
+    site, lines = content.advance_delve(cat, save, passage)
+    if site is None:  # the way splits; nothing is spent until you choose
+        say(lines)
+        print("Take one with: python session.py delve <n>")
+        return
     print("DEPTH %d -- %s [%s]" % (site["depth"], site["name"], site["kind"]))
     print(site["text"])
     if site["kind"] == "strange":
@@ -122,7 +130,7 @@ def _delve(cat, save):
 def cmd_delve(cat, args):
     save = load_save()
     require_alive(save)
-    _delve(cat, save)
+    _delve(cat, save, args.passage)
     write_save(save)
 
 
@@ -232,8 +240,12 @@ def main(argv=None):
     s.add_argument("--n", type=int, default=2000, help="runs per line")
     s.set_defaults(fn=cmd_odds)
 
+    s = sub.add_parser("delve", help="one step deeper (costs 1 light), or hear where the way splits")
+    s.add_argument("passage", nargs="?", type=int, default=None,
+                   help="which passage to take when the way splits (1-based)")
+    s.set_defaults(fn=cmd_delve)
+
     for name, fn, msg in (("status", cmd_status, "where things stand"),
-                          ("delve", cmd_delve, "one step deeper (costs 1 light)"),
                           ("camp", cmd_camp, "heal and steady (1 supply, 1 light)"),
                           ("surface", cmd_surface, "climb out, bank salvage, rest in Wake"),
                           ("market", cmd_market, "what Wake sells"),

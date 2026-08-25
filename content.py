@@ -38,16 +38,35 @@ FORBIDDEN_IN_TEMPLATES = ("Wake",)
 
 SITE_KIND_WEIGHTS = [("encounter", 50), ("salvage", 25), ("strange", 15), ("breather", 10)]
 
+# What a passage tells you before you take it. Rumors are honest, because
+# the senses are honest -- but the world is not obliged to be audible. A
+# breather and an all-lurker ambush give the identical line, on purpose:
+# quiet is either rest or teeth, and pricing that is the whole feature.
+QUIET_RUMOR = "Quiet. Your own lamp is the loudest thing in it."
+SALVAGE_RUMORS = [
+    "A glint where nothing should be shining.",
+    "Still air over the smell of oil that has not burned in an age.",
+    "Shapes with corners -- made things, holding their arrangement.",
+]
+# single throat, two passages, three passages
+FORK_SHAPES = [(1, 20), (2, 65), (3, 15)]
+ORDINALS = ("first", "second", "third")
+
 _FIELDS = {
     "backgrounds": {"name", "blurb", "priorities", "knack", "knack_text", "weapon", "armor"},
-    "enemies": {"name", "blurb", "hp", "atk", "guard", "soak", "dmg", "traits", "menace", "dread", "depth"},
+    "enemies": {"name", "blurb", "rumor", "hp", "atk", "guard", "soak", "dmg",
+                "traits", "menace", "dread", "depth"},
     "weapons": {"name", "dmg", "acc", "value", "blurb"},
     "armors": {"name", "guard", "soak", "value", "heavy", "blurb"},
     "salvage": {"name", "value", "depth", "blurb"},
-    "strange": {"name", "effect", "text"},
+    "strange": {"name", "effect", "text", "rumor"},
     "sites": {"name", "kind", "depth", "text"},
     "marks": {"name", "effect", "text"},
 }
+
+# declared-optional authored keys: read with a default, never a damage shim.
+# A lurker makes no sound, so it must carry no rumor at all.
+_OPTIONAL_FIELDS = {"enemies": {"rumor"}}
 
 # a fight this hard leaves a mark; see engine.MARK_EFFECTS for what they do
 MARK_BLOW = 6
@@ -60,16 +79,17 @@ class CatalogError(ValueError):
 
 def _check_records(records, section):
     fields = _FIELDS[section]
+    optional = _OPTIONAL_FIELDS.get(section, set())
     names = []
     for rec in records:
-        missing = fields - set(rec)
+        missing = fields - set(rec) - optional
         extra = set(rec) - fields
         if missing:
             raise CatalogError("%s %r missing fields %s" % (section, rec.get("name"), sorted(missing)))
         if extra:
             raise CatalogError("%s %r has unknown fields %s" % (section, rec.get("name"), sorted(extra)))
         names.append(rec["name"])
-        for key in ("blurb", "text"):
+        for key in ("blurb", "text", "rumor"):
             if key in rec:
                 for word in FORBIDDEN_IN_TEMPLATES:
                     if word in rec[key]:
@@ -125,6 +145,12 @@ def validate_catalog(cat):
             raise CatalogError("enemy %r has unknown traits %s" % (e["name"], sorted(set(e["traits"]) - ALLOWED_TRAITS)))
         if e["menace"] < 1:
             raise CatalogError("enemy %r has menace < 1" % e["name"])
+        lurker = "lurker" in e["traits"]
+        if lurker and "rumor" in e:
+            raise CatalogError("enemy %r is a lurker: it makes no sound and must carry no rumor"
+                               % e["name"])
+        if not lurker and "rumor" not in e:
+            raise CatalogError("enemy %r has no rumor" % e["name"])
     for s in cat["strange"]:
         if s["effect"] not in engine.STRANGE_EFFECTS:
             raise CatalogError("strange %r has unknown effect %r" % (s["name"], s["effect"]))
@@ -207,8 +233,24 @@ def roll_salvage(cat, depth, rng):
     return rng.choice(_eligible(cat["salvage"], depth))
 
 
+def rumor_for(cat, site, rng):
+    """The loudest honest thing about a site, heard from outside it."""
+    if site["kind"] == "encounter":
+        specs = [by_name(cat["enemies"], n) for n in site["enemies"]]
+        heard = [e for e in specs if "lurker" not in e["traits"]]
+        if not heard:
+            return QUIET_RUMOR
+        return sorted(heard, key=lambda e: (-e["menace"], e["name"]))[0]["rumor"]
+    if site["kind"] == "breather":
+        return QUIET_RUMOR
+    if site["kind"] == "salvage":
+        return rng.choice(SALVAGE_RUMORS)
+    return by_name(cat["strange"], site["strange"])["rumor"]
+
+
 def generate_site(cat, depth, rng, exclude=()):
-    """One site at this depth: template + payload. Deterministic per rng.
+    """One site at this depth: template + payload + rumor. Deterministic
+    per rng.
 
     `exclude` names templates already used this expedition; the Understory
     does not repeat itself until it runs out of rooms.
@@ -238,6 +280,7 @@ def generate_site(cat, depth, rng, exclude=()):
         site["strange_text"] = strange["text"]
         if strange["effect"] in ("found_cache", "murmur_market"):
             site["salvage"] = [roll_salvage(cat, depth, rng)["name"]]
+    site["rumor"] = rumor_for(cat, site, rng)
     return site
 
 
@@ -305,7 +348,8 @@ def new_save(cat, world_seed):
         "odds_counter": 0,
         "delver": delver,
         "expedition": {"active": False, "depth": 0, "sites": [], "pending_site": None,
-                       "paused_fight": None, "free_delve": False},
+                       "paused_fight": None, "free_delve": False,
+                       "fork": None, "declined": []},
         "wake": {"chits": 0, "day": 1, "expeditions": 0, "commission": None},
         "history": ["Day 1: %s, %s, went down the great mouth."
                     % (delver["name"], delver["background"])],
@@ -354,23 +398,83 @@ def _darkness(delver):
     return delver["light"] <= 0
 
 
-def advance_delve(cat, save, rng):
-    """One step deeper. Returns (site, lines). Mutates save."""
-    delver = save["delver"]
+def _next_depth(exp):
+    """Where a step down would land. The sealed floor holds at DEPTH_MAX."""
+    return exp["depth"] if exp["depth"] >= DEPTH_MAX else exp["depth"] + 1
+
+
+def _draw_fork_shape(rng):
+    total = sum(w for _, w in FORK_SHAPES)
+    pick = rng.randint(1, total)
+    for shape, weight in FORK_SHAPES:
+        pick -= weight
+        if pick <= 0:
+            return shape
+    return FORK_SHAPES[-1][0]
+
+
+def fork_lines(fork):
+    lines = ["The way down splits %d ways. This is what you can hear:" % len(fork)]
+    for i, passage in enumerate(fork, 1):
+        lines.append("  %d) %s" % (i, passage["rumor"]))
+    return lines
+
+
+def advance_delve(cat, save, passage=None):
+    """Offer the fork, or take a passage down. Returns (site, lines).
+
+    `site` is None when the way splits: the fork is left pending and the
+    rumors are in `lines`. Nothing is spent at a split -- a rumor is only
+    what you hear from where you already stand. The unchosen passages are
+    gone once you move; the Understory does not hold doors open.
+    """
     exp = save["expedition"]
     if exp["paused_fight"] or (exp["pending_site"] and exp["pending_site"].get("enemies")):
         raise ValueError("there is a fight in front of you; resolve it first")
     lines = []
     if not exp["active"]:
-        exp["active"] = True
-        exp["depth"] = 0
-        exp["sites"] = []
+        exp.update({"active": True, "depth": 0, "sites": [], "fork": None, "declined": []})
         lines.append("You go down through the great mouth. The expedition begins.")
+    if exp["fork"]:
+        if passage is None:  # a reprint costs nothing and decides nothing
+            return None, lines + fork_lines(exp["fork"])
+        if not 1 <= passage <= len(exp["fork"]):
+            raise ValueError("there are only %d passages here" % len(exp["fork"]))
+        site = exp["fork"][passage - 1]
+        for i, other in enumerate(exp["fork"], 1):
+            if i != passage:
+                exp["declined"].append({"depth": other["depth"], "rumor": other["rumor"]})
+        exp["fork"] = None
+        lines.append("You take the %s passage. The others close behind you."
+                     % ORDINALS[passage - 1])
+    else:
+        if passage is not None:
+            raise ValueError("the way is single here")
+        rng = _evt_rng(save)
+        depth = _next_depth(exp)
+        used = {s["name"] for s in exp["sites"]}
+        # the mouth is known ground: the first delve never stalls at a fork
+        shape = 1 if not exp["sites"] else _draw_fork_shape(rng)
+        if shape > 1:
+            fork = []
+            for _ in range(shape):
+                fork.append(generate_site(cat, depth, rng,
+                                          exclude=used | {p["name"] for p in fork}))
+            exp["fork"] = fork
+            return None, lines + fork_lines(fork)
+        lines.append("The way down is single here.")
+        site = generate_site(cat, depth, rng, exclude=used)
+    return _enter_site(cat, save, site, lines)
+
+
+def _enter_site(cat, save, site, lines):
+    """Spend the light, take the step, and resolve what is waiting."""
+    delver = save["delver"]
+    exp = save["expedition"]
     if exp["depth"] >= DEPTH_MAX:
         lines.append("Below this the floor is one sealed pane, fathoms thick. "
                      "The Understory goes deeper; you, today, do not.")
-    else:
-        exp["depth"] += 1
+    exp["depth"] = site["depth"]
     if exp.get("free_delve"):
         exp["free_delve"] = False
         cost = 0
@@ -383,9 +487,8 @@ def advance_delve(cat, save, rng):
     delver["light"] = max(0, delver["light"] - cost)
     if _darkness(delver):
         lines.append("The lamp is dry. You move in the dark now.")
-    site = generate_site(cat, exp["depth"], rng,
-                         exclude={s["name"] for s in exp["sites"]})
     exp["sites"].append({"depth": site["depth"], "kind": site["kind"], "name": site["name"]})
+    rng = _evt_rng(save)
     if site["kind"] == "encounter":
         exp["pending_site"] = site
         lines.append("Something is here: " + ", ".join(site["enemies"]) + ".")
@@ -550,7 +653,7 @@ def do_surface(cat, save):
     save["wake"]["expeditions"] += 1
     reached = exp["depth"]
     exp.update({"active": False, "depth": 0, "pending_site": None, "paused_fight": None,
-                "free_delve": False})
+                "free_delve": False, "fork": None, "declined": []})
     delver["hp"] = engine.hp_max(delver)
     delver["grit"] = engine.grit_max(delver)
     delver["light"] = engine.light_max(delver)
@@ -710,13 +813,16 @@ def main():
     p.add_argument("--per-depth", type=int, default=3)
     args = p.parse_args()
     cat = load_catalog()
-    print("catalog ok:", ", ".join("%s=%d" % (k, len(cat[k])) for k in sorted(CENSUS)))
+    counts = {k: (sum(len(cat["names"][p]) for p in NAME_LISTS) if k == "names" else len(cat[k]))
+              for k in CENSUS}
+    print("catalog ok:", ", ".join("%s=%d" % (k, counts[k]) for k in sorted(counts)))
     for depth in range(1, DEPTH_MAX + 1):
         for i in range(args.per_depth):
             rng = engine.rng_for(args.seed, "eyeball", depth, i)
             site = generate_site(cat, depth, rng)
             extra = site.get("enemies") or site.get("salvage") or site.get("strange") or ""
             print("d%d %-12s %-22s %s" % (depth, site["kind"], site["name"], extra))
+            print("      rumor: %s" % site["rumor"])
 
 
 if __name__ == "__main__":

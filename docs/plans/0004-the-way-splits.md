@@ -1,7 +1,6 @@
 # Plan 0004 — The way splits: forks and rumors
 
-Status: READY (implement after plan 0003; builds on its save shape and
-site no-repeat)
+Status: DONE (2026-08-25)
 
 ## Sources
 
@@ -169,12 +168,41 @@ fork stood, as `..unopened: <rumor>`. Taken sites render as today.
 
 ## Checklist
 
-- [ ] content.py fork offer/take + rumor derivation + validator clauses
-- [ ] catalog rumor fields (enemies, strange) exactly as authored above
-- [ ] session.py delve passage arg + status rumors
-- [ ] pages.py unopened map lines
-- [ ] SAVE_VERSION 4; fresh save plays clean end-to-end through several forks
-- [ ] contract suites green; benches re-run; BENCHLOG entry appended
-- [ ] PLAYBOOK rumor rule added (embroider but never add or contradict
+- [x] content.py fork offer/take + rumor derivation + validator clauses
+- [x] catalog rumor fields (enemies, strange) exactly as authored above
+- [x] session.py delve passage arg + status rumors
+- [x] pages.py unopened map lines
+- [x] SAVE_VERSION 4; fresh save plays clean end-to-end through several forks
+- [x] contract suites green; benches re-run; BENCHLOG entry appended
+- [x] PLAYBOOK rumor rule added (embroider but never add or contradict
       information; quiet is only ever the quiet line)
-- [ ] CLAUDE.md status updated
+- [x] CLAUDE.md status updated
+
+## Implementation notes (deviations, recorded for review)
+
+- **`advance_delve` no longer takes an rng; it takes `passage=None`.** The
+  plan requires that reprinting a pending fork bump no counter, and the
+  driver was creating the event RNG (and bumping the counter) *before*
+  calling in. Making the RNG internal is the only way the no-cost reprint
+  can be true. Every caller updated; `_enter_site` draws its own event RNG
+  for the site payload, because a fork's passage was generated one command
+  earlier and has no live RNG to inherit.
+- **Every generated site carries a `rumor`, not just fork passages.** One
+  shape for all sites keeps the RNG stream uniform (the salvage rumor is a
+  draw) and means a single throat and a fork passage are the same record.
+- **Enemy `rumor` is a declared-optional authored key**, handled by a new
+  `_OPTIONAL_FIELDS` map in the validator rather than by loosening the
+  strict missing/unknown field checks. Both directions are enforced as
+  their own clauses: a lurker carrying a rumor is rejected, and so is a
+  non-lurker without one.
+- **The map pairs declined passages with sites positionally**, consuming
+  the declined queue in order as it walks `exp["sites"]`. Both lists are
+  appended in the same order, so this is exact except after a retreat back
+  to a depth that later forks again, where an unopened line can print
+  under the earlier room at that depth. Cosmetic, on a map page, and the
+  alternative is a stored index the plan's `{"depth", "rumor"}` shape does
+  not carry.
+- The site catalog is thin for forks (two templates per kind at most
+  depths), so 7.1% of forks repeat a room name between passages via the
+  documented fallback. Flagged in the BENCHLOG for a content pass rather
+  than fixed by bending the kind weights.

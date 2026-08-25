@@ -27,6 +27,20 @@ compressed, summarised, or dropped. A fight with two beats is two sentences,
 and that is correct — the word budget (SETTING §Voice) still rules. The
 beats are hooks, not vocabulary: never print the tag names at the table.
 
+**Rumors: embroider, never add.** Where the way splits, each passage is
+announced by one line the engine derived from what is actually behind it.
+The DM may set the scene around a rumor — the shape of the opening, the
+draft, how the lamp behaves — but must never add information to it, soften
+it, or contradict it. Do not hint that one passage is safer, richer, or
+shorter; the rumor is the whole offer.
+
+Quiet is the load-bearing case. A passage with nothing but lurkers behind
+it gets the *identical* line a resting-place gets, and that ambiguity is
+the mechanic, not an oversight. When the line is the quiet line, narrate
+quiet — exactly as quiet as the other quiet — and let the player price it.
+The drum has no reading on a fork, and neither does the DM: what is behind
+a door belongs to nerve and appetite.
+
 ## Advice: facts, prices, and the drum
 
 Settled after session 2. The DM's counsel is **object-level only**: state

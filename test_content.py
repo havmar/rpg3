@@ -21,6 +21,22 @@ def cat():
     return copy.deepcopy(content.load_catalog())
 
 
+def _take_first(cat, save):
+    """Batch helper: when the way splits, take passage 1."""
+    if save["expedition"]["fork"]:
+        return content.advance_delve(cat, save, passage=1)
+    return None, []
+
+
+def _delve_through(cat, save):
+    """One completed step down, fork or no fork. Returns (site, lines)."""
+    site, lines = content.advance_delve(cat, save)
+    if site is None:
+        site, more = content.advance_delve(cat, save, passage=1)
+        lines = lines + more
+    return site, lines
+
+
 class TestCatalogLoads(unittest.TestCase):
     def test_clean_load(self):
         c = content.load_catalog()
@@ -152,6 +168,28 @@ class TestBrokenWorlds(unittest.TestCase):
         c["names"]["given"][0] = "Wakeborn"
         self.assert_rejected(c)
 
+    def test_lurker_with_a_rumor(self):
+        c = cat()
+        lurker = next(e for e in c["enemies"] if "lurker" in e["traits"])
+        lurker["rumor"] = "Something moving, plainly audible."
+        self.assert_rejected(c)
+
+    def test_non_lurker_without_a_rumor(self):
+        c = cat()
+        loud = next(e for e in c["enemies"] if "lurker" not in e["traits"])
+        del loud["rumor"]
+        self.assert_rejected(c)
+
+    def test_strange_entry_without_a_rumor(self):
+        c = cat()
+        del c["strange"][0]["rumor"]
+        self.assert_rejected(c)
+
+    def test_rumor_locality_violation(self):
+        c = cat()
+        c["strange"][0]["rumor"] = "A draft that smells of Wake."
+        self.assert_rejected(c)
+
     def test_priorities_not_permutation(self):
         c = cat()
         c["backgrounds"][0]["priorities"] = ["edge"] * 5
@@ -216,7 +254,8 @@ class TestExpeditionFlow(unittest.TestCase):
             if not save["delver"]["alive"]:
                 break
             rng = content._evt_rng(save)
-            content.advance_delve(c, save, rng)
+            content.advance_delve(c, save)
+            _take_first(c, save)
             if save["expedition"]["pending_site"] and save["expedition"]["pending_site"].get("enemies"):
                 paused, _ = content.start_pending_fight(c, save, "measure")
                 if paused:
@@ -336,12 +375,12 @@ class TestMarks(unittest.TestCase):
         d = self.save["delver"]
         self.save["expedition"]["pending_site"] = None
         before = d["light"]
-        content.advance_delve(self.cat, self.save, content._evt_rng(self.save))
+        _delve_through(self.cat, self.save)
         plain = before - d["light"]
         d["light"] = before
         self.save["expedition"]["pending_site"] = None
         d["marks"] = [dict(content.by_name(self.cat["marks"], "lamp-shy"))]
-        content.advance_delve(self.cat, self.save, content._evt_rng(self.save))
+        _delve_through(self.cat, self.save)
         self.assertEqual(before - d["light"], plain + 1)
 
     def test_a_numbed_breather_gives_no_grit(self):
@@ -351,7 +390,7 @@ class TestMarks(unittest.TestCase):
         exp = self.save["expedition"]
         exp["pending_site"] = None
         for _ in range(40):
-            site, _ = content.advance_delve(self.cat, self.save, content._evt_rng(self.save))
+            site, _ = _delve_through(self.cat, self.save)
             if site["kind"] == "breather":
                 break
             exp["pending_site"] = None
@@ -455,7 +494,7 @@ class TestTheDrum(unittest.TestCase):
     def pending_fight(self, save):
         exp = save["expedition"]
         for _ in range(60):
-            content.advance_delve(self.cat, save, content._evt_rng(save))
+            _delve_through(self.cat, save)
             if exp["pending_site"] and exp["pending_site"].get("enemies"):
                 return
             exp["depth"] = 1  # stay shallow; we only want an encounter
@@ -545,14 +584,22 @@ class TestSitesDoNotRepeat(unittest.TestCase):
             head = names[:len(pools[kind])]
             self.assertEqual(len(set(head)), len(head), "%s repeated early: %s" % (kind, head))
 
-    def test_an_expedition_does_not_repeat_itself(self):
+    def test_an_expedition_repeats_only_once_a_pool_is_spent(self):
         cat, save = TestExpeditionFlow().fresh_save(77)
         exp = save["expedition"]
-        for _ in range(6):
-            content.advance_delve(cat, save, content._evt_rng(save))
+        for _ in range(8):
+            _delve_through(cat, save)
             exp["pending_site"] = None
-        names = [s["name"] for s in exp["sites"]]
-        self.assertEqual(len(set(names)), len(names), names)
+        used = []
+        for entry in exp["sites"]:
+            pool = {s["name"] for s in cat["sites"] if s["kind"] == entry["kind"]
+                    and s["depth"][0] <= entry["depth"] <= s["depth"][1]}
+            if entry["name"] in used:
+                self.assertTrue(pool <= set(used),
+                                "%r came round again with %s still unused"
+                                % (entry["name"], sorted(pool - set(used))))
+            used.append(entry["name"])
+        self.assertGreater(len(used), 4)
 
 
 class TestTheOpeningCommand(unittest.TestCase):
@@ -586,6 +633,219 @@ class TestTheOpeningCommand(unittest.TestCase):
         self.assertIn("item", save["wake"]["commission"])
         self.assertIn("CRAFT  provision", sheet)
         self.assertIn("SATCHEL", sheet)
+
+
+class TestRumors(unittest.TestCase):
+    """Rumors are honest, because the senses are honest. The world is not
+    obliged to be audible."""
+
+    def setUp(self):
+        self.cat = content.load_catalog()
+
+    def site(self, kind, **over):
+        s = {"depth": 3, "kind": kind, "name": "a room", "text": "..."}
+        s.update(over)
+        return s
+
+    def rumor(self, site, seed=1):
+        return content.rumor_for(self.cat, site, engine.rng_for("rumor", seed))
+
+    def test_quiet_is_the_same_quiet(self):
+        lurkers = [e["name"] for e in self.cat["enemies"] if "lurker" in e["traits"]]
+        ambush = self.rumor(self.site("encounter", enemies=lurkers))
+        rest = self.rumor(self.site("breather"))
+        self.assertEqual(ambush, content.QUIET_RUMOR)
+        self.assertEqual(ambush, rest)
+
+    def test_an_ambush_reads_exactly_like_a_rest(self):
+        lurkers = [e["name"] for e in self.cat["enemies"] if "lurker" in e["traits"]]
+        ambush = self.site("encounter", enemies=lurkers, name="one room")
+        rest = self.site("breather", name="another room")
+        for s in (ambush, rest):
+            s["rumor"] = self.rumor(s)
+        self.assertEqual(content.fork_lines([ambush]), content.fork_lines([rest]))
+
+    def test_the_loudest_thing_speaks_for_the_group(self):
+        group = ["shardswarm", "saltfog strangler", "vitrified watchman"]
+        self.assertEqual(self.rumor(self.site("encounter", enemies=group)),
+                         content.by_name(self.cat["enemies"], "vitrified watchman")["rumor"])
+
+    def test_a_menace_tie_breaks_alphabetically(self):
+        a = content.by_name(self.cat["enemies"], "chorus pane")
+        b = content.by_name(self.cat["enemies"], "glasshound")
+        self.assertEqual(a["menace"], b["menace"])
+        self.assertEqual(self.rumor(self.site("encounter", enemies=[b["name"], a["name"]])),
+                         a["rumor"])
+
+    def test_a_lurker_never_speaks_for_a_group(self):
+        group = ["shardswarm", "mirrorling"]  # the mirrorling out-menaces the swarm
+        self.assertEqual(self.rumor(self.site("encounter", enemies=group)),
+                         content.by_name(self.cat["enemies"], "shardswarm")["rumor"])
+
+    def test_salvage_rumors_come_from_the_authored_three(self):
+        seen = {self.rumor(self.site("salvage", salvage=["vitric lens"]), seed=i)
+                for i in range(60)}
+        self.assertEqual(seen, set(content.SALVAGE_RUMORS))
+
+    def test_strange_speaks_with_its_own_authored_line(self):
+        for entry in self.cat["strange"]:
+            s = self.site("strange", strange=entry["name"], effect=entry["effect"],
+                          strange_text=entry["text"])
+            self.assertEqual(self.rumor(s), entry["rumor"])
+
+    def test_every_generated_site_carries_a_rumor(self):
+        for i in range(80):
+            site = content.generate_site(self.cat, 1 + i % content.DEPTH_MAX,
+                                         engine.rng_for("carries", i))
+            self.assertTrue(site["rumor"])
+
+
+class TestForks(unittest.TestCase):
+    """The way splits, and the only thing announcing a passage is a rumor."""
+
+    def fresh(self, seed=2024):
+        return TestExpeditionFlow().fresh_save(seed)
+
+    def forked(self, seed_from=0):
+        """A save with a fork pending, and its catalog."""
+        for seed in range(seed_from, seed_from + 80):
+            cat, save = self.fresh(seed)
+            exp = save["expedition"]
+            for _ in range(6):
+                site, _ = content.advance_delve(cat, save)
+                if site is None:
+                    return cat, save
+                exp["pending_site"] = None
+            continue
+        self.fail("no fork in 80 seeded expeditions")
+
+    def test_the_first_delve_is_always_a_single_throat(self):
+        for seed in range(120):
+            cat, save = self.fresh(seed)
+            site, _ = content.advance_delve(cat, save)
+            self.assertIsNotNone(site, "seed %d stalled the mouth at a fork" % seed)
+            self.assertEqual(save["expedition"]["fork"], None)
+
+    def test_forks_are_deterministic(self):
+        cat, a = self.fresh(4242)
+        _, b = self.fresh(4242)
+        for save in (a, b):
+            for _ in range(8):
+                site, _ = content.advance_delve(cat, save)
+                if site is None:
+                    content.advance_delve(cat, save, passage=1)
+                save["expedition"]["pending_site"] = None
+        self.assertEqual(a["expedition"]["sites"], b["expedition"]["sites"])
+        self.assertEqual(a["expedition"]["declined"], b["expedition"]["declined"])
+        self.assertEqual(a["expedition"]["fork"], b["expedition"]["fork"])
+
+    def test_every_shape_the_table_allows_shows_up(self):
+        shapes = set()
+        for i in range(400):
+            shapes.add(content._draw_fork_shape(engine.rng_for("shape", i)))
+        self.assertEqual(shapes, {s for s, _ in content.FORK_SHAPES})
+
+    def test_passages_are_distinct_rooms_when_the_pool_allows(self):
+        """Templates are drawn per kind, so the guarantee is per kind: two
+        strange passages can only differ if two strange rooms are left."""
+        checked = 0
+        for seed in range(40):
+            cat, save = self.forked(seed_from=seed)
+            exp = save["expedition"]
+            used = {s["name"] for s in exp["sites"]}
+            depth = exp["fork"][0]["depth"]
+            by_kind = {}
+            for passage in exp["fork"]:
+                by_kind.setdefault(passage["kind"], []).append(passage["name"])
+            for kind, names in by_kind.items():
+                pool = {s["name"] for s in cat["sites"] if s["kind"] == kind
+                        and s["depth"][0] <= depth <= s["depth"][1]}
+                if len(pool - used) >= len(names):
+                    self.assertEqual(len(set(names)), len(names), names)
+                    checked += 1
+        self.assertGreater(checked, 0)
+
+    def test_reprinting_a_fork_costs_nothing_and_decides_nothing(self):
+        cat, save = self.forked()
+        exp, d = save["expedition"], save["delver"]
+        before = (save["counter"], d["light"], exp["depth"],
+                  json.dumps(exp["fork"]), len(exp["sites"]))
+        site, lines = content.advance_delve(cat, save)
+        self.assertIsNone(site)
+        self.assertEqual(lines, content.fork_lines(exp["fork"]))
+        self.assertEqual(before, (save["counter"], d["light"], exp["depth"],
+                                  json.dumps(exp["fork"]), len(exp["sites"])))
+
+    def test_taking_a_passage_spends_one_light_and_closes_the_others(self):
+        for seed in range(60):
+            cat, save = self.forked(seed_from=seed)
+            exp, d = save["expedition"], save["delver"]
+            if exp["fork"][0]["kind"] == "strange":
+                continue  # strange sites move light themselves; measure elsewhere
+            taken, others = exp["fork"][0], exp["fork"][1:]
+            light, depth = d["light"], exp["depth"]
+            site, _ = content.advance_delve(cat, save, passage=1)
+            self.assertEqual(site["name"], taken["name"])
+            self.assertEqual(d["light"], light - 1)
+            self.assertEqual(exp["depth"], depth + 1)
+            self.assertIsNone(exp["fork"])
+            self.assertEqual([p["rumor"] for p in others],
+                             [x["rumor"] for x in exp["declined"]])
+            return
+        self.fail("no non-strange fork in 60 seeds")
+
+    def test_old_stairs_carry_you_through_a_fork_for_free(self):
+        cat, save = self.forked()
+        save["expedition"]["free_delve"] = True
+        light = save["delver"]["light"]
+        content.advance_delve(cat, save, passage=1)
+        self.assertGreaterEqual(save["delver"]["light"], light)
+
+    def test_the_way_is_single_here(self):
+        cat, save = self.fresh()
+        content.advance_delve(cat, save)
+        save["expedition"]["pending_site"] = None
+        with self.assertRaises(ValueError):
+            content.advance_delve(cat, save, passage=1)
+
+    def test_there_are_only_so_many_passages(self):
+        cat, save = self.forked()
+        with self.assertRaises(ValueError):
+            content.advance_delve(cat, save, passage=len(save["expedition"]["fork"]) + 1)
+        with self.assertRaises(ValueError):
+            content.advance_delve(cat, save, passage=0)
+
+    def test_surfacing_closes_the_fork_and_forgets_the_roads_not_taken(self):
+        cat, save = self.forked()
+        content.advance_delve(cat, save, passage=1)
+        save["expedition"]["pending_site"] = None
+        self.assertTrue(save["expedition"]["declined"])
+        content.do_surface(cat, save)
+        self.assertIsNone(save["expedition"]["fork"])
+        self.assertEqual(save["expedition"]["declined"], [])
+
+    def test_the_save_shape_is_complete(self):
+        cat, save = self.fresh()
+        self.assertEqual(save["version"], 4)
+        for key in ("fork", "declined"):
+            self.assertIn(key, save["expedition"])
+        blob = json.loads(json.dumps(save))
+        self.assertEqual(blob, save)
+
+    def test_the_map_remembers_what_you_did_not_open(self):
+        import pages
+        cat, save = self.forked()
+        content.advance_delve(cat, save, passage=1)
+        with tempfile.TemporaryDirectory() as tmp:
+            old, pages.UI_DIR = pages.UI_DIR, tmp
+            try:
+                pages.write_map(save)
+                with open(os.path.join(tmp, "map.txt"), encoding="utf-8") as f:
+                    text = f.read()
+            finally:
+                pages.UI_DIR = old
+        for entry in save["expedition"]["declined"]:
+            self.assertIn("..unopened: %s" % entry["rumor"], text)
 
 
 if __name__ == "__main__":

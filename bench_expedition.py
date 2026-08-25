@@ -73,7 +73,9 @@ def run_career(world_seed, max_expeditions, policy):
             if exp["active"] and d["hp"] < 0.5 * engine.hp_max(d) and d["supply"] > 0:
                 content.do_camp(cat, save)
                 continue
-            content.advance_delve(cat, save, content._evt_rng(save))
+            content.advance_delve(cat, save)
+            if save["expedition"]["fork"]:  # batch policies always take passage 1
+                content.advance_delve(cat, save, passage=1)
         # spend between expeditions
         if d["alive"]:
             for stat in TRAIN_ROTATION:
@@ -138,9 +140,66 @@ def bench(careers, max_expeditions):
         bench_policy(careers, max_expeditions, policy)
 
 
+def rumor_census(samples):
+    """Every authored rumor should be reachable, and quiet must sometimes
+    be teeth: the ambush ambiguity is the whole point of the mechanic."""
+    cat = content.load_catalog()
+    heard = {}
+    quiet_kinds = {}
+    for i in range(samples):
+        depth = 1 + i % content.DEPTH_MAX
+        site = content.generate_site(cat, depth, engine.rng_for("rumorcensus", i))
+        heard[site["rumor"]] = heard.get(site["rumor"], 0) + 1
+        if site["rumor"] == content.QUIET_RUMOR:
+            quiet_kinds[site["kind"]] = quiet_kinds.get(site["kind"], 0) + 1
+    authored = set(content.SALVAGE_RUMORS) | {content.QUIET_RUMOR}
+    authored |= {e["rumor"] for e in cat["enemies"] if "rumor" in e}
+    authored |= {s["rumor"] for s in cat["strange"]}
+    quiet = sum(quiet_kinds.values())
+    ambush = quiet_kinds.get("encounter", 0)
+    print("rumor census over %d generated sites" % samples)
+    print("  authored lines: %d; heard at least once: %d" % (len(authored), len(authored & set(heard))))
+    unheard = sorted(authored - set(heard))
+    if unheard:
+        print("  NEVER HEARD (%d): %s" % (len(unheard), "; ".join(unheard)))
+    print("  quiet passages: %d (%.1f%% of all sites)" % (quiet, 100.0 * quiet / samples))
+    if quiet:
+        print("  of those, an all-lurker ambush: %d (%.1f%% of quiet lines)"
+              % (ambush, 100.0 * ambush / quiet))
+
+
+def fork_census(samples):
+    """What shape the way takes, and how often a fork has to repeat a room."""
+    cat = content.load_catalog()
+    shapes = {}
+    for i in range(samples):
+        shape = content._draw_fork_shape(engine.rng_for("forkcensus", i))
+        shapes[shape] = shapes.get(shape, 0) + 1
+    print("fork shapes over %d draws: %s" % (samples, "  ".join(
+        "%d-way %.0f%%" % (s, 100.0 * shapes[s] / samples) for s in sorted(shapes))))
+    repeats = forks = 0
+    for i in range(samples // 10):
+        depth = 1 + i % content.DEPTH_MAX
+        rng = engine.rng_for("forkrooms", i)
+        shape = max(2, content._draw_fork_shape(rng))
+        passages = []
+        for _ in range(shape):
+            passages.append(content.generate_site(cat, depth, rng,
+                                                  exclude={p["name"] for p in passages}))
+        forks += 1
+        repeats += len({p["name"] for p in passages}) < len(passages)
+    print("forks whose passages repeat a room name: %.1f%% of %d (kind pools are small)"
+          % (100.0 * repeats / forks, forks))
+
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--careers", type=int, default=300)
     p.add_argument("--expeditions", type=int, default=10)
+    p.add_argument("--rumors", type=int, default=10000)
     args = p.parse_args()
     bench(args.careers, args.expeditions)
+    print()
+    rumor_census(args.rumors)
+    print()
+    fork_census(args.rumors)

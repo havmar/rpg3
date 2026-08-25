@@ -24,3 +24,8 @@ if __name__ == "__main__":
     print()
     print("== careers ==")
     bench_expedition.bench(args.careers, 10)
+    print()
+    print("== rumors ==")
+    bench_expedition.rumor_census(10000)
+    print()
+    bench_expedition.fork_census(10000)

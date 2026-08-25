@@ -115,3 +115,39 @@ the next tuning pass does not mistake it for the satchel being lethal.
 Mean max depth reached rose (3.9 → 4.3 ramp, 4.5 satchel) and mean chits
 per career rose (103 → 131 ramp), both from the commission and from
 expeditions running longer under a carry limit than under a depth target.
+
+## 2026-08-25 — plan 0004 (the way splits)
+
+`python tune.py --runs 300 --careers 300`, plus a 1000-career A/B against
+the plan 0003 commit to settle the "within noise" target properly. Combat
+numbers are again byte-identical to the plan 0002 entry — forks touch no
+fight.
+
+Plan targets, actuals:
+
+- **Outcomes stay within noise.** Same code, same policies, 1000 careers
+  each, plan 0003 → plan 0004: ramp death rate 68% → 70%, median career
+  chits 106 → 102; satchel death rate 78% → 79%, median career chits
+  64 → 69. Standard error on a 70% proportion at n=1000 is ~1.4 points, so
+  every move is inside noise. Forks re-shape *decisions*, not odds, and
+  the bench says so. (At 300 careers the same comparison shows a 5-point
+  swing on ramp; that is the sample, not the mechanic — recorded because
+  the smaller run is what `tune.py` prints by default.)
+- **Rumor census over 10,000 generated sites: all 22 authored lines
+  reachable**, none unheard.
+- **Quiet is a real fraction, and it is genuinely ambiguous.** 13.3% of
+  generated sites give the quiet line; **27.3% of those quiet lines are an
+  all-lurker ambush**, not a resting place. The plan set 10% as the level
+  below which the ambiguity would be too thin to be a real decision — this
+  is comfortably above it, so nothing to flag.
+- Fork shapes measured at exactly the authored 20% / 65% / 15%.
+
+**Noted for the next design session, not tuned here: the site catalog is
+thin under forks.** Templates are drawn per kind, so a two- or three-way
+fork wants two or three *fresh templates of the same kind* at that depth,
+and there are only two salvage, two strange and two breather templates in
+the whole catalog. 7.1% of generated forks have to repeat a room name
+between passages (the documented fallback — repeats allowed, never a
+failure). Forks made the site catalog's thinness visible; more templates
+per kind and depth band would fix it, and that is content authoring, not
+tuning.

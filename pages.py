@@ -81,12 +81,19 @@ def write_map(save):
     lines.append("  WAKE  (the mouth)" + ("" if exp["active"] else "   <-- you are here"))
     if exp["active"] and not exp["sites"]:
         lines.append("   |   <-- you are here, at the threshold")
-    depth_seen = 0
+    # roads not taken, in the order they were declined
+    unopened = list(exp["declined"]) if exp["active"] else []
     for site in exp["sites"] if exp["active"] else []:
-        depth_seen = max(depth_seen, site["depth"])
         marker = "   <-- you are here" if site["depth"] == exp["depth"] and site is exp["sites"][-1] else ""
         lines.append("   |")
         lines.append("  d%-2d %-12s %s%s" % (site["depth"], "[" + site["kind"] + "]", site["name"], marker))
+        while unopened and unopened[0]["depth"] == site["depth"]:
+            lines.append("      ..unopened: %s" % unopened.pop(0)["rumor"])
+    if exp["active"] and exp["fork"]:
+        lines.append("   |")
+        lines.append("  the way splits here:")
+        for i, passage in enumerate(exp["fork"], 1):
+            lines.append("    %d) %s" % (i, passage["rumor"]))
     if not exp["active"]:
         lines.append("   |")
         lines.append("  (the Understory waits)")

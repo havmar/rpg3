@@ -10,7 +10,7 @@ import json
 import random
 import re
 
-SAVE_VERSION = 3
+SAVE_VERSION = 4
 
 STATS = ["edge", "iron", "vim", "nerve", "craft"]
 

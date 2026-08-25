@@ -77,5 +77,11 @@ first delve, so day 1 starts underground; the satchel caps what comes
 home; Wake posts a daily commission that pays double; and the reckoning
 drum (`session.py odds`) answers odds questions out of a rationed supply
 of windings, on a seed path that cannot peek at the real fight.
-Plan 0004 is READY. Next milestone: 0004, then a third playthrough on the
-new engine. Update this status as milestones land.
+Plan 0004 is DONE (save v4): at most depths the way down splits, and each
+passage is announced only by a rumor derived from what is actually behind
+it — a passage holding nothing but lurkers sounds exactly like a place to
+rest. The unchosen ways close behind you; the map remembers them.
+
+All three plans from the 2026-08-25 design session have landed. Next
+milestone: a third playthrough on the new engine (save v4), then a design
+session on what it turns up. Update this status as milestones land.
