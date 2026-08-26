@@ -1,26 +1,30 @@
-# Day 1, depth 3 — vitrified street
+# Day 1, depth 3 — the street kept him
 
-**hp 14/14 · grit 3/3 · light 7 · satchel 2/7.**
-**A fight is pending: five shardswarms.**
+**Marek Culvert is dead.** Two rounds, on the vitrified street, at depth 3.
 
-A street preserved mid-morning — stalls with their awnings still out, doorways
-standing open, citizens of glass exactly where they stood. Not one of them has
-fallen over in the whole age since. That is the part that takes a moment.
+**Round 1.** He opened the nearest drift on his first swing — **6 damage**, and
+it came apart into ordinary broken glass. The other four closed, and every one
+of them landed: **3, 3, 3, 2**. **14 → 3 hp.**
 
-The rustling you heard from above resolves as you come down the street: five
-drifts of broken glass, moving against the draft. All edges.
+**Round 2.** He killed the second one, **6 damage**, clean. Then the third hit
+for **4** and he spent grit to halve it to **2** — **1 hp**. The fourth hit for
+**3**; grit, halved to **1**; his last grit, halved to **0**. Still standing at
+**1 hp**, no grit left, three of them still in the street.
 
-**Stances** — `fight --stance <name>`:
+The fifth hit him for **2**.
 
-- `press` — atk **+2**, dmg **+2**, guard **−2**
-- `measure` — no change
-- `skirmish` — atk **−1**, guard **+1**; you break off on your own below **40%** hp, and parting blows come
-- `ward` — atk **−2**, guard **+3**, soak **+1**
+He died among citizens of glass who have not fallen over in an age, and who did
+not fall over for this either.
 
-You are **guard 10, soak 0, attack +9**, knife **1d6+1**. Rounds burn lamp oil.
+**On him, never banked:** fused coin-clutch (**3**), unmelted ledger-clasp
+(**5**). Light **7**. Supply **3**. Day **1**.
 
-Also here: `odds` — wind the reckoning drum (**4/4 windings**). `status`.
+Press stance put him at **guard 8**. They needed a **6**.
+
+His page is written. `LEDGER.md` has three names in it now.
+
+**`new` raises the next delver** — a new name, a new descent, day 1 underground.
 
 ---
 
-[the map](map.txt) · [the story so far](history.md) · [the chronicle](chronicle.md)
+[the ledger](../LEDGER.md) · [the map](map.txt) · [the last fight](fight.txt) · [the chronicle](chronicle.md)

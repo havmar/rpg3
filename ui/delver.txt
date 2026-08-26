@@ -1,9 +1,9 @@
 ====================================================
-  Marek Culvert -- glasspicker of Wake
+  Marek Culvert -- glasspicker of Wake  (DECEASED)
 ====================================================
 
-  HP    [####################] 14/14
-  GRIT  [########] 3/3
+  HP    [--------------------] 0/14
+  GRIT  [--------] 0/3
   LIGHT [########----] 7/10
   SUPPLY 3      WINDINGS 4/4
   SATCHEL 2/7
