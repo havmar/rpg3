@@ -1,14 +1,25 @@
-# Day 1, depth 2 — two ways down
+# Day 1, depth 3 — vitrified street
 
-Nothing is spent at a split. **hp 14/14 · grit 3/3 · light 8 · satchel 2/7.**
+**hp 14/14 · grit 3/3 · light 7 · satchel 2/7.**
+**A fight is pending: five shardswarms.**
 
-Behind the crushed shelving the floor has gone through twice. Both openings
-breathe, and neither of them is quiet.
+A street preserved mid-morning — stalls with their awnings still out, doorways
+standing open, citizens of glass exactly where they stood. Not one of them has
+fallen over in the whole age since. That is the part that takes a moment.
 
-1. The floor hums, as if something swims through it.
-2. A dry rustling, like sleet on glass, from everywhere at once.
+The rustling you heard from above resolves as you come down the street: five
+drifts of broken glass, moving against the draft. All edges.
 
-**Choose:** `delve 1` · `delve 2` — **1 light**, and the other closes behind you.
+**Stances** — `fight --stance <name>`:
+
+- `press` — atk **+2**, dmg **+2**, guard **−2**
+- `measure` — no change
+- `skirmish` — atk **−1**, guard **+1**; you break off on your own below **40%** hp, and parting blows come
+- `ward` — atk **−2**, guard **+3**, soak **+1**
+
+You are **guard 10, soak 0, attack +9**, knife **1d6+1**. Rounds burn lamp oil.
+
+Also here: `odds` — wind the reckoning drum (**4/4 windings**). `status`.
 
 ---
 

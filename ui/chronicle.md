@@ -69,3 +69,18 @@ breathe, and neither of them is quiet.
 
 1. The floor hums, as if something swims through it.
 2. A dry rustling, like sleet on glass, from everywhere at once.
+
+---
+
+## Day 1, depth 3 — vitrified street
+
+*Took the second passage — the dry rustling.*
+
+**hp 14/14 · grit 3/3 · light 7 · satchel 2/7. A fight is pending: five shardswarms.**
+
+A street preserved mid-morning — stalls with their awnings still out, doorways
+standing open, citizens of glass exactly where they stood. Not one of them has
+fallen over in the whole age since. That is the part that takes a moment.
+
+The rustling you heard from above resolves as you come down the street: five
+drifts of broken glass, moving against the draft. All edges.

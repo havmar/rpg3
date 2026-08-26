@@ -5,11 +5,10 @@ THE DESCENT
    |
   d1  [strange]    a standing mirror
    |
-  d2  [salvage]    collapsed stockroom   <-- you are here
+  d2  [salvage]    collapsed stockroom
       ..unopened: Quiet. Your own lamp is the loudest thing in it.
       ..unopened: Quiet. Your own lamp is the loudest thing in it.
    |
-  the way splits here:
-    1) The floor hums, as if something swims through it.
-    2) A dry rustling, like sleet on glass, from everywhere at once.
+  d3  [encounter]  vitrified street   <-- you are here
+      ..unopened: The floor hums, as if something swims through it.
 

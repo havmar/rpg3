@@ -4,7 +4,7 @@
 
   HP    [####################] 14/14
   GRIT  [########] 3/3
-  LIGHT [##########--] 8/10
+  LIGHT [########----] 7/10
   SUPPLY 3      WINDINGS 4/4
   SATCHEL 2/7
 
@@ -22,7 +22,7 @@
   armor:  oilcloth wraps (guard +0, soak 0)
   knack:  glasspicker -- +1 chit on every salvage item banked
 
-  ON EXPEDITION -- depth 2
+  ON EXPEDITION -- depth 3
   chits banked: 0
   standing order: watchman's eye -- the assay-house pays +8 on the first one in
   carrying (2/7):
