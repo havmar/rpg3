@@ -3,13 +3,12 @@ THE DESCENT
 
   WAKE  (the mouth)
    |
-  d1  [encounter]  shatterfall scree
+  d1  [strange]    a standing mirror
    |
-  d2  [encounter]  watchman's rotunda
+  d2  [salvage]    collapsed stockroom
+      ..unopened: Quiet. Your own lamp is the loudest thing in it.
+      ..unopened: Quiet. Your own lamp is the loudest thing in it.
    |
-  d3  [encounter]  watchman's rotunda
-   |
-  d4  [breather]   a cold hearth-round
-   |
-  d5  [encounter]  annealing hall   <-- you are here
+  d3  [encounter]  vitrified street   <-- you are here
+      ..unopened: The floor hums, as if something swims through it.
 

@@ -1,48 +1,26 @@
-LAST FIGHT -- annealing hall (depth 5) -- DOWN
-==============================================
+LAST FIGHT -- vitrified street (depth 3) -- DOWN
+================================================
 
 (every roll; the short log is fight.txt)
 
   -- round 1 --
-  You miss vitrified watchman#1 (6+4 vs 12).
-  vitrified watchman#1 misses you (6+3 vs 15).
+  You hit shardswarm#1 for 6 (7+11 vs 10).  [first-blood]
+* shardswarm#1 goes down.
+  shardswarm#2 hits you for 3 (7+2 vs 8).
+  shardswarm#3 hits you for 3 (7+2 vs 8).
+  shardswarm#4 hits you for 3 (14+2 vs 8).
+  shardswarm#5 hits you for 2 (14+2 vs 8).
+* You are badly hurt (3/14).
   -- round 2 --
-  You miss vitrified watchman#1 (4+4 vs 12).
-  vitrified watchman#1 misses you (1+3 vs 15).
-  -- round 3 --
-  You miss vitrified watchman#1 (5+4 vs 12).
-  vitrified watchman#1 hits you for 1 (16+3 vs 15).
-  -- round 4 --
-  You miss vitrified watchman#1 (1+4 vs 12).
-  vitrified watchman#1 hits you for 5 (17+3 vs 15).
-* PAUSE: the fight hangs in the balance.
-* You choose: spend 2 grit: next attack cannot miss and strikes double.
-  -- round 5 --
-* You hit vitrified watchman#1 for 1 SURGE! (11+4 vs 12).
-  vitrified watchman#1 hits you for 3 (16+3 vs 15).
-* You are badly hurt (3/17).
-  -- round 6 --
-  You miss vitrified watchman#1 (1+4 vs 12).
-  vitrified watchman#1 hits you for 2 (19+3 vs 15).
-* You are badly hurt (1/17).
-  -- round 7 --
-  You miss vitrified watchman#1 (6+4 vs 12).
-  vitrified watchman#1 misses you (4+3 vs 15).
-  -- round 8 --
-  You hit vitrified watchman#1 for 1 (12+4 vs 12).
-  vitrified watchman#1 misses you (4+3 vs 15).
-  -- round 9 --
-  You hit vitrified watchman#1 for 1 (8+4 vs 12).
-  vitrified watchman#1 misses you (1+3 vs 15).
-  -- round 10 --
-* You hit vitrified watchman#1 for 6 CRIT! (20+4 vs 12).
-  vitrified watchman#1 misses you (4+3 vs 15).
-  -- round 11 --
-  You miss vitrified watchman#1 (1+4 vs 12).
-  vitrified watchman#1 misses you (6+3 vs 15).
-  -- round 12 --
-  You miss vitrified watchman#1 (5+4 vs 12).
-* vitrified watchman#1 hits you for 7 CRIT! (20+3 vs 15).
-* You grit through it: damage halved to 3 (1 grit spent).
+  You hit shardswarm#2 for 6 (3+11 vs 10).  [finisher]
+* shardswarm#2 goes down.
+  shardswarm#3 hits you for 4 (17+2 vs 8).
+* You grit through it: damage halved to 2 (1 grit spent).  [close-call]
+* You are badly hurt (1/14).
+  shardswarm#4 hits you for 3 (13+2 vs 8).
+* You grit through it: damage halved to 1 (1 grit spent).  [close-call]
+* You grit through it: damage halved to 0 (1 grit spent).  [close-call]
+* You are badly hurt (1/14).
+  shardswarm#5 hits you for 2 (13+2 vs 8).  [finisher]
 * You are down.
-* FIGHT ENDS after round 12: the dark takes you.
+* FIGHT ENDS after round 2: the dark takes you.

@@ -1,26 +1,31 @@
 ====================================================
-  Teodor Slake -- cutter of Wake  (DECEASED)
+  Marek Culvert -- glasspicker of Wake  (DECEASED)
 ====================================================
 
-  HP    [--------------------] 0/17
+  HP    [--------------------] 0/14
   GRIT  [--------] 0/3
-  LIGHT [#####-------] 4/10
-  SUPPLY 2
+  LIGHT [########----] 7/10
+  SUPPLY 3      WINDINGS 4/4
+  SATCHEL 2/7
 
-  EDGE 3  IRON 3  VIM 3  NERVE 2  CRAFT 2
+  EDGE 4  IRON 2  VIM 2  NERVE 2  CRAFT 3
 
-  attack +6   guard 12   soak 2
-  weapon: salvage axe (1d10, acc -1)
-  armor:  cullet-studded jack (guard +1, soak 2)
-  knack:  cutter -- +1 attack
+  EDGE   swing      (attack rolls)
+  IRON   stand      (guard)
+  VIM    endure     (hp)
+  NERVE  hold       (grit, fear)
+  CRAFT  provision  (satchel size, drum windings)
+  grit: luck you spend    light: time underground    supply: nights of camp
 
-  ON EXPEDITION -- depth 5
+  attack +9   guard 10   soak 0
+  weapon: delver's knife (1d6+1, acc +1)
+  armor:  oilcloth wraps (guard +0, soak 0)
+  knack:  glasspicker -- +1 chit on every salvage item banked
+
+  ON EXPEDITION -- depth 3
   chits banked: 0
-  carrying:
-    - scrap glass and fittings (worth 6)
+  standing order: watchman's eye -- the assay-house pays +8 on the first one in
+  carrying (2/7):
     - fused coin-clutch (worth 3)
-    - scrap glass and fittings (worth 4)
-    - glass rose (worth 6)
-    - scrap glass and fittings (worth 10)
-    - watchman's eye (worth 8)
+    - unmelted ledger-clasp (worth 5)
 
