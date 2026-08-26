@@ -1,18 +1,24 @@
-# Day 1, depth 1 — the way splits
+# Day 1, depth 2 — collapsed stockroom
 
-Nothing is spent at a split. **hp 14/14 · light 9 · satchel 1/7.**
+**hp 14/14 · grit 3/3 · light 8 · satchel 2/7.** Nothing here was waiting for you.
 
-Past the mirror the floor gives up three openings, close enough together that
-one lamp lays light into all three mouths at once.
+Shelving pancaked into strata of its own; goods survive in the gaps. The oil
+you smelled from above is here, and it is not oil anymore — the casks went to
+glass with everything else in the age that ended this floor, and what is inside
+them will never burn again.
 
-1. Quiet. Your own lamp is the loudest thing in it.
-2. Quiet. Your own lamp is the loudest thing in it.
-3. Still air over the smell of oil that has not burned in an age.
+Out of a gap between two collapsed decks: an **unmelted ledger-clasp (worth 5)**.
+Everything for a hundred paces is glass. This is brass, and it still works.
 
-The first two say the same thing. That is the whole of what they say.
+**Carrying:** fused coin-clutch (**3**), unmelted ledger-clasp (**5**) — and
+your knack pays **+1** on each one banked.
 
-**Choose:** `delve 1` · `delve 2` · `delve 3` — **1 light**, and the other two
-close behind you.
+**What now?**
+
+- `delve` — deeper, **1 light**
+- `camp` — **1 supply, 1 light**: heal and steady
+- `surface` — climb out, bank what you carry
+- `status`
 
 ---
 

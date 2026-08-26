@@ -41,3 +41,19 @@ one lamp lays light into all three mouths at once.
 3. Still air over the smell of oil that has not burned in an age.
 
 The first two say the same thing. That is the whole of what they say.
+
+---
+
+## Day 1, depth 2 — collapsed stockroom
+
+*Took the third passage; the other two closed behind.*
+
+**hp 14/14 · grit 3/3 · light 8 · satchel 2/7.** Nothing here was waiting for you.
+
+Shelving pancaked into strata of its own; goods survive in the gaps. The oil
+you smelled from above is here, and it is not oil anymore — the casks went to
+glass with everything else in the age that ended this floor, and what is inside
+them will never burn again.
+
+Out of a gap between two collapsed decks: an **unmelted ledger-clasp (worth 5)**.
+Everything for a hundred paces is glass. This is brass, and it still works.

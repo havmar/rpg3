@@ -3,10 +3,9 @@ THE DESCENT
 
   WAKE  (the mouth)
    |
-  d1  [strange]    a standing mirror   <-- you are here
+  d1  [strange]    a standing mirror
    |
-  the way splits here:
-    1) Quiet. Your own lamp is the loudest thing in it.
-    2) Quiet. Your own lamp is the loudest thing in it.
-    3) Still air over the smell of oil that has not burned in an age.
+  d2  [salvage]    collapsed stockroom   <-- you are here
+      ..unopened: Quiet. Your own lamp is the loudest thing in it.
+      ..unopened: Quiet. Your own lamp is the loudest thing in it.
 
