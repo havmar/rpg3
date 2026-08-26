@@ -27,6 +27,9 @@ instruction filename unchanged.)
 
 - `docs/CHARTER.md` — vision, pillars, the vibe-design contract. Changes
   rarely and deliberately.
+- `docs/MECHANICS.md` — the mechanical north star: what makes the game
+  good as a game, and the low-playtest measurement strategy that keeps it
+  honest. Design sessions argue every plan against it.
 - `docs/SETTING.md` — the world seed and tone. Canon accretes in play;
   never contradict a committed fact.
 - `docs/PLAYBOOK.md` — how the table is run: session flow, the ui/ pages

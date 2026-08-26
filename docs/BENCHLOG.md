@@ -36,3 +36,33 @@ run below played rates; leaving them harsh on purpose.
 
 Watch next: whether played d5–d6 needs a mid-stratum gear tier, and
 whether training cost (15*new value) lets NERVE/VIM matter fast enough.
+
+## 2026-08-26 — first policy probe: stance decision health (no tuning applied)
+
+New instrument: `bench_policy.py` (defaults reproduce these numbers).
+Per depth, 25 generated encounters; per encounter the best stance is
+picked on 60 train seeds (survival first, victory second) and everything
+is scored on 60 disjoint test seeds, stock delver, pauses = fight_on.
+Measurement-only entry — findings feed design (MECHANICS.md agenda);
+nothing in the game was changed.
+
+- **Skirmish is a near-dominant survival hedge**: 85–100% survival at
+  every depth (vs 20–97% for measure), because the auto-withdraw at 40%
+  hp caps downside while parting blows rarely kill from there. It pays in
+  victories (7% at d6) — but under permadeath, survival-max is close to
+  the played utility, and "always skirmish, fight only what it beats" is
+  too safe. The exit is underpriced.
+- **Ward weakly dominates press for the stock delver from d3 down** —
+  better survival *and* better victory rate (d4: 58%/58% vs 51%/51%).
+  Speed has no price (rounds cost nothing), so press's only edge is the
+  damage race it usually loses.
+- **Matchup knowledge is real but thin**: picked-stance beats
+  fixed-measure by +2pp survival at d1 up to +69pp at d6, but beats the
+  best single fixed stance by ~0pp everywhere — the "table" collapses to
+  "skirmish unless trivial". 36 of 42 encounter signatures have one
+  context-stable best stance; the learnable content is a small lookup,
+  not a pricing skill yet.
+
+Outcome benches (2026-08-23 entry) showed every stance's numbers side by
+side and looked healthy; the dominant line only appears when a policy is
+allowed to *choose*. That is the argument for keeping this bench.
