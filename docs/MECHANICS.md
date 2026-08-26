@@ -78,28 +78,36 @@ budgeted as content, not counted as depth).
    (salvage names, rumor flavors, strange sites) over a small coupled
    core, never in parallel disconnected subsystems.
 
-## Where v0.1 stands (audit, 2026-08-26 — see BENCHLOG same date)
+## Where the game stands (audit of the save-v4 engine, 2026-08-26 — see BENCHLOG same date)
 
-The first policy probe (`bench_policy.py`) plus a read of the code:
+Plans 0002–0004 already built a large part of what this document asks
+for, and the policy probe (`bench_policy.py`) measures what remains:
 
-- **Informed bets**: enemy names are announced before stance choice — good
-  start. But odds are learnable only by dying, there is no scout/avoid/
-  appraise verb, and CRAFT has no mechanical hook at all. That dead stat
-  is deliberately reserved: CRAFT is the knowledge axis when it lands.
-- **Live decisions**: the probe found two dead spots the outcome benches
-  missed. Skirmish is a near-dominant survival hedge (85–100% survival at
-  every depth; its exit fee is underpriced), and ward weakly dominates
-  press for the stock delver from d3 down (better survival *and* better
-  win rate). Stance matchup knowledge is worth +2pp survival at d1 rising
-  to +69pp at d6 over fixed-measure — but almost nothing over "always
-  skirmish". The fight-layer choice needs re-coupling (exit pricing, time
-  pressure, information), not re-numbering.
-- **Shape**: knacks are real shape; gear is mostly stat-stick; strange
-  sites are flavor with a tweak. Thin, as v0.1 should be.
-- **Coupling**: the light/supply/hp/grit web is genuinely good already.
-  Holes: fight rounds cost nothing outside the fight, retreat prices at
-  one depth step, carrying salvage is free (no slots), chits sink only
-  into train/buy.
+- **Informed bets**: substantially real. Enemy names announce before the
+  stance choice; the reckoning drum sells true Monte Carlo odds out of a
+  CRAFT-metered supply (0003); forks are announced by honest rumors whose
+  quiet case is deliberately ambiguous (0004), and the fork layer is
+  uncomputable by settled design — nerve and appetite keep a domain the
+  drum cannot price. The remaining gap is not information but the thing
+  the information is about: see live decisions.
+- **Live decisions**: plan 0002 fixed one dominance (press, once tempo
+  cost light, became the best *committed* stance at every depth — ward's
+  hp-thrift now trades against press's light-thrift, though only a career
+  view can weigh that trade). The probe shows the other dominance intact:
+  **skirmish survives 85–100% at every depth and the picked-stance policy
+  beats "always skirmish" by ~0pp** — `_withdraw` is still v0.1, so the
+  exit is free and the matchup table collapses into it. Priced exits are
+  plans/0005; the career tournament that can finally weigh ward, light,
+  and the hedge honestly ships in the same plan.
+- **Shape**: knacks, marks, beats, and the drum are real shape; gear is
+  still six weapons and four armors of stat-stick, and chits sink only
+  into train/buy. The outfitter's shelf — kit with declared auto-triggers,
+  relics that refuse to be money, stances worth learning — is plans/0006.
+- **Coupling**: the light/supply/hp/grit web now includes fight tempo
+  (0002) and carry weight (0003 satchel, with commissions as the pull
+  home). Still loose: leaving a fight costs nothing (0005), and value
+  cannot be committed at depth (0005's stashes — weight converted into a
+  promise to come back).
 
 ## The strategy: strong mechanics with almost no human testing
 
@@ -158,23 +166,33 @@ Safe, because content divides in two:
   worth at a time, so each stratum re-poses the pricing problem instead
   of extending the old answer key.
 
-## Near-term mechanical agenda (each item still needs its own plan)
+## The five-point agenda, reconciled (2026-08-26)
 
-1. **Price the exits.** Withdrawing is a bet, not a refund: pursuit rules
-   (swift/relentless press the retreat), salvage dropped when fleeing,
-   retreat costing light. Kills the skirmish free-hedge the probe found.
-2. **Couple fight length to the clock.** Rounds cost light or attention
-   (reinforcement risk) so press-vs-ward becomes an economy choice, not a
-   survival calculation — this is also what un-dominates press.
-3. **CRAFT is the knowledge axis.** Scout and appraise verbs: spend light
-   or supply to reveal the next site or an enemy's traits and menace
-   before committing; rumors bought at Wake; Ledger entries seeding
-   rumors, so dead delvers literally become institutional knowledge.
-4. **Shape-changing acquisitions.** Relic slots carrying procedural
-   exceptions; a fifth and sixth stance as trainable unlocks;
-   pre-expedition kit slots (rope, oil, poultice) as the hand you draw.
-5. **Sharpen bank-or-push.** Salvage slots (carrying more is a choice),
-   choose-one loot offers, caches you can stash deep and must return for.
+Where each item stands after plans 0002–0004, and where the rest lives:
+
+1. **Price the exits.** Open — the probe's confirmed dominant line.
+   Specced in full as `plans/0005-the-cost-of-leaving.md`: pursuit priced
+   by trait (lurkers don't chase, relentless does), withdrawing costs
+   light, skirmish pays attack for its prepared exit, and the career
+   policy tournament lands as the instrument that can finally weigh it.
+2. **Couple fight length to the clock.** DONE — plan 0002 (rounds burn
+   light every 4th, press converts risk to flat damage, armor cracks). An
+   independent design session reached it from the played evidence one day
+   before the probe reached it from measurement; keep both instruments.
+3. **CRAFT is the knowledge axis.** DONE, better than first sketched —
+   plan 0003 gave CRAFT the satchel and the drum's windings (odds as a
+   rationed in-game instrument), plan 0004 gave route information as
+   honest rumors. Mechanizing Ledger knowledge is DECLINED: the traces
+   rule (playbook) keeps dead delvers as set dressing, never priced.
+4. **Shape-changing acquisitions.** Open. Specced in full as
+   `plans/0006-the-outfitters-shelf.md`: kit with auto-triggers declared
+   at purchase (no mid-fight buttons — the one-pause law holds), relics
+   that are worn instead of banked, brace and read as bought stances that
+   answer the game's existing telegraphs.
+5. **Sharpen bank-or-push.** Half done — the satchel and commissions
+   (0003) are the weight and the pull home. The remainder — stashes that
+   convert weight into a promise to come back — ships with 0005; the
+   bank-it-or-wear-it choice on relics ships with 0006.
 
 ## The standing answer to the standing worry
 

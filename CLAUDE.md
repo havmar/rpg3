@@ -96,6 +96,15 @@ passage is announced only by a rumor derived from what is actually behind
 it — a passage holding nothing but lurkers sounds exactly like a place to
 rest. The unchosen ways close behind you; the map remembers them.
 
-All three plans from the 2026-08-25 design session have landed. Next
-milestone: a third playthrough on the new engine (save v4), then a design
-session on what it turns up. Update this status as milestones land.
+All three plans from the 2026-08-25 design session have landed. Session 3
+(`play/marek-culvert`, ledgered) was played on a stale checkout — the
+2026-08-23 engine — so the v4 engine remains unplayed; the freshness guard
+now exists because of it.
+
+The 2026-08-26 design session wrote `docs/MECHANICS.md` (the mechanical
+north star), landed `bench_policy.py` (the policy-tournament bench the
+plan-0002 benchlog caveat asked for; it confirmed the skirmish hedge
+survives 0002–0004 untouched), and produced plans
+`0005-the-cost-of-leaving` and `0006-the-outfitters-shelf`, both READY.
+Next milestone: implement 0005 then 0006, then a playthrough on the
+resulting engine (save v6). Update this status as milestones land.
