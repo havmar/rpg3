@@ -26,3 +26,18 @@ trade-cant, a price agreed before you opened your mouth. You came away with a
 The mirror is still facing the wrong way.
 
 **Light 9.** The way down from here is single.
+
+---
+
+## Day 1, depth 1 — the way splits
+
+Nothing is spent at a split. **hp 14/14 · light 9 · satchel 1/7.**
+
+Past the mirror the floor gives up three openings, close enough together that
+one lamp lays light into all three mouths at once.
+
+1. Quiet. Your own lamp is the loudest thing in it.
+2. Quiet. Your own lamp is the loudest thing in it.
+3. Still air over the smell of oil that has not burned in an age.
+
+The first two say the same thing. That is the whole of what they say.

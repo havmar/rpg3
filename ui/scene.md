@@ -1,31 +1,18 @@
-# Day 1, depth 1 — a standing mirror
+# Day 1, depth 1 — the way splits
 
-**Marek Culvert, glasspicker.** Grew up sorting shard-middens barehanded.
-Fast eyes, faster fingers.
+Nothing is spent at a split. **hp 14/14 · light 9 · satchel 1/7.**
 
-**EDGE 4 · IRON 2 · VIM 2 · NERVE 2 · CRAFT 3** — hp **14/14**, grit **3/3**,
-light **9**, supply **3**, satchel **1/7**, windings **4/4**.
-Delver's knife (**1d6+1**, acc **+1**). Oilcloth wraps (guard **+0**, soak **0**).
-Knack: **+1 chit** on every item banked.
-Standing order at the assay-house: a **watchman's eye**, paying double (**+8**).
+Past the mirror the floor gives up three openings, close enough together that
+one lamp lays light into all three mouths at once.
 
-Wake signs you and the mouth takes you the same hour. That is how Wake does it.
+1. Quiet. Your own lamp is the loudest thing in it.
+2. Quiet. Your own lamp is the loudest thing in it.
+3. Still air over the smell of oil that has not burned in an age.
 
-Depth 1, **a standing mirror**: full-length, unbroken, facing away from the
-door. Behind a curtain of hanging shards, voices were trading softly —
-trade-cant, a price agreed before you opened your mouth. You came away with a
-**fused coin-clutch (worth 3)** and nobody asked you for anything.
+The first two say the same thing. That is the whole of what they say.
 
-The mirror is still facing the wrong way.
-
-**Light 9.** The way down from here is single.
-
-**What now?**
-
-- `delve` — one step deeper, **1 light**
-- `camp` — **1 supply, 1 light**: heal and steady
-- `surface` — climb out, bank what you carry
-- `status` — where things stand · `odds` — wind the drum (only on a fight)
+**Choose:** `delve 1` · `delve 2` · `delve 3` — **1 light**, and the other two
+close behind you.
 
 ---
 
