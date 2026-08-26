@@ -118,6 +118,30 @@ when the delver first walks into Wake. `new` starts the scene and chronicle
 fresh; the old game lives on in its own branch, forever. Dev work never
 happens on a play branch; play state never commits to a dev branch.
 
+**Starting a game from Claude Code on the web** (settled after the
+session-3 false start). The web makes you name a branch before the session
+opens — before the delver exists, and since plan 0003 the *engine* deals
+the name. So the branch you type is a placeholder, and the rite is:
+
+1. Open the session on any placeholder branch (`play/next` will do).
+2. Trust the freshness guard: the SessionStart hook fast-forwards a
+   fresh branch to current `origin/master` and says so. If its line says
+   freshness was NOT verified, or there is no line, check by hand before
+   anything else — session 3 played an opening scene on a six-commits-
+   stale base, with the old chargen and an empty Ledger over committed
+   canon, because nothing forced the branch onto current master.
+3. Run `python session.py new`, meet the delver, then rename the branch
+   to the one that is theirs: `git branch -m play/<delver-name>`, and
+   push with `git push -u origin play/<delver-name>`. The placeholder
+   name is never pushed; if the web UI already pushed it, delete it
+   after the rename so the shelf holds one branch per delver.
+
+A branch is a delver's, not a session's: session two of the same game
+opens on the existing `play/<delver>` branch, where being behind master
+is normal — the playthrough keeps the engine it started on. Master
+moving underneath a live game is never a reason to merge; a new engine
+is a new delver (Charter §6).
+
 ## The save and the override surface
 
 - `save.json` (untracked) holds all campaign state between commands.
@@ -168,8 +192,11 @@ only marked harvested or declined by a later design session.
 
 ## Session start (play mode)
 
-1. `git status --short --branch`; clean → `git pull --ff-only`, dirty →
-   understand the local work first.
+1. `git status --short --branch`, and read the freshness guard's output
+   (the SessionStart hook): a fresh branch must sit on current
+   `origin/master` before a new game starts; an existing play branch
+   plays on exactly as it is. No guard line visible → verify by hand
+   (dispatcher, step 1). Dirty tree → understand the local work first.
 2. Load this playbook, `docs/SETTING.md`, the `ui/` pages (history.md is
    the recap), `LEDGER.md`, and the save.
 3. Confirm which play branch is checked out before touching anything.

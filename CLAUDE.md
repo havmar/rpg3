@@ -11,9 +11,20 @@ instruction filename unchanged.)
 
 ## Session start — always
 
-1. `git status --short --branch`. Clean tree → `git pull --ff-only`.
-   Dirty tree → preserve and understand the local work before pulling.
-   Never assume the checkout is current.
+1. **Verify the checkout is fresh against `origin/master`** — not against
+   the branch you happen to be on. A web session starts on a freshly named
+   branch, and pulling *that branch* proves nothing: it can have been cut
+   from a stale base (session 3 ran an entire opening on a checkout six
+   commits behind master this way). The SessionStart hook
+   (`.claude/hooks/session-start.sh`) does the check mechanically — read
+   its output; a line saying it fast-forwarded or could not verify is
+   load-bearing. If no hook output is visible, do its job by hand:
+   `git fetch origin master`, and if HEAD is strictly behind
+   `origin/master` with no commits of its own, `git merge --ff-only
+   origin/master`. A dirty tree is preserved and understood first, never
+   pulled over. A play branch mid-playthrough is *supposed* to be behind
+   master — a playthrough keeps its engine; never merge master into a
+   live game.
 2. Read `docs/CHARTER.md` — the constitution. It overrides habit.
 3. Settle the session MODE before doing anything else:
 
