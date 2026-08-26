@@ -11,9 +11,20 @@ instruction filename unchanged.)
 
 ## Session start — always
 
-1. `git status --short --branch`. Clean tree → `git pull --ff-only`.
-   Dirty tree → preserve and understand the local work before pulling.
-   Never assume the checkout is current.
+1. **Verify the checkout is fresh against `origin/master`** — not against
+   the branch you happen to be on. A web session starts on a freshly named
+   branch, and pulling *that branch* proves nothing: it can have been cut
+   from a stale base (session 3 ran an entire opening on a checkout six
+   commits behind master this way). The SessionStart hook
+   (`.claude/hooks/session-start.sh`) does the check mechanically — read
+   its output; a line saying it fast-forwarded or could not verify is
+   load-bearing. If no hook output is visible, do its job by hand:
+   `git fetch origin master`, and if HEAD is strictly behind
+   `origin/master` with no commits of its own, `git merge --ff-only
+   origin/master`. A dirty tree is preserved and understood first, never
+   pulled over. A play branch mid-playthrough is *supposed* to be behind
+   master — a playthrough keeps its engine; never merge master into a
+   live game.
 2. Read `docs/CHARTER.md` — the constitution. It overrides habit.
 3. Settle the session MODE before doing anything else:
 
@@ -63,5 +74,28 @@ v0.1 playable (plan 0001, benched 2026-08-23): full expedition loop —
 creation, delve, autocombat with one pause, camp, surface, bank, train,
 buy — through `session.py`, with contract suites (`python -m unittest`)
 and benches (`python tune.py`). The Vitric Age runs 6 depths and has a
-sealed floor. Next milestone: first real playthrough on a `play/<delver>`
-branch, then harvest PLAYNOTES. Update this status as milestones land.
+sealed floor. Two playthroughs are on the shelf — `play/hallam-rasp`
+(session 1, abandoned mid-descent, ledgered) and `play/teodor-slake`
+(session 2, dead at depth 5). Both delvers died on day 1 having banked
+nothing, so the haven layer is still untested. Sessions 1–2 were harvested
+by the 2026-08-25 design session, which produced plans
+`0002-combat-that-costs`, `0003-a-reason-to-surface`, and
+`0004-the-way-splits`, and gave the playbook the advice protocol, the
+traces rule, and a wrap-up rite without table questions.
+
+Plan 0002 is DONE (save v2): stances carry a damage bonus, rounds burn
+lamp oil, armor cracks as you work it, a surge goes through soak, the
+fight log tags its own beats for the DM, and a hard fight leaves a mark.
+Plan 0003 is DONE (save v3): `new` deals a random delver and executes the
+first delve, so day 1 starts underground; the satchel caps what comes
+home; Wake posts a daily commission that pays double; and the reckoning
+drum (`session.py odds`) answers odds questions out of a rationed supply
+of windings, on a seed path that cannot peek at the real fight.
+Plan 0004 is DONE (save v4): at most depths the way down splits, and each
+passage is announced only by a rumor derived from what is actually behind
+it — a passage holding nothing but lurkers sounds exactly like a place to
+rest. The unchosen ways close behind you; the map remembers them.
+
+All three plans from the 2026-08-25 design session have landed. Next
+milestone: a third playthrough on the new engine (save v4), then a design
+session on what it turns up. Update this status as milestones land.

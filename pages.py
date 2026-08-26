@@ -34,9 +34,18 @@ def write_delver(save):
     lines.append("  HP    " + _bar(d["hp"], engine.hp_max(d)))
     lines.append("  GRIT  " + _bar(d["grit"], engine.grit_max(d), width=8))
     lines.append("  LIGHT " + _bar(d["light"], engine.light_max(d), width=12))
-    lines.append("  SUPPLY %d" % d["supply"])
+    lines.append("  SUPPLY %d      WINDINGS %d/%d"
+                 % (d["supply"], d["windings"], engine.windings_max(d)))
+    lines.append("  SATCHEL %d/%d" % (len(d["salvage"]), engine.satchel_cap(d)))
     lines.append("")
     lines.append("  " + "  ".join("%s %d" % (s.upper(), d["stats"][s]) for s in engine.STATS))
+    lines.append("")
+    lines.append("  EDGE   swing      (attack rolls)")
+    lines.append("  IRON   stand      (guard)")
+    lines.append("  VIM    endure     (hp)")
+    lines.append("  NERVE  hold       (grit, fear)")
+    lines.append("  CRAFT  provision  (satchel size, drum windings)")
+    lines.append("  grit: luck you spend    light: time underground    supply: nights of camp")
     lines.append("")
     lines.append("  attack %+d   guard %d   soak %d" % (engine.attack_bonus(d), engine.guard(d), engine.soak(d)))
     lines.append("  weapon: %s (%s, acc %+d)" % (d["weapon"]["name"], d["weapon"]["dmg"], d["weapon"]["acc"]))
@@ -45,13 +54,21 @@ def write_delver(save):
                                                           " [heavy]" if d["armor"].get("heavy") else ""))
     lines.append("  knack:  %s -- %s" % (d["knack"], d["knack_text"]))
     lines.append("")
+    if d["marks"]:
+        lines.append("  MARKS (camp dresses the newest; a day in the haven clears them all)")
+        for mark in d["marks"]:
+            lines.append("    - %s: %s" % (mark["name"], mark["text"]))
+        lines.append("")
     if exp["active"]:
         lines.append("  ON EXPEDITION -- depth %d" % exp["depth"])
     else:
         lines.append("  IN WAKE -- day %d" % save["wake"]["day"])
     lines.append("  chits banked: %d" % save["wake"]["chits"])
+    com = save["wake"]["commission"]
+    lines.append("  standing order: %s -- the assay-house pays +%d on the first one in"
+                 % (com["item"], com["bonus"]))
     if d["salvage"]:
-        lines.append("  carrying:")
+        lines.append("  carrying (%d/%d):" % (len(d["salvage"]), engine.satchel_cap(d)))
         for item in d["salvage"]:
             lines.append("    - %s (worth %d)" % (item["name"], item["value"]))
     lines.append("")
@@ -64,12 +81,19 @@ def write_map(save):
     lines.append("  WAKE  (the mouth)" + ("" if exp["active"] else "   <-- you are here"))
     if exp["active"] and not exp["sites"]:
         lines.append("   |   <-- you are here, at the threshold")
-    depth_seen = 0
+    # roads not taken, in the order they were declined
+    unopened = list(exp["declined"]) if exp["active"] else []
     for site in exp["sites"] if exp["active"] else []:
-        depth_seen = max(depth_seen, site["depth"])
         marker = "   <-- you are here" if site["depth"] == exp["depth"] and site is exp["sites"][-1] else ""
         lines.append("   |")
         lines.append("  d%-2d %-12s %s%s" % (site["depth"], "[" + site["kind"] + "]", site["name"], marker))
+        while unopened and unopened[0]["depth"] == site["depth"]:
+            lines.append("      ..unopened: %s" % unopened.pop(0)["rumor"])
+    if exp["active"] and exp["fork"]:
+        lines.append("   |")
+        lines.append("  the way splits here:")
+        for i, passage in enumerate(exp["fork"], 1):
+            lines.append("    %d) %s" % (i, passage["rumor"]))
     if not exp["active"]:
         lines.append("   |")
         lines.append("  (the Understory waits)")
@@ -87,16 +111,22 @@ def write_history(save):
     _write("history.md", "\n".join(lines) + "\n")
 
 
+def _beat_line(imp, text, beat):
+    """The engine's beat rides along as a [tag]: the DM narrates every one."""
+    return text + (("  [%s]" % beat) if beat else "")
+
+
 def write_fight(save):
     lf = save.get("last_fight")
     if not lf:
         return
     head = "LAST FIGHT -- %s (depth %d) -- %s" % (lf["site"], lf["depth"], lf["outcome"].upper())
     short = [head, "=" * len(head), ""]
-    short += engine.fight_summary(lf["events"])
+    short += [_beat_line(imp, text, beat) for imp, text, beat in lf["events"]
+              if imp >= 1 or beat]
     _write("fight.txt", "\n".join(short) + "\n")
     full = [head, "=" * len(head), "", "(every roll; the short log is fight.txt)", ""]
-    full += [("* " if imp else "  ") + text for imp, text in lf["events"]]
+    full += [("* " if imp else "  ") + _beat_line(imp, text, beat) for imp, text, beat in lf["events"]]
     _write("fight_full.txt", "\n".join(full) + "\n")
 
 
