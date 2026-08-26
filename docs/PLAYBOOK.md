@@ -18,6 +18,29 @@ write it here. Narration style and tone live in `docs/SETTING.md`.*
   asked to make choices mid-descent that don't matter, or none at the
   haven that do, pacing is broken — fix the offer, not the player.
 
+**Narrate from the beats.** The fight log tags its own turning points —
+`first-blood`, `finisher`, `crack`, `stagger`, `turned`, `overreach`,
+`close-call`, `surge`, `crit`, `lamp-low`, `lamp-out` — and those tags are
+the engine telling the DM where the fight actually happened. Every beat in
+the short log earns a clause of narration; every unlabeled line may be
+compressed, summarised, or dropped. A fight with two beats is two sentences,
+and that is correct — the word budget (SETTING §Voice) still rules. The
+beats are hooks, not vocabulary: never print the tag names at the table.
+
+**Rumors: embroider, never add.** Where the way splits, each passage is
+announced by one line the engine derived from what is actually behind it.
+The DM may set the scene around a rumor — the shape of the opening, the
+draft, how the lamp behaves — but must never add information to it, soften
+it, or contradict it. Do not hint that one passage is safer, richer, or
+shorter; the rumor is the whole offer.
+
+Quiet is the load-bearing case. A passage with nothing but lurkers behind
+it gets the *identical* line a resting-place gets, and that ambiguity is
+the mechanic, not an oversight. When the line is the quiet line, narrate
+quiet — exactly as quiet as the other quiet — and let the player price it.
+The drum has no reading on a fork, and neither does the DM: what is behind
+a door belongs to nerve and appetite.
+
 ## Advice: facts, prices, and the drum
 
 Settled after session 2. The DM's counsel is **object-level only**: state
@@ -27,20 +50,25 @@ command does — and stop there. Evaluations of the player's options
 DM playing the player's side of the table; don't.
 
 The urge to compute is real and welcome — it goes through the **reckoning
-drum** (plan 0003), the in-game instrument that answers odds questions.
-The rules of its use at the table:
+drum**, the in-game instrument that answers odds questions
+(`session.py odds`). The rules of its use at the table:
 
-- The drum speaks only when the player asks it to (and it has windings
-  left). The DM never volunteers a simulation.
+- The drum speaks only when the player asks it to. Each question spends a
+  winding; `1 + CRAFT` of them per expedition, restored by a night above
+  ground. The DM never volunteers a simulation and never spends a winding
+  on the player's behalf.
 - Its output is presented as the engine prints it — a bare table, no
-  editorial on top, no recommendation under it.
-- What the drum cannot hear (what is behind the next site, what a find is
-  worth to a commission, whether to push a fourth depth), the DM does not
-  compute either. Those decisions belong to nerve and appetite, and the
-  table keeps them.
-
-Until plan 0003 lands, the interim rule is the first clause alone: no
-unsolicited analysis, odds only if the player explicitly asks.
+  editorial on top, no recommendation under it. Naming which row is best
+  is the DM playing the player's side of the table.
+- The drum answers only about the fight in front of you: a pending
+  encounter, or a fight standing at its pause. Anything else it cannot
+  hear, and the DM does not compute either — what is behind the next
+  passage, whether a find is worth carrying, whether to push a fourth
+  depth. Those belong to nerve and appetite, and the table keeps them.
+- The drum cannot cheat and cannot be cheated. Its simulations run on a
+  seed path of their own, so asking never changes and never reveals the
+  fight actually waiting (reseed, never peek — pinned by test). Consulting
+  it, then reloading and not consulting it, produces the same fight.
 
 ## GitHub is the player's UI
 

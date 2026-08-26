@@ -10,20 +10,30 @@ import json
 import random
 import re
 
-SAVE_VERSION = 1
+SAVE_VERSION = 4
 
 STATS = ["edge", "iron", "vim", "nerve", "craft"]
 
 STANCES = {
-    # atk, guard, soak
-    "measure": (0, 0, 0),
-    "press": (3, -2, 0),
-    "ward": (-2, 3, 1),
-    "skirmish": (-1, 1, 0),
+    # atk, guard, soak, dmg
+    "measure": (0, 0, 0, 0),
+    "press": (2, -2, 0, 2),
+    "ward": (-2, 3, 1, 0),
+    "skirmish": (-1, 1, 0, 0),
 }
 
 PAUSE_HP_FRAC = 0.6
 SKIRMISH_FLEE_FRAC = 0.4
+FLEE_LATE_FRAC = 0.25
+LIGHT_CLOCK_ROUNDS = 4
+
+# Marks: small named conditions a hard fight leaves on you. The catalog
+# (catalogs/marks.json) names them; the engine owns what they do.
+MARK_EFFECTS = [
+    "atk-1", "guard-1", "soak-1", "nerve-2", "grit_max-1", "hp_max-3",
+    "camp_heal_half", "light_leak", "breather_numb", "flee_late",
+]
+MARK_CAP = 3
 
 
 # ---------------------------------------------------------------- rng / dice
@@ -57,13 +67,23 @@ def max_dice(spec):
 
 
 # ------------------------------------------------------------- delver math
+# Readers recompute from stored state, marks included. A delver always
+# carries a "marks" list (possibly empty); a missing one is a bug, not a
+# case to soften.
+
+def has_mark(delver, effect):
+    if effect not in MARK_EFFECTS:
+        raise ValueError("unknown mark effect: %r" % effect)
+    return any(m["effect"] == effect for m in delver["marks"])
+
 
 def hp_max(delver):
-    return 8 + 3 * delver["stats"]["vim"]
+    return 8 + 3 * delver["stats"]["vim"] - (3 if has_mark(delver, "hp_max-3") else 0)
 
 
 def grit_max(delver):
-    return 1 + delver["stats"]["nerve"] + (1 if delver["knack"] == "archivist" else 0)
+    base = 1 + delver["stats"]["nerve"] + (1 if delver["knack"] == "archivist" else 0)
+    return max(1, base - (1 if has_mark(delver, "grit_max-1") else 0))
 
 
 def attack_bonus(delver):
@@ -72,27 +92,43 @@ def attack_bonus(delver):
         b += 1
     if delver["armor"].get("heavy"):
         b -= 1
+    if has_mark(delver, "atk-1"):
+        b -= 1
     return b
 
 
 def guard(delver):
-    return 8 + delver["stats"]["iron"] + delver["armor"]["guard"]
+    return 8 + delver["stats"]["iron"] + delver["armor"]["guard"] - (1 if has_mark(delver, "guard-1") else 0)
 
 
 def soak(delver):
-    return delver["armor"]["soak"]
+    return max(0, delver["armor"]["soak"] - (1 if has_mark(delver, "soak-1") else 0))
 
 
 def nerve_bonus(delver):
-    return 2 * delver["stats"]["nerve"] + (2 if delver["knack"] == "salvage-priest" else 0)
+    base = 2 * delver["stats"]["nerve"] + (2 if delver["knack"] == "salvage-priest" else 0)
+    return base - (2 if has_mark(delver, "nerve-2") else 0)
 
 
 def light_max(delver):
     return 10 + (2 if delver["knack"] == "lamplighter" else 0)
 
 
+def satchel_cap(delver):
+    """How much salvage comes home with you. CRAFT is provisioning."""
+    return 4 + delver["stats"]["craft"]
+
+
+def windings_max(delver):
+    """Reckoning-drum windings per expedition. CRAFT again."""
+    return 1 + delver["stats"]["craft"]
+
+
 def camp_heal(delver, rng):
-    return roll_dice("2d6", rng) + delver["stats"]["vim"] + (3 if delver["knack"] == "surgeons-runner" else 0)
+    heal = roll_dice("2d6", rng) + delver["stats"]["vim"] + (3 if delver["knack"] == "surgeons-runner" else 0)
+    if has_mark(delver, "camp_heal_half"):
+        heal //= 2
+    return heal
 
 
 # ------------------------------------------------------------- fight state
@@ -107,9 +143,13 @@ def _combatant_from_delver(delver, stance, darkness):
         "guard": guard(delver) + st[1],
         "soak": soak(delver) + st[2],
         "dmg": delver["weapon"]["dmg"],
+        "dmg_bonus": st[3],
         "grit": delver["grit"],
         "nerve": nerve_bonus(delver),
         "shaken": False,
+        "light": delver["light"],
+        "flee_frac": FLEE_LATE_FRAC if has_mark(delver, "flee_late") else SKIRMISH_FLEE_FRAC,
+        "worst_blow": 0,
     }
 
 
@@ -152,6 +192,7 @@ def start_fight(delver, enemy_specs, stance, seed, darkness=False):
         "pause_used": False,
         "surge": False,
         "withdrawing": False,
+        "first_blood": False,
         "events": [],
         "rng_state": None,
     }
@@ -211,6 +252,7 @@ def _switch_stance(state, new_stance):
     d["atk"] += new[0] - old[0]
     d["guard"] += new[1] - old[1]
     d["soak"] += new[2] - old[2]
+    d["dmg_bonus"] += new[3] - old[3]
     state["stance"] = new_stance
 
 
@@ -226,8 +268,20 @@ def _load_rng(state):
     return rng
 
 
-def _ev(state, importance, text):
-    state["events"].append([importance, text])
+def _ev(state, importance, text, beat=None):
+    """One log line. `beat` is the engine's own word for what just happened;
+    the DM narrates every beat and compresses everything unlabeled."""
+    state["events"].append([importance, text, beat])
+
+
+def reseed_state(state, seed):
+    """Replace a serialized fight's RNG with a fresh seeded one.
+
+    The reckoning drum's simulations use this: a resumed sim never draws
+    the real fight's stream, so consulting the drum cannot peek at (or
+    disturb) the outcome that is actually waiting.
+    """
+    _save_rng(state, random.Random(seed))
 
 
 def _living(state):
@@ -253,29 +307,51 @@ def _dread_test(state, rng):
         _ev(state, 1, "Fear gets its hook in: SHAKEN (-2 attack, -1 guard) (%d+%d vs %d)." % (roll, d["nerve"], dc))
 
 
-def _attack(state, rng, att_name, atk, dmg_spec, target, tgt_name, tgt_guard, tgt_soak, brittle_bonus=0, surge=False):
-    """One attack. Returns damage dealt. Mutates target hp via caller."""
+def _attack(state, rng, att_name, atk, dmg_spec, tgt_name, tgt_guard, tgt_soak,
+            flat_bonus=0, surge=False):
+    """Resolve one attack and return what happened.
+
+    The caller logs it: only the caller knows whether the blow finished
+    anyone, and that decides the beat.
+    """
     roll = rng.randint(1, 20)
     crit = roll == 20
     verb_hit, verb_miss = ("hit", "miss") if att_name == "You" else ("hits", "misses")
-    if surge:
-        hit = True
-    else:
-        hit = roll != 1 and (crit or roll + atk >= tgt_guard)
+    hit = True if surge else (roll != 1 and (crit or roll + atk >= tgt_guard))
     if not hit:
-        _ev(state, 0, "%s %s %s (%d%+d vs %d)." % (att_name, verb_miss, tgt_name, roll, atk, tgt_guard))
-        return 0
+        return {"hit": False, "dmg": 0, "crit": False, "surge": False, "floored": False,
+                "short": tgt_guard - (roll + atk),
+                "text": "%s %s %s (%d%+d vs %d)." % (att_name, verb_miss, tgt_name, roll, atk, tgt_guard)}
     if surge:
-        dmg = roll_dice(dmg_spec, rng) + roll_dice(dmg_spec, rng)
+        # a surge goes through armor, not into it
+        raw, against = roll_dice(dmg_spec, rng) + roll_dice(dmg_spec, rng), 0
     elif crit:
-        dmg = max_dice(dmg_spec)
+        raw, against = max_dice(dmg_spec), tgt_soak
     else:
-        dmg = roll_dice(dmg_spec, rng)
-    dmg = max(1, dmg + brittle_bonus - tgt_soak)
+        raw, against = roll_dice(dmg_spec, rng), tgt_soak
+    dmg = max(1, raw + flat_bonus - against)
     tag = " CRIT!" if crit else (" SURGE!" if surge else "")
-    _ev(state, 1 if (crit or surge) else 0,
-        "%s %s %s for %d%s (%d%+d vs %d)." % (att_name, verb_hit, tgt_name, dmg, tag, roll, atk, tgt_guard))
-    return dmg
+    return {"hit": True, "dmg": dmg, "crit": crit, "surge": surge, "short": 0,
+            "floored": against > 0 and raw + flat_bonus - against < 1,
+            "text": "%s %s %s for %d%s (%d%+d vs %d)."
+                    % (att_name, verb_hit, tgt_name, dmg, tag, roll, atk, tgt_guard)}
+
+
+def _hit_beat(state, info, tgt_hp_max, killed, by_delver):
+    """The engine's own word for a landed blow. First match wins."""
+    if not state["first_blood"]:
+        return "first-blood"
+    if killed:
+        return "finisher"
+    if info["dmg"] * 2 >= tgt_hp_max:
+        return "stagger"
+    if by_delver and info["floored"]:
+        return "turned"
+    if info["surge"]:
+        return "surge"
+    if info["crit"]:
+        return "crit"
+    return None
 
 
 def _delver_strike(state, rng):
@@ -284,14 +360,26 @@ def _delver_strike(state, rng):
     if not living:
         return
     target = min(living, key=lambda e: (e["hp"], e["id"]))
-    brittle = 2 if "brittle" in target["traits"] else 0
-    dmg = _attack(state, rng, "You", d["atk"], d["dmg"], target, target["id"],
-                  target["guard"], target["soak"], brittle_bonus=brittle, surge=state["surge"])
+    flat = d["dmg_bonus"] + (2 if "brittle" in target["traits"] else 0)
+    surge = state["surge"]
+    info = _attack(state, rng, "You", d["atk"], d["dmg"], target["id"],
+                   target["guard"], target["soak"], flat_bonus=flat, surge=surge)
     state["surge"] = False
-    if dmg:
-        target["hp"] -= dmg
-        if target["hp"] <= 0:
-            _ev(state, 1, "%s goes down." % target["id"])
+    if not info["hit"]:
+        overreach = state["stance"] == "press" and info["short"] >= 5
+        _ev(state, 0, info["text"], "overreach" if overreach else None)
+        return
+    target["hp"] -= info["dmg"]
+    killed = target["hp"] <= 0
+    _ev(state, 1 if (info["crit"] or surge) else 0, info["text"],
+        _hit_beat(state, info, target["hp_max"], killed, by_delver=True))
+    state["first_blood"] = True
+    if killed:
+        _ev(state, 1, "%s goes down." % target["id"])
+    elif "armored" in target["traits"] and target["soak"] > 0 and not surge:
+        target["soak"] = max(0, target["soak"] - (2 if info["crit"] else 1))
+        _ev(state, 1, "Armor gives where you worked it: %s is down to soak %d."
+            % (target["id"], target["soak"]), "crack")
 
 
 def _enemy_strike(state, rng, enemy, free=False):
@@ -305,20 +393,46 @@ def _enemy_strike(state, rng, enemy, free=False):
         atk += 4
     if state["darkness"]:
         atk += 2
-    dmg = _attack(state, rng, enemy["id"], atk, enemy["dmg"], d, "you", d["guard"], d["soak"])
-    if not dmg:
+    info = _attack(state, rng, enemy["id"], atk, enemy["dmg"], "you", d["guard"], d["soak"])
+    if not info["hit"]:
+        _ev(state, 0, info["text"])
         return
+    # resolve the grit auto-spend before logging, so the blow's own line can
+    # say whether it was the one that finished you
+    dmg = info["dmg"]
+    halved = []
     while dmg >= d["hp"] and d["grit"] > 0:
         d["grit"] -= 1
         dmg = dmg // 2
-        _ev(state, 1, "You grit through it: damage halved to %d (1 grit spent)." % dmg)
+        halved.append("You grit through it: damage halved to %d (1 grit spent)." % dmg)
         if dmg == 0:
             break
+    killed = dmg >= d["hp"]
+    _ev(state, 1 if info["crit"] else 0, info["text"],
+        _hit_beat(state, info, d["hp_max"], killed, by_delver=False))
+    state["first_blood"] = True
+    for line in halved:
+        _ev(state, 1, line, "close-call")
+    d["worst_blow"] = max(d["worst_blow"], dmg)
     d["hp"] -= dmg
     if d["hp"] <= 0:
         _ev(state, 1, "You are down.")
     elif d["hp"] * 3 <= d["hp_max"]:
         _ev(state, 1, "You are badly hurt (%d/%d)." % (d["hp"], d["hp_max"]))
+
+
+def _burn_light(state):
+    """The light clock: rounds cost lamp oil, so tempo is a real currency."""
+    d = state["delver"]
+    if d["light"] <= 0:  # a fight that began in the dark burns nothing
+        return
+    d["light"] -= 1
+    if d["light"] > 0:
+        _ev(state, 1, "The lamp burns down while you work: %d light left." % d["light"], "lamp-low")
+    else:
+        _ev(state, 1, "The lamp dies. This ends in the dark.", "lamp-out")
+        state["darkness"] = True
+        d["atk"] -= 2
 
 
 def _finish(state, outcome):
@@ -327,6 +441,8 @@ def _finish(state, outcome):
         "outcome": outcome,  # victory | retreated | down
         "hp": max(0, d["hp"]),
         "grit": d["grit"],
+        "light": d["light"],
+        "worst_blow": d["worst_blow"],
         "rounds": state["round"],
         "kills": [e["id"] for e in state["enemies"] if e["hp"] <= 0],
         "events": state["events"],
@@ -373,7 +489,9 @@ def _run(state):
             _enemy_strike(state, rng, enemy)
         if d["hp"] <= 0:
             return _finish(state, "down")
-        if state["stance"] == "skirmish" and d["hp"] < SKIRMISH_FLEE_FRAC * d["hp_max"]:
+        if r % LIGHT_CLOCK_ROUNDS == 0:
+            _burn_light(state)
+        if state["stance"] == "skirmish" and d["hp"] < d["flee_frac"] * d["hp_max"]:
             _ev(state, 1, "Skirmish stance: this is the moment you planned to leave.")
             return _withdraw(state, rng)
         if (not state["pause_used"]) and r >= 2 and d["hp"] <= PAUSE_HP_FRAC * d["hp_max"]:
@@ -387,8 +505,8 @@ def _run(state):
 
 
 def fight_summary(events):
-    """Short log: the flagged lines only."""
-    return [text for imp, text in events if imp >= 1]
+    """Short log: the flagged lines, plus every line the engine gave a beat."""
+    return [text for imp, text, beat in events if imp >= 1 or beat]
 
 
 # --------------------------------------------------------- strange effects
@@ -458,7 +576,7 @@ def main():
         "knack": "cutter",
         "weapon": {"name": "salvage axe", "dmg": "1d10", "acc": -1},
         "armor": {"name": "quilted coat", "guard": 1, "soak": 1},
-        "hp": 14, "grit": 3,
+        "hp": 14, "grit": 3, "light": 10, "marks": [],
     }
     hound = {"name": "glasshound", "hp": 6, "atk": 3, "guard": 12, "soak": 0,
              "dmg": "1d6", "traits": ["swift"], "menace": 2}
@@ -466,9 +584,10 @@ def main():
     while result is None:
         print("(pause reached; auto-choosing fight_on for the demo)")
         result = resume_fight(state, "fight_on")
-    for imp, text in result["events"]:
-        print(("* " if imp else "  ") + text)
-    print("outcome:", result["outcome"], json.dumps({k: result[k] for k in ("hp", "grit", "rounds")}))
+    for imp, text, beat in result["events"]:
+        print(("* " if imp else "  ") + text + (("  [%s]" % beat) if beat else ""))
+    print("outcome:", result["outcome"],
+          json.dumps({k: result[k] for k in ("hp", "grit", "light", "rounds", "worst_blow")}))
 
 
 if __name__ == "__main__":

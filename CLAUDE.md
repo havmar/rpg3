@@ -64,10 +64,24 @@ sealed floor. Two playthroughs are on the shelf — `play/hallam-rasp`
 (session 1, abandoned mid-descent, ledgered) and `play/teodor-slake`
 (session 2, dead at depth 5). Both delvers died on day 1 having banked
 nothing, so the haven layer is still untested. Sessions 1–2 were harvested
-by the 2026-08-25 design session: plans `0002-combat-that-costs`,
-`0003-a-reason-to-surface`, and `0004-the-way-splits` are READY
-(implement in that order), and the playbook gained the advice protocol,
-the traces rule, and a wrap-up rite without table questions. Next
-milestone: implementation sessions for 0002–0004, then a third
-playthrough on the new engine. Update this status
-as milestones land.
+by the 2026-08-25 design session, which produced plans
+`0002-combat-that-costs`, `0003-a-reason-to-surface`, and
+`0004-the-way-splits`, and gave the playbook the advice protocol, the
+traces rule, and a wrap-up rite without table questions.
+
+Plan 0002 is DONE (save v2): stances carry a damage bonus, rounds burn
+lamp oil, armor cracks as you work it, a surge goes through soak, the
+fight log tags its own beats for the DM, and a hard fight leaves a mark.
+Plan 0003 is DONE (save v3): `new` deals a random delver and executes the
+first delve, so day 1 starts underground; the satchel caps what comes
+home; Wake posts a daily commission that pays double; and the reckoning
+drum (`session.py odds`) answers odds questions out of a rationed supply
+of windings, on a seed path that cannot peek at the real fight.
+Plan 0004 is DONE (save v4): at most depths the way down splits, and each
+passage is announced only by a rumor derived from what is actually behind
+it — a passage holding nothing but lurkers sounds exactly like a place to
+rest. The unchosen ways close behind you; the map remembers them.
+
+All three plans from the 2026-08-25 design session have landed. Next
+milestone: a third playthrough on the new engine (save v4), then a design
+session on what it turns up. Update this status as milestones land.
