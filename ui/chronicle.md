@@ -57,3 +57,15 @@ them will never burn again.
 
 Out of a gap between two collapsed decks: an **unmelted ledger-clasp (worth 5)**.
 Everything for a hundred paces is glass. This is brass, and it still works.
+
+---
+
+## Day 1, depth 2 — two ways down
+
+Nothing is spent at a split. **hp 14/14 · grit 3/3 · light 8 · satchel 2/7.**
+
+Behind the crushed shelving the floor has gone through twice. Both openings
+breathe, and neither of them is quiet.
+
+1. The floor hums, as if something swims through it.
+2. A dry rustling, like sleet on glass, from everywhere at once.

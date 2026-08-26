@@ -8,4 +8,8 @@ THE DESCENT
   d2  [salvage]    collapsed stockroom   <-- you are here
       ..unopened: Quiet. Your own lamp is the loudest thing in it.
       ..unopened: Quiet. Your own lamp is the loudest thing in it.
+   |
+  the way splits here:
+    1) The floor hums, as if something swims through it.
+    2) A dry rustling, like sleet on glass, from everywhere at once.
 
