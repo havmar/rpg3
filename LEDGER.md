@@ -61,3 +61,32 @@ and never ran once it wasn't. Thirty-seven chits' worth on him when he fell —
 a fused coin-clutch, a glass rose still growing, a watchman's eye — none of
 it ever banked, none of it ever spent. Two names in this book now, and
 neither of them ever saw a second day.
+
+---
+
+## Marek Culvert — glasspicker
+
+*Signed the book and was underground the same hour. Lasted two rounds longer
+than the third depth wanted him to.*
+
+**Delved:** the Vitric Age, depths 1 through 3, in one descent.
+
+**Deeds:** traded at the murmur market behind a standing mirror at depth 1 —
+voices behind a curtain of hanging shards, a price agreed before he spoke —
+and came away with a fused coin-clutch. Went down through a stockroom whose
+oil-casks had all gone to glass and pulled an unmelted ledger-clasp out of a
+gap between two collapsed decks; brass, in a place where everything else was
+glass, and it still worked. Then took the passage that rustled.
+
+**How it ended:** a vitrified street at depth 3, awnings still out, and five
+shardswarms coming up it against the draft. He chose press — **guard 8**, and
+they needed a **6**. He killed the first on his opening swing and the second on
+his next, both for **6**. Between those two swings all four survivors landed at
+once for **3, 3, 3, 2**, and took him from **14 to 3**. He spent all three grit
+in round two halving blows down to **2**, **1**, and **0**, and was still on his
+feet at **1 hp** with three of them left. The fifth hit him for **2**. Two
+rounds, start to finish.
+
+**What Wake remembers:** the fastest hands anyone had signed in a season, and
+eight chits' worth of salvage that never reached an assay-house. Three names in
+this book now. Not one of them has seen a second day.
