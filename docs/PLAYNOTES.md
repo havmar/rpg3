@@ -148,3 +148,41 @@ the notes above):
 - Process: the player sets feelings and constraints and wants the design
   details owned by the DM — "go strong." `[Noted — this is Charter §The
   contract, reaffirmed.]`
+
+---
+
+## Session 3 — 2026-08-26 — Marek Culvert (`play/marek-culvert`) — feedback via dev session
+
+The wrap-up rite did not run at the table; the Ledger page and the mirror
+landed, this entry did not. Marek Culvert, glasspicker, died at depth 3 on
+day 1 — five shardswarms on the vitrified street, press stance, two rounds.
+Note for the record: session 3 opened on a stale checkout and was played on
+the 2026-08-23 engine (no light clock, no satchel, no forks); the freshness
+guard exists because of it. Player feedback arrived in chat afterward and
+is recorded here so the inbox stays complete.
+
+Player notes:
+
+- Quick death was fine; no complaint about lethality itself.
+  `[HARVESTED → docs/MECHANICS.md — the "informed bets" property: deaths
+  must be readable, not rarer.]`
+- Asked what the intended skill is — "I'll learn which monsters need
+  which stance?" — probing whether mastery is matchup memorization.
+  `[HARVESTED → docs/MECHANICS.md + BENCHLOG 2026-08-26 (policy probe):
+  measured — the matchup table mostly collapses into "skirmish when in
+  doubt" because exits are unpriced; plans/0005 prices them. The deeper
+  answer is that mastery should be pricing bets, not memorizing answers.]`
+- Standing worry: whether the mechanics can *feel good* at all under
+  these constraints (no spatial play, autocombat). Points at Slay the
+  Spire / Diablo / Universal Paperclips (tight mathematical loops),
+  autobattlers (configure-then-resolve), Fallen London (flat rules, huge
+  resource variety) — and floats the fallback of flat, additive mechanics
+  carried by narrative.
+  `[HARVESTED → docs/MECHANICS.md — the whole document; the flat fallback
+  is rejected as a default, allowed per designated subsystem.]`
+- Cadence constraint: little time to play. Wants more design/dev and
+  fewer test rounds, content that can ship without testing, and a
+  strategy for a-priori quality — career benches, AI playthroughs.
+  `[HARVESTED → docs/MECHANICS.md — the four-instrument strategy and the
+  content-on-hooks scaling rule; bench_policy.py is the instrument the
+  plan-0002 benchlog caveat asked for.]`

@@ -95,7 +95,10 @@ something big surfaces, change the game, start a new delver. Therefore:
   content drift fails loudly.
 - **Bench suites**: standalone `bench_*.py` scripts measure outcome
   distributions (expedition clear/death rates, economy flow, stratum
-  censuses, delver-career sims) over many seeds. After every change that
+  censuses, delver-career sims) over many seeds — and decision health:
+  `bench_policy.py` runs competing policies to measure what knowledge and
+  choices are worth, because dominant lines and dead options are invisible
+  in outcome distributions (rationale in `docs/MECHANICS.md`). After every change that
   could move numbers, re-run and append a dated entry to
   `docs/BENCHLOG.md` — including "nothing moved, byte-identical" entries;
   they are the proof a change is bench-neutral. `tune.py` does the
@@ -138,10 +141,11 @@ Development runs as separate sessions with distinct jobs. The repo, not the
 chat, carries context between them.
 
 - **Design sessions** (frontier model). Harvest `docs/PLAYNOTES.md`, argue
-  the design, and produce a *plan file*: `docs/plans/NNNN-<slug>.md`, a
-  full spec ready to implement with no further design decisions — file
-  list, behavior, formulas, catalog content, test expectations, and an
-  implementation checklist. Header carries `Status: READY / IN PROGRESS /
+  the design against `docs/MECHANICS.md`, and produce a *plan file*:
+  `docs/plans/NNNN-<slug>.md`, a full spec ready to implement with no
+  further design decisions — file list, behavior, formulas, catalog
+  content, test expectations, target outcome curves stated before
+  implementation, and an implementation checklist. Header carries `Status: READY / IN PROGRESS /
   DONE`. A DONE plan is history: never edit it, write a new one.
 - **Implementation sessions** (cheaper model). Read ENGINE.md and exactly
   one plan file; implement, tick the plan's checklist, flip its status,

@@ -151,3 +151,51 @@ between passages (the documented fallback — repeats allowed, never a
 failure). Forks made the site catalog's thinness visible; more templates
 per kind and depth band would fix it, and that is content authoring, not
 tuning.
+
+## 2026-08-26 — first policy probe: stance decision health (stale-base numbers)
+
+New instrument: `bench_policy.py`. Per depth, 25 generated encounters; per
+encounter the best stance is picked on 60 train seeds (survival first,
+victory second) and everything is scored on 60 disjoint test seeds, stock
+delver, pauses = fight_on. It measures what the outcome grids cannot: what
+a policy that *chooses* is worth.
+
+**Correction, same day:** these first numbers were measured on a stale
+checkout — the 2026-08-23 engine, six commits behind master (the same
+incident class the freshness guard was built for; the dev branch had been
+cut from the old base). They stand as v0.1 history: skirmish survived
+85–100% at every depth while committed stances fell to 20–42% at d5–d6;
+ward weakly dominated press for the stock delver from d3 down; picked-
+stance beat fixed-measure by up to +69pp survival but beat "always
+skirmish" by ~0pp everywhere. The ward/press half was already fixed by
+plan 0002 before this probe ran. The re-run on the current engine is the
+next entry; the instrument itself is the point — it is the career-adjacent
+bench the plan-0002 caveat called for, landed.
+
+## 2026-08-26 — policy probe re-run on the save-v4 engine (pre-0005 baseline)
+
+`python bench_policy.py` (defaults), current master merged (plans
+0002–0004 in). Measurement only; nothing tuned.
+
+- **Plan 0002 verified from a new angle: press is now the best committed
+  stance at every depth** — d3 89% survival (ward 83, measure 73), d5 52%
+  (ward 44), d6 42% (ward 36) — and equals or beats ward on victory
+  everywhere. In single-fight terms ward is now the weakly dominated
+  committed stance; its remaining case (hp preserved across an
+  expedition, light spent instead) is invisible to this fight-layer view
+  by construction. The honest reading of ward needs the career tournament
+  (plans/0005 extends this bench).
+- **The skirmish hedge is unchanged by 0002–0004**: 85–100% survival at
+  every depth (d4 88%, d6 89%), victory 8–57%. Picked-stance still beats
+  the best fixed stance by ~0pp everywhere — "skirmish unless trivial"
+  remains the whole matchup table, because `_withdraw` is byte-identical
+  to v0.1: one parting blow each, swift two, no other price. This is the
+  plan-0002 caveat, now measured directly: no stance-number tuning moves
+  it. Exit pricing is a design change → plans/0005.
+- Knowledge value vs fixed-measure: +1pp (d1), +7 (d2), +23 (d3), +35
+  (d4), +52 (d5), +64pp (d6) of survival — real and depth-scaling, but
+  currently all of it is "know to skirmish".
+
+Watch after 0005 lands: skirmish survival should settle in the 70–80%
+band at d3–d6 with picked-vs-best-fixed ≥ +3pp at two or more depths;
+the career tournament should show committed play out-earning the hedge.
